@@ -1,0 +1,664 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ASDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="NidCategory" />
+          </Key>
+          <Property Name="NidCategory" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="keywords" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Category_Brands">
+          <Key>
+            <PropertyRef Name="NidBrand" />
+          </Key>
+          <Property Name="NidBrand" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="BrandName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="NidCategory" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Keywords" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Category_Types">
+          <Key>
+            <PropertyRef Name="NidType" />
+          </Key>
+          <Property Name="NidType" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Keywords" Type="nvarchar(max)" />
+          <Property Name="NidCategory" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="NidComment" />
+          </Key>
+          <Property Name="NidComment" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NidUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CommentText" Type="nvarchar(max)" />
+          <Property Name="State" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="NidOrder" />
+          </Key>
+          <Property Name="NidOrder" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NidUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NidProduct" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="NidShip" Type="uniqueidentifier" />
+          <Property Name="state" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="NidProduct" />
+          </Key>
+          <Property Name="NidProduct" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="NidCategory" Type="int" Nullable="false" />
+          <Property Name="NidBrand" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NidType" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="LastModified" Type="datetime" />
+          <Property Name="Description" Type="ntext" Nullable="false" />
+          <Property Name="Keywords" Type="nvarchar(max)" />
+          <Property Name="Price" Type="decimal" Precision="15" Scale="0" Nullable="false" />
+          <Property Name="State" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ships">
+          <Key>
+            <PropertyRef Name="NidShip" />
+          </Key>
+          <Property Name="NidShip" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="DueDate" Type="datetime" />
+          <Property Name="ShipVia" Type="tinyint" />
+          <Property Name="Address" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ZipCode" Type="decimal" Precision="12" Scale="0" />
+          <Property Name="State" Type="tinyint" Nullable="false" />
+          <Property Name="ShipPrice" Type="decimal" Precision="15" Scale="0" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="NidUser" />
+          </Key>
+          <Property Name="NidUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserImage" Type="nvarchar" MaxLength="50" />
+          <Property Name="Enabled" Type="bit" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="LastLoginDate" Type="datetime" />
+          <Property Name="ZipCode" Type="decimal" Precision="12" Scale="0" />
+          <Property Name="Address" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_Categories_Category_Brands">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Category_Brands" Type="Self.Category_Brands" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="NidCategory" />
+            </Principal>
+            <Dependent Role="Category_Brands">
+              <PropertyRef Name="NidCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Category_Types">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Category_Types" Type="Self.Category_Types" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="NidCategory" />
+            </Principal>
+            <Dependent Role="Category_Types">
+              <PropertyRef Name="NidCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Products">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="NidCategory" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="NidCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="NidUser" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="NidUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="NidProduct" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="NidProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Ships">
+          <End Role="Ships" Type="Self.Ships" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ships">
+              <PropertyRef Name="NidShip" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="NidShip" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="NidUser" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="NidUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Category_Brands">
+          <End Role="Category_Brands" Type="Self.Category_Brands" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category_Brands">
+              <PropertyRef Name="NidBrand" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="NidBrand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Category_Types">
+          <End Role="Category_Types" Type="Self.Category_Types" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category_Types">
+              <PropertyRef Name="NidType" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="NidType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ASDbModelStoreContainer">
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category_Brands" EntityType="Self.Category_Brands" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category_Types" EntityType="Self.Category_Types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ships" EntityType="Self.Ships" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Categories_Category_Brands" Association="Self.FK_Categories_Category_Brands">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Category_Brands" EntitySet="Category_Brands" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Category_Types" Association="Self.FK_Categories_Category_Types">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Category_Types" EntitySet="Category_Types" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Products" Association="Self.FK_Categories_Products">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_Users" Association="Self.FK_Comments_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Products" Association="Self.FK_Orders_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Ships" Association="Self.FK_Orders_Ships">
+            <End Role="Ships" EntitySet="Ships" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Category_Brands" Association="Self.FK_Products_Category_Brands">
+            <End Role="Category_Brands" EntitySet="Category_Brands" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Category_Types" Association="Self.FK_Products_Category_Types">
+            <End Role="Category_Types" EntitySet="Category_Types" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ASDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="NidCategory" />
+          </Key>
+          <Property Name="NidCategory" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="keywords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Category_Brands" Relationship="Self.FK_Categories_Category_Brands" FromRole="Categories" ToRole="Category_Brands" />
+          <NavigationProperty Name="Category_Types" Relationship="Self.FK_Categories_Category_Types" FromRole="Categories" ToRole="Category_Types" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Categories_Products" FromRole="Categories" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Category_Brands">
+          <Key>
+            <PropertyRef Name="NidBrand" />
+          </Key>
+          <Property Name="NidBrand" Type="Guid" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NidCategory" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Keywords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Categories_Category_Brands" FromRole="Category_Brands" ToRole="Categories" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Category_Brands" FromRole="Category_Brands" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Category_Types">
+          <Key>
+            <PropertyRef Name="NidType" />
+          </Key>
+          <Property Name="NidType" Type="Guid" Nullable="false" />
+          <Property Name="TypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Keywords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NidCategory" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Categories_Category_Types" FromRole="Category_Types" ToRole="Categories" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Category_Types" FromRole="Category_Types" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Comment">
+          <Key>
+            <PropertyRef Name="NidComment" />
+          </Key>
+          <Property Name="NidComment" Type="Guid" Nullable="false" />
+          <Property Name="NidUser" Type="Guid" Nullable="false" />
+          <Property Name="CommentText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="Byte" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Comments_Users" FromRole="Comments" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="NidOrder" />
+          </Key>
+          <Property Name="NidOrder" Type="Guid" Nullable="false" />
+          <Property Name="NidUser" Type="Guid" Nullable="false" />
+          <Property Name="NidProduct" Type="Guid" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NidShip" Type="Guid" />
+          <Property Name="state" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Orders_Products" FromRole="Orders" ToRole="Products" />
+          <NavigationProperty Name="Ship" Relationship="Self.FK_Orders_Ships" FromRole="Orders" ToRole="Ships" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="NidProduct" />
+          </Key>
+          <Property Name="NidProduct" Type="Guid" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NidCategory" Type="Int32" Nullable="false" />
+          <Property Name="NidBrand" Type="Guid" Nullable="false" />
+          <Property Name="NidType" Type="Guid" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Keywords" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="15" Scale="0" Nullable="false" />
+          <Property Name="State" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Categories_Products" FromRole="Products" ToRole="Categories" />
+          <NavigationProperty Name="Category_Brands" Relationship="Self.FK_Products_Category_Brands" FromRole="Products" ToRole="Category_Brands" />
+          <NavigationProperty Name="Category_Types" Relationship="Self.FK_Products_Category_Types" FromRole="Products" ToRole="Category_Types" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Products" FromRole="Products" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Ship">
+          <Key>
+            <PropertyRef Name="NidShip" />
+          </Key>
+          <Property Name="NidShip" Type="Guid" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DueDate" Type="DateTime" Precision="3" />
+          <Property Name="ShipVia" Type="Byte" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ZipCode" Type="Decimal" Precision="12" Scale="0" />
+          <Property Name="State" Type="Byte" Nullable="false" />
+          <Property Name="ShipPrice" Type="Decimal" Precision="15" Scale="0" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Ships" FromRole="Ships" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="NidUser" />
+          </Key>
+          <Property Name="NidUser" Type="Guid" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Enabled" Type="Boolean" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+          <Property Name="ZipCode" Type="Decimal" Precision="12" Scale="0" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Users" FromRole="Users" ToRole="Comments" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK_Categories_Category_Brands">
+          <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Category_Brands" Type="Self.Category_Brands" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="NidCategory" />
+            </Principal>
+            <Dependent Role="Category_Brands">
+              <PropertyRef Name="NidCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Category_Types">
+          <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+          <End Role="Category_Types" Type="Self.Category_Types" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="NidCategory" />
+            </Principal>
+            <Dependent Role="Category_Types">
+              <PropertyRef Name="NidCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Products">
+          <End Role="Categories" Type="Self.Category" Multiplicity="1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="NidCategory" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="NidCategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Category_Brands">
+          <End Role="Category_Brands" Type="Self.Category_Brands" Multiplicity="1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category_Brands">
+              <PropertyRef Name="NidBrand" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="NidBrand" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Category_Types">
+          <End Role="Category_Types" Type="Self.Category_Types" Multiplicity="1" />
+          <End Role="Products" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category_Types">
+              <PropertyRef Name="NidType" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="NidType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="NidUser" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="NidUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Products">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="NidProduct" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="NidProduct" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Ships">
+          <End Role="Ships" Type="Self.Ship" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ships">
+              <PropertyRef Name="NidShip" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="NidShip" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="NidUser" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="NidUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ASDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Category_Brands" EntityType="Self.Category_Brands" />
+          <EntitySet Name="Category_Types" EntityType="Self.Category_Types" />
+          <EntitySet Name="Comments" EntityType="Self.Comment" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Ships" EntityType="Self.Ship" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Categories_Category_Brands" Association="Self.FK_Categories_Category_Brands">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Category_Brands" EntitySet="Category_Brands" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Category_Types" Association="Self.FK_Categories_Category_Types">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Category_Types" EntitySet="Category_Types" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Products" Association="Self.FK_Categories_Products">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Category_Brands" Association="Self.FK_Products_Category_Brands">
+            <End Role="Category_Brands" EntitySet="Category_Brands" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Category_Types" Association="Self.FK_Products_Category_Types">
+            <End Role="Category_Types" EntitySet="Category_Types" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_Users" Association="Self.FK_Comments_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Products" Association="Self.FK_Orders_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Ships" Association="Self.FK_Orders_Ships">
+            <End Role="Ships" EntitySet="Ships" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ASDbModelStoreContainer" CdmEntityContainer="ASDbEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="ASDbModel.Category">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="NidCategory" ColumnName="NidCategory" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="keywords" ColumnName="keywords" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category_Brands">
+            <EntityTypeMapping TypeName="ASDbModel.Category_Brands">
+              <MappingFragment StoreEntitySet="Category_Brands">
+                <ScalarProperty Name="NidBrand" ColumnName="NidBrand" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="NidCategory" ColumnName="NidCategory" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Category_Types">
+            <EntityTypeMapping TypeName="ASDbModel.Category_Types">
+              <MappingFragment StoreEntitySet="Category_Types">
+                <ScalarProperty Name="NidType" ColumnName="NidType" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
+                <ScalarProperty Name="NidCategory" ColumnName="NidCategory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="ASDbModel.Comment">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="NidComment" ColumnName="NidComment" />
+                <ScalarProperty Name="NidUser" ColumnName="NidUser" />
+                <ScalarProperty Name="CommentText" ColumnName="CommentText" />
+                <ScalarProperty Name="State" ColumnName="State" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="ASDbModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="NidOrder" ColumnName="NidOrder" />
+                <ScalarProperty Name="NidUser" ColumnName="NidUser" />
+                <ScalarProperty Name="NidProduct" ColumnName="NidProduct" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="NidShip" ColumnName="NidShip" />
+                <ScalarProperty Name="state" ColumnName="state" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="ASDbModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="NidProduct" ColumnName="NidProduct" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="NidCategory" ColumnName="NidCategory" />
+                <ScalarProperty Name="NidBrand" ColumnName="NidBrand" />
+                <ScalarProperty Name="NidType" ColumnName="NidType" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Keywords" ColumnName="Keywords" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="State" ColumnName="State" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ships">
+            <EntityTypeMapping TypeName="ASDbModel.Ship">
+              <MappingFragment StoreEntitySet="Ships">
+                <ScalarProperty Name="NidShip" ColumnName="NidShip" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="ShipVia" ColumnName="ShipVia" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ShipPrice" ColumnName="ShipPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ASDbModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="NidUser" ColumnName="NidUser" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="UserImage" ColumnName="UserImage" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -13,5 +13,20 @@ namespace AudioShopBackend.Controllers
         {
             return View();
         }
+        public ActionResult Categories()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddType()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddBrand()
+        {
+            return View();
+        }
     }
 }
