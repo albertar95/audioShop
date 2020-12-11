@@ -10,6 +10,9 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:right;direction:rtl;">
                 <div class="form-element-list">
+                    <div class="alert alert-success" role="alert" hidden="hidden" id="successfullMessageDiv"></div>
+                    <div class="alert alert-warning" role="alert" hidden="hidden" id="warningMessageDiv"></div>
+                    <div class="alert alert-danger" role="alert" hidden="hidden" id="errorMessageDiv"></div>
                     <div class="basic-tb-hd">
                         <h2>Categories</h2>
                         <p>desc about categories</p>
@@ -118,57 +121,236 @@
     {
    <script src="@Url.Content("~/Content/js/vendor/jquery-1.12.4.min.js")"></script>
     <script type="text/javascript">
-        $(function ()
-        {
-            $("#btnAddCategory").click(function (e)
-            {
+        $(function () {
+            var IsCategoryAdded = false;
+            var NidCurrentCategory = 0;
+            $("#btnAddCategory").click(function (e) {
                 e.preventDefault();
-                if($("#txtCategoryName").val() == '')
-                {
-                    alert('category name is null');
+                if ($("#txtCategoryName").val() == '') {
+                    $("#warningMessageDiv").html('category name is null');
+                    $("#warningMessageDiv").removeAttr('hidden');
+                    setTimeout(function () {
+                        $("#warningMessageDiv").prop('hidden', 'hidden');
+                    }, 3000);
+                } else {
+                    if (IsCategoryAdded) {
+                        $.ajax(
+                            {
+                                url: '@Url.Action("AddCategory","Home")',
+                                type: 'post',
+                                datatype: 'json',
+                                data: { IsNewCategory: false, Name: $("#txtCategoryName").val(), NidCategory: NidCurrentCategory, CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
+                                success: function (result) {
+                                    if (result.HasValue) {
+                                        //refresh list
+                                        $("#txtCategoryName").val("");
+                                        $("#txtDescription").val("");
+                                        $("#txtKeywords").val("");
+                                        NidCurrentCategory = 0;
+                                        IsCategoryAdded = false;
+                                        $("#BrandWrap").html("");
+                                        $("#TypeWrap").html("");
+                                        $("#successfullMessageDiv").html('category added successfully!');
+                                        $("#successfullMessageDiv").removeAttr('hidden');
+                                        setTimeout(function () {
+                                            $("#successfullMessageDiv").prop('hidden', 'hidden');
+                                        }, 5000);
+                                    } else {
+                                        $("#errorMessageDiv").html(result.Message);
+                                        $("#errorMessageDiv").removeAttr('hidden');
+                                        setTimeout(function () {
+                                            $("#errorMessageDiv").prop('hidden', 'hidden');
+                                        }, 5000);
+                                    }
+                                },
+                                error: function (result) {
+                                    $("#errorMessageDiv").html(result.Message);
+                                    $("#errorMessageDiv").removeAttr('hidden');
+                                    setTimeout(function () {
+                                        $("#errorMessageDiv").prop('hidden', 'hidden');
+                                    }, 5000);
+                                }
+                            })
+                    } else {
+                        $.ajax(
+    {
+        url: '@Url.Action("AddCategory","Home")',
+        type: 'post',
+        datatype: 'json',
+        data: { IsNewCategory: true, Name: $("#txtCategoryName").val(), CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
+        success: function (result) {
+            if (result.HasValue) {
+                //refresh list
+                $("#txtCategoryName").val("");
+                $("#txtDescription").val("");
+                $("#txtKeywords").val("");
+                NidCurrentCategory = 0;
+                IsCategoryAdded = false;
+                $("#BrandWrap").html("");
+                $("#TypeWrap").html("");
+                $("#successfullMessageDiv").html('category added successfully!');
+                $("#successfullMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#successfullMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            } else {
+                $("#errorMessageDiv").html(result.Message);
+                $("#errorMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#errorMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            }
+        },
+        error: function (result) {
+            $("#errorMessageDiv").html(result.Message);
+            $("#errorMessageDiv").removeAttr('hidden');
+            setTimeout(function () {
+                $("#errorMessageDiv").prop('hidden', 'hidden');
+            }, 5000);
+        }
+    })
+                    }
                 }
             });
             $("#btnAddBrand").click(function (e) {
                 e.preventDefault();
-                if ($("#txtBrandName").val() == '') {
-                    alert('category name is null');
+                if ($("#txtBrandName").val() == '' || $("#txtCategoryName").val() == '') {
+                    $("#warningMessageDiv").html('fill the fields');
+                    $("#warningMessageDiv").removeAttr('hidden');
+                    setTimeout(function () {
+                        $("#warningMessageDiv").prop('hidden', 'hidden');
+                    }, 3000);
+                } else {
+                    if (IsCategoryAdded) {
+                        $.ajax(
+                         {
+                             url: '@Url.Action("AddBrandOrType", "Home")',
+                             type: 'post',
+                             datatype: 'json',
+                             data: { IsBrand: true, Name: $("#txtBrandName").val(), NidCategory: NidCurrentCategory, IsNewCategory: !IsCategoryAdded },
+                             success: function (result) {
+                                 if (result.HasValue) {
+                                     $("#BrandWrap").html(result.Html);
+                                     $("#txtBrandName").val("");
+                                 } else {
+                                     $("#errorMessageDiv").html(result.Message);
+                                     $("#errorMessageDiv").removeAttr('hidden');
+                                     setTimeout(function () {
+                                         $("#errorMessageDiv").prop('hidden', 'hidden');
+                                     }, 5000);
+                                 }
+                             },
+                             error: function (result) {
+                                 $("#errorMessageDiv").html(result.Message);
+                                 $("#errorMessageDiv").removeAttr('hidden');
+                                 setTimeout(function () {
+                                     $("#errorMessageDiv").prop('hidden', 'hidden');
+                                 }, 5000);
+                             }
+                         }
+                                )
+                    } else {
+                        $.ajax(
+                         {
+                             url: '@Url.Action("AddBrandOrType", "Home")',
+                             type: 'post',
+                             datatype: 'json',
+                             data: { IsBrand: true, Name: $("#txtBrandName").val(), CategoryName: $("#txtCategoryName").val(), IsNewCategory: !IsCategoryAdded, CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
+                             success: function (result) {
+                                 IsCategoryAdded = true;
+                                 NidCurrentCategory = result.tmpNidCategory;
+                                 if (result.HasValue) {
+                                     $("#BrandWrap").html(result.Html);
+                                     $("#txtBrandName").val("");
+                                 } else {
+                                     $("#errorMessageDiv").html(result.Message);
+                                     $("#errorMessageDiv").removeAttr('hidden');
+                                     setTimeout(function () {
+                                         $("#errorMessageDiv").prop('hidden', 'hidden');
+                                     }, 5000);
+                                 }
+                             },
+                             error: function (result) {
+                                 $("#errorMessageDiv").html(result.Message);
+                                 $("#errorMessageDiv").removeAttr('hidden');
+                                 setTimeout(function () {
+                                     $("#errorMessageDiv").prop('hidden', 'hidden');
+                                 }, 5000);
+                             }
+                         }
+                                )
+                    }
                 }
-                $.ajax(
-                    {
-                    url: '@Url.Action("Home","AddBrand")',
-                    type: 'post',
-                    datatype: 'json',
-                    data: {Name : $("#txtCategoryName").val()},
-                    success: function (result)
-                    {
-                        $("#BrandWrap").html(result.Html);
-                    },
-                    error: function (result)
-                    {
-                        alert(result.Message);
-                    }
-                    }
-                )
             });
             $("#btnAddType").click(function (e) {
                 e.preventDefault();
-                if ($("#txtTypeName").val() == '') {
-                    alert('Type name is null');
-                }
-                $.ajax(
-                    {
-                        url: '@Url.Action("Home","AddType")',
-                        type: 'post',
-                        datatype: 'json',
-                        data: { Name: $("#txtTypeName").val() },
-                        success: function (result) {
-                            $("#TypeWrap").html(result.Html);
-                        },
-                        error: function (result) {
-                            alert(result.Message);
-                        }
+                if ($("#txtTypeName").val() == '' || $("#txtCategoryName").val() == '') {
+                    $("#warningMessageDiv").html('fill the fields');
+                    $("#warningMessageDiv").removeAttr('hidden');
+                    setTimeout(function () {
+                        $("#warningMessageDiv").prop('hidden', 'hidden');
+                    }, 3000);
+                } else {
+                    if (IsCategoryAdded) {
+                        $.ajax(
+                         {
+                             url: '@Url.Action("AddBrandOrType", "Home")',
+                             type: 'post',
+                             datatype: 'json',
+                             data: { IsBrand: false, Name: $("#txtTypeName").val(), NidCategory: NidCurrentCategory, IsNewCategory: !IsCategoryAdded },
+                             success: function (result) {
+                                 if (result.HasValue) {
+                                     $("#TypeWrap").html(result.Html);
+                                     $("#txtTypeName").val("");
+                                 } else {
+                                     $("#errorMessageDiv").html(result.Message);
+                                     $("#errorMessageDiv").removeAttr('hidden');
+                                     setTimeout(function () {
+                                         $("#errorMessageDiv").prop('hidden', 'hidden');
+                                     }, 5000);
+                                 }
+                             },
+                             error: function (result) {
+                                 $("#errorMessageDiv").html(result.Message);
+                                 $("#errorMessageDiv").removeAttr('hidden');
+                                 setTimeout(function () {
+                                     $("#errorMessageDiv").prop('hidden', 'hidden');
+                                 }, 5000);
+                             }
+                         }
+                                )
+                    } else {
+                        $.ajax(
+                         {
+                             url: '@Url.Action("AddBrandOrType", "Home")',
+                             type: 'post',
+                             datatype: 'json',
+                             data: { IsBrand: false, Name: $("#txtTypeName").val(), CategoryName: $("#txtCategoryName").val(), IsNewCategory: !IsCategoryAdded, CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
+                             success: function (result) {
+                                 IsCategoryAdded = true;
+                                 NidCurrentCategory = result.tmpNidCategory;
+                                 if (result.HasValue) {
+                                     $("#TypeWrap").html(result.Html);
+                                     $("#txtTypeName").val("");
+                                 } else {
+                                     $("#errorMessageDiv").html(result.Message);
+                                     $("#errorMessageDiv").removeAttr('hidden');
+                                     setTimeout(function () {
+                                         $("#errorMessageDiv").prop('hidden', 'hidden');
+                                     }, 5000);
+                                 }
+                             },
+                             error: function (result) {
+                                 $("#errorMessageDiv").html(result.Message);
+                                 $("#errorMessageDiv").removeAttr('hidden');
+                                 setTimeout(function () {
+                                     $("#errorMessageDiv").prop('hidden', 'hidden');
+                                 }, 5000);
+                             }
+                         }
+                                )
                     }
-                )
+                }
             });
         });
     </script>

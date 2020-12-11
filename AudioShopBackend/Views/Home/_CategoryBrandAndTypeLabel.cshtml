@@ -1,0 +1,11 @@
+﻿@model List<Tuple<string,string>>
+
+@foreach (var lbl in Model)
+{
+<div class="dropdown-trig-sgn open">
+    <button class="btn triger-shake waves-effect" data-toggle="dropdown" aria-expanded="true" id="@lbl.Item1">@lbl.Item2</button>
+    <ul class="dropdown-menu triger-shake-dp">
+        <li><a href="#">Delete</a></li>
+    </ul>
+</div>
+}

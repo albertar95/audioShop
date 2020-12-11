@@ -25,7 +25,6 @@ namespace AudioShopBackend.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Category_Brands> Category_Brands { get; set; }
         public virtual DbSet<Category_Types> Category_Types { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
@@ -33,5 +32,6 @@ namespace AudioShopBackend.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Ship> Ships { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
     }
 }
