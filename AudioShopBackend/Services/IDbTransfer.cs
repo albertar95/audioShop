@@ -17,6 +17,7 @@ namespace AudioShopBackend.Services
 
         //Categories
         Category GetCategoryByNidCategory(int NidCategory);
+        List<Category> GetAllCategories(int PageSize = 10,bool IncludeTypes = false, bool IncludeBrands = false);
         //sub-section : Brand 
         List<Category_Brands> GetCategoryBrandsByNidCategory(int NidCategory,int PageSize);
         //sub-section : type 

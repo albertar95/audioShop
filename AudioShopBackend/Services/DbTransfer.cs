@@ -59,5 +59,10 @@ namespace AudioShopBackend.Services
         {
             return db.Categories.Where(p => p.NidCategory == NidCategory).FirstOrDefault();
         }
+
+        public List<Category> GetAllCategories(int PageSize = 10, bool IncludeTypes = false, bool IncludeBrands = false)
+        {
+            return db.Categories.Where(p => p.IsSubmmited == true).Take(PageSize).ToList();
+        }
     }
 }

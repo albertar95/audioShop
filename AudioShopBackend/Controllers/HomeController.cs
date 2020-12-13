@@ -19,7 +19,9 @@ namespace AudioShopBackend.Controllers
         }
         public ActionResult Categories()
         {
-            return View();
+            dbTransfer = new DbTransfer();
+            var categoryList = dbTransfer.GetAllCategories();
+            return View("Categories",categoryList);
         }
         public ActionResult AddBrandOrType(bool IsBrand,string Name, bool IsNewCategory, string CategoryName = "",int NidCategory = 0,string categoryKeywords="",string CategoryDescription="")
         {
@@ -114,6 +116,12 @@ namespace AudioShopBackend.Controllers
             else
                 return Json(new JsonResults() { HasValue = false, Message = "unexcpected error" });
 
+        }
+        public ActionResult SyncCategoryTable()
+        {
+            dbTransfer = new DbTransfer();
+            var categoryList = dbTransfer.GetAllCategories();
+            return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryTable", categoryList) });
         }
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
         {

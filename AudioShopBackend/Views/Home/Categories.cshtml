@@ -1,4 +1,4 @@
-﻿
+﻿@model List<AudioShopBackend.Models.Category>
 @{
     ViewBag.Title = "Categories";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -112,13 +112,84 @@
     </div>
 </div>
 
+    <!-- Data Table area Start-->
+<div class="data-table-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="data-table-list">
+                    <div class="basic-tb-hd">
+                        <h2>Basic Example</h2>
+                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="data-table-basic" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>NidCategory</th>
+                                    <th>CategoryName</th>
+                                    <th>Types</th>
+                                    <th>Brands</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblCategory">
+                                @foreach (var cat in Model)
+                                {
+                                    <tr>
+                                        <td>@cat.NidCategory</td>
+                                        <td>@cat.CategoryName</td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                @foreach (var typ in cat.Category_Types.Take(4))
+                                                {
+                                                    <div class="col-sm-6">
+                                                        <button class="btn btn-default btn-icon-notika waves-effect">
+                                                             @typ.TypeName
+                                                        </button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="col-sm-12">
+                                                @foreach (var brd in cat.Category_Brands.Take(4))
+                                                {
+                                                    <div class="col-sm-6">
+                                                    <button class="btn btn-default btn-icon-notika waves-effect">
+                                                         @brd.BrandName
+                                                    </button>
+                                                        </div>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-warning notika-btn-warning waves-effect">Edit</button>
+                                            <button class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                                            <button class="btn btn-info notika-btn-info waves-effect">Detail</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Data Table area End-->
+
+
 @section styles
     {
-    <link rel="stylesheet" href="@Url.Content("~/Content/css/wave/button.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.dataTables.min.css")">
      }
 
 @section scripts
     {
+<script src="@Url.Content("~/Content/js/data-table/jquery.dataTables.min.js")"></script>
+<script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
    <script src="@Url.Content("~/Content/js/vendor/jquery-1.12.4.min.js")"></script>
     <script type="text/javascript">
         $(function () {
@@ -142,7 +213,21 @@
                                 data: { IsNewCategory: false, Name: $("#txtCategoryName").val(), NidCategory: NidCurrentCategory, CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
                                 success: function (result) {
                                     if (result.HasValue) {
-                                        //refresh list
+                                        $.ajax(
+                                            {
+                                                url: '@Url.Action("SyncCategoryTable","Home")',
+                                                type: 'post',
+                                                datatype: 'json',
+                                                data: {},
+                                                success: function (result) {
+                                                    if (result.HasValue) {
+                                                        $("#tblCategory").html(result.Html);
+                                                    }
+                                                },
+                                                error: function () {
+                                                    alert('error');
+                                                }
+                                            })
                                         $("#txtCategoryName").val("");
                                         $("#txtDescription").val("");
                                         $("#txtKeywords").val("");
@@ -180,7 +265,21 @@
         data: { IsNewCategory: true, Name: $("#txtCategoryName").val(), CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
         success: function (result) {
             if (result.HasValue) {
-                //refresh list
+                $.ajax(
+    {
+        url: '@Url.Action("SyncCategoryTable","Home")',
+        type: 'post',
+        datatype: 'json',
+        data: {},
+        success: function (result) {
+            if (result.HasValue) {
+                $("#tblCategory").html(result.Html);
+            }
+        },
+        error: function () {
+            alert('error');
+        }
+    })
                 $("#txtCategoryName").val("");
                 $("#txtDescription").val("");
                 $("#txtKeywords").val("");

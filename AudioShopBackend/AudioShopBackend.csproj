@@ -195,6 +195,7 @@
     <Content Include="Content\img\widgets\4.png" />
     <Content Include="Content\img\widgets\6.png" />
     <Content Include="Content\pages\buttons.html" />
+    <Content Include="Content\pages\data-table.html" />
     <Content Include="Content\pages\index.html" />
     <Content Include="Content\js\animation\animation-active.js" />
     <Content Include="Content\js\autosize.min.js" />
@@ -379,6 +380,7 @@
     </Content>
     <Content Include="Views\Home\Categories.cshtml" />
     <Content Include="Views\Home\_CategoryBrandAndTypeLabel.cshtml" />
+    <Content Include="Views\Home\_CategoryTable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -388,6 +390,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
