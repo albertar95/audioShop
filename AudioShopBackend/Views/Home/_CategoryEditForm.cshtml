@@ -1,210 +1,129 @@
-﻿@model List<AudioShopBackend.Models.Category>
-@{
-    ViewBag.Title = "Categories";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-
-<div class="form-example-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:right;direction:rtl;">
-                <div class="form-element-list" id="divCategoryForm">
-                    <div class="alert alert-success" role="alert" hidden="hidden" id="successfullMessageDiv"></div>
-                    <div class="alert alert-warning" role="alert" hidden="hidden" id="warningMessageDiv"></div>
-                    <div class="alert alert-danger" role="alert" hidden="hidden" id="errorMessageDiv"></div>
-                    <div class="basic-tb-hd">
-                        <h2>Categories</h2>
-                        <p>desc about categories</p>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                                <div class="nk-int-st">
-                                    <input type="text" class="form-control" placeholder="type name" id="txtTypeName">
-                                </div>
-                                <div class="form-ic-cmp button-icon-btn button-icon-btn-cl sm-res-mg-t-30">
-                                    <button class="btn btn-lightgreen lightgreen-icon-notika btn-reco-mg btn-button-mg waves-effect" id="btnAddType"><i class="notika-icon notika-checked" style="top:0 !important;"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                                <div class="nk-int-st">
-                                    <input type="text" class="form-control" placeholder="brand name" id="txtBrandName">
-                                </div>
-                                <div class="form-ic-cmp button-icon-btn button-icon-btn-cl sm-res-mg-t-30">
-                                    <button class="btn btn-lightgreen lightgreen-icon-notika btn-reco-mg btn-button-mg waves-effect" id="btnAddBrand"><i class="notika-icon notika-checked" style="top:0 !important;"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                                <div class="form-ic-cmp">
-                                    <i class="notika-icon notika-edit"></i>
-                                </div>
-                                <div class="nk-int-st">
-                                    <input type="text" class="form-control" placeholder="categoryname" id="txtCategoryName">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int" id="TypeWrap">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int" id="BrandWrap">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                                <div class="form-ic-cmp">
-                                    <i class="notika-icon notika-star"></i>
-                                </div>
-                                <div class="nk-int-st">
-                                    <textarea class="form-control" placeholder="desc" id="txtDescription"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                                <div class="form-ic-cmp">
-                                    <i class="notika-icon notika-star"></i>
-                                </div>
-                                <div class="nk-int-st">
-                                    <input type="text" class="form-control" placeholder="keywords" id="txtKeywords">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <div class="form-group ic-cmp-int">
-                                <div class="nk-int-st">
-                                    <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddCategory">add this!</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+﻿@model AudioShopBackend.Models.Category
+<div class="alert alert-success" role="alert" hidden="hidden" id="successfullMessageDiv"></div>
+<div class="alert alert-warning" role="alert" hidden="hidden" id="warningMessageDiv"></div>
+<div class="alert alert-danger" role="alert" hidden="hidden" id="errorMessageDiv"></div>
+<div class="basic-tb-hd">
+    <h2>Categories</h2>
+    <p>desc about categories</p>
+</div>
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+            <div class="nk-int-st">
+                <input type="text" class="form-control" placeholder="type name" id="txtTypeName">
+            </div>
+            <div class="form-ic-cmp button-icon-btn button-icon-btn-cl sm-res-mg-t-30">
+                <button class="btn btn-lightgreen lightgreen-icon-notika btn-reco-mg btn-button-mg waves-effect" id="btnAddType"><i class="notika-icon notika-checked" style="top:0 !important;"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+            <div class="nk-int-st">
+                <input type="text" class="form-control" placeholder="brand name" id="txtBrandName">
+            </div>
+            <div class="form-ic-cmp button-icon-btn button-icon-btn-cl sm-res-mg-t-30">
+                <button class="btn btn-lightgreen lightgreen-icon-notika btn-reco-mg btn-button-mg waves-effect" id="btnAddBrand"><i class="notika-icon notika-checked" style="top:0 !important;"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+            <div class="form-ic-cmp">
+                <i class="notika-icon notika-edit"></i>
+            </div>
+            <div class="nk-int-st">
+                <input type="text" class="form-control" value="@Model.CategoryName" id="txtCategoryName">
             </div>
         </div>
     </div>
 </div>
-
-    <!-- Data Table area Start-->
-<div class="data-table-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="data-table-list">
-                    <div class="basic-tb-hd">
-                        <h2>Basic Example</h2>
-                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
-                    </div>
-                    <div class="table-responsive">
-                        <table id="data-table-basic" class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>NidCategory</th>
-                                    <th>CategoryName</th>
-                                    <th>Types</th>
-                                    <th>Brands</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tblCategory">
-                                @foreach (var cat in Model)
-                                {
-                                    <tr>
-                                        <td>@cat.NidCategory</td>
-                                        <td>@cat.CategoryName</td>
-                                        <td>
-                                            <div class="col-sm-12">
-                                                @foreach (var typ in cat.Category_Types.Take(4))
-                                                {
-                                                    <div class="col-sm-6">
-                                                        <button class="btn btn-default btn-icon-notika waves-effect">
-                                                             @typ.TypeName
-                                                        </button>
-                                                    </div>
-                                                }
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="col-sm-12">
-                                                @foreach (var brd in cat.Category_Brands.Take(4))
-                                                {
-                                                    <div class="col-sm-6">
-                                                    <button class="btn btn-default btn-icon-notika waves-effect">
-                                                         @brd.BrandName
-                                                    </button>
-                                                        </div>
-                                                }
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button onclick="EditThis(@cat.NidCategory)" class="btn btn-warning notika-btn-warning waves-effect">Edit</button>
-                                            <button class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
-                                            <button class="btn btn-info notika-btn-info waves-effect"  data-toggle="modal" data-target="#myModal">Detail</button>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int" id="TypeWrap">
+            @foreach (var typ in Model.Category_Types)
+            {
+                <div class="dropdown-trig-sgn open">
+                    <button class="btn triger-shake waves-effect" data-toggle="dropdown" aria-expanded="true" id="@typ.NidType">@typ.TypeName</button>
+                    <ul class="dropdown-menu triger-shake-dp">
+                        <li><a href="#">Delete</a></li>
+                    </ul>
                 </div>
+            }
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int" id="BrandWrap">
+            @foreach (var brd in Model.Category_Brands)
+            {
+                <div class="dropdown-trig-sgn open">
+                    <button class="btn triger-shake waves-effect" data-toggle="dropdown" aria-expanded="true" id="@brd.NidBrand">@brd.BrandName</button>
+                    <ul class="dropdown-menu triger-shake-dp">
+                        <li><a href="#">Delete</a></li>
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+            <div class="form-ic-cmp">
+                <i class="notika-icon notika-star"></i>
+            </div>
+            <div class="nk-int-st">
+                <textarea class="form-control" id="txtDescription">@Model.Description</textarea>
             </div>
         </div>
     </div>
 </div>
-<!-- Data Table area End-->
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Modal header</h3>
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+        </div>
     </div>
-    <div class="modal-body">
-        <p>One fine body…</p>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+        </div>
     </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-        <button class="btn btn-primary">Save changes</button>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+            <div class="form-ic-cmp">
+                <i class="notika-icon notika-star"></i>
+            </div>
+            <div class="nk-int-st">
+                <input type="text" class="form-control" value="@Model.keywords" id="txtKeywords">
+            </div>
+        </div>
     </div>
 </div>
-
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="form-group ic-cmp-int">
+            <div class="nk-int-st">
+                <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddCategory">add this!</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section styles
     {
     <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.dataTables.min.css")">
-     }
+}
 
 @section scripts
     {
-<script src="@Url.Content("~/Content/js/data-table/jquery.dataTables.min.js")"></script>
-<script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
-   <script src="@Url.Content("~/Content/js/vendor/jquery-1.12.4.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/data-table/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
+    <script src="@Url.Content("~/Content/js/vendor/jquery-1.12.4.min.js")"></script>
     <script type="text/javascript">
         $(function () {
             var IsCategoryAdded = false;
@@ -486,4 +405,4 @@
                 })
         }
     </script>
-    }
+}

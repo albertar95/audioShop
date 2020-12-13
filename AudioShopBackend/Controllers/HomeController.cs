@@ -123,6 +123,12 @@ namespace AudioShopBackend.Controllers
             var categoryList = dbTransfer.GetAllCategories();
             return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryTable", categoryList) });
         }
+        public ActionResult GetEditCategory(int NidCategory)
+        {
+            dbTransfer = new DbTransfer();
+            Category category = dbTransfer.GetCategoryByNidCategory(NidCategory);
+            return Json(new JsonResults() {  HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryEditForm", category)});
+        }
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
         {
             if (string.IsNullOrEmpty(viewName))

@@ -284,6 +284,7 @@
     <Content Include="Content\js\wow.min.js" />
     <Content Include="Content\pages\form-components.html" />
     <Content Include="Content\pages\form-examples.html" />
+    <Content Include="Content\pages\modals.html" />
     <Content Include="Content\style.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
@@ -381,6 +382,7 @@
     <Content Include="Views\Home\Categories.cshtml" />
     <Content Include="Views\Home\_CategoryBrandAndTypeLabel.cshtml" />
     <Content Include="Views\Home\_CategoryTable.cshtml" />
+    <Content Include="Views\Home\_CategoryEditForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
