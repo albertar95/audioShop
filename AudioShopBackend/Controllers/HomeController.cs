@@ -111,7 +111,8 @@ namespace AudioShopBackend.Controllers
                 else
                     return Json(new JsonResults() { HasValue = false, Message = "error adding category" });
             }
-            if(categoryAdded)
+            TempData["NidEditcategory"] = -1;
+            if (categoryAdded)
                 return Json(new JsonResults() { HasValue = true });
             else
                 return Json(new JsonResults() { HasValue = false, Message = "unexcpected error" });
@@ -139,6 +140,7 @@ namespace AudioShopBackend.Controllers
             }
             string types = RenderViewToString(this.ControllerContext, "_CategoryBrandAndTypeLabel",typelabels);
             string brands = RenderViewToString(this.ControllerContext, "_CategoryBrandAndTypeLabel", brandlabels);
+            TempData["NidEditcategory"] = category.NidCategory;
             return Json(new JsonCategoryEdit() {  CategoryName = category.CategoryName, Description = category.Description, Keywords = category.keywords, NidCategory = category.NidCategory, BrandWrap = brands, TypeWrap = types});
         }
         public ActionResult DeleteCategory(int NidCategory)
@@ -156,30 +158,30 @@ namespace AudioShopBackend.Controllers
                     return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
             }
         }
-        public ActionResult DeleteType(string NidType)
+        public ActionResult DeleteType(Guid NidType)
         {
             dbTransfer = new DbTransfer();
             //check for product
-            if (dbTransfer.CheckForProductByNidType(Guid.Parse(NidType)))
+            if (dbTransfer.CheckForProductByNidType(NidType))
                 return Json(new JsonResults() { HasValue = false, Message = "product included" });
             else
             {
-                dbTransfer.Delete(dbTransfer.GetCategoryTypeByNidType(Guid.Parse(NidType)));
+                dbTransfer.Delete(dbTransfer.GetCategoryTypeByNidType(NidType));
                 if (dbTransfer.Save())
                     return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
                 else
                     return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
             }
         }
-        public ActionResult DeleteBrand(string NidBrand)
+        public ActionResult DeleteBrand(Guid NidBrand)
         {
             dbTransfer = new DbTransfer();
             //check for product
-            if (dbTransfer.CheckForProductByNidBrand(Guid.Parse(NidBrand)))
+            if (dbTransfer.CheckForProductByNidBrand(NidBrand))
                 return Json(new JsonResults() { HasValue = false, Message = "product included" });
             else
             {
-                dbTransfer.Delete(dbTransfer.GetCategoryBrandByNidBrand(Guid.Parse(NidBrand)));
+                dbTransfer.Delete(dbTransfer.GetCategoryBrandByNidBrand(NidBrand));
                 if (dbTransfer.Save())
                     return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
                 else
@@ -191,6 +193,60 @@ namespace AudioShopBackend.Controllers
             dbTransfer = new DbTransfer();
             Category category = dbTransfer.GetCategoryByNidCategory(NidCategory);
             return Json(new JsonResults() {  HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryDetail", category)});
+        }
+        public ActionResult ManageTypeAndBrand(bool IsBrand)
+        {
+            int NidCategory = int.Parse(TempData["NidEditcategory"].ToString());
+            ViewModels.CategoryAndBrandViewModel cbvm = new ViewModels.CategoryAndBrandViewModel();
+            if (NidCategory != -1)
+            {
+                dbTransfer = new DbTransfer();
+                if(IsBrand)
+                {
+                    cbvm.category_Brand = dbTransfer.GetCategoryByNidCategory(NidCategory).Category_Brands.ToList();
+                    cbvm.IsBrand = true;
+                }
+                else
+                {
+                    cbvm.category_Type = dbTransfer.GetCategoryByNidCategory(NidCategory).Category_Types.ToList();
+                    cbvm.IsBrand = false;
+                }
+            }
+            return View(cbvm);
+        }
+        public ActionResult EditBrand(Guid NidBrand)
+        {
+            dbTransfer = new DbTransfer();
+            Category_Brands brand = dbTransfer.GetCategoryBrandByNidBrand(NidBrand);
+            return Json(new JsonBnTEdit() {  Description = brand.Description, Keywords = brand.Keywords, Name = brand.BrandName, Nid = brand.NidBrand.ToString()});
+        }
+        public ActionResult EditType(Guid NidType)
+        {
+            dbTransfer = new DbTransfer();
+            Category_Types type = dbTransfer.GetCategoryTypeByNidType(NidType);
+            return Json(new JsonBnTEdit() { Description = type.Description, Keywords = type.Keywords, Name = type.TypeName, Nid = type.NidType.ToString() });
+        }
+        public ActionResult SyncBnTTable(bool IsBrand)
+        {
+            int NidCategory = int.Parse(TempData["NidEditcategory"].ToString());
+            ViewModels.CategoryAndBrandViewModel cbvm = new ViewModels.CategoryAndBrandViewModel();
+            if (NidCategory != -1)
+            {
+                dbTransfer = new DbTransfer();
+                if (IsBrand)
+                {
+                    cbvm.category_Brand = dbTransfer.GetCategoryByNidCategory(NidCategory).Category_Brands.ToList();
+                    cbvm.IsBrand = true;
+                }
+                else
+                {
+                    cbvm.category_Type = dbTransfer.GetCategoryByNidCategory(NidCategory).Category_Types.ToList();
+                    cbvm.IsBrand = false;
+                }
+            }
+            else
+                cbvm.IsBrand = true;
+            return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_BnTTable", cbvm) });
         }
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
         {
@@ -225,5 +281,12 @@ namespace AudioShopBackend.Controllers
         public string Keywords { get; set; }
         public string BrandWrap { get; set; }
         public string TypeWrap { get; set; }
+    }
+    public class JsonBnTEdit
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Keywords { get; set; }
+        public string Nid { get; set; }
     }
 }
