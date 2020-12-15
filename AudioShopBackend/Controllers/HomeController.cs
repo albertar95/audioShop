@@ -186,6 +186,12 @@ namespace AudioShopBackend.Controllers
                     return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
             }
         }
+        public ActionResult CategoryDetail(int NidCategory)
+        {
+            dbTransfer = new DbTransfer();
+            Category category = dbTransfer.GetCategoryByNidCategory(NidCategory);
+            return Json(new JsonResults() {  HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryDetail", category)});
+        }
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
         {
             if (string.IsNullOrEmpty(viewName))

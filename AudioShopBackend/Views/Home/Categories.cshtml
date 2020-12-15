@@ -533,7 +533,24 @@
         }
         function DetailThis(nidcat)
         {
-            //call ajax
+            $.ajax(
+                {
+                    url: '@Url.Action("CategoryDetail","Home")',
+                    type: 'post',
+                    datatype: 'json',
+                    data: {NidCategory:nidcat},
+                    success: function (result)
+                    {
+                        if (result.HasValue)
+                            $("#DetailModal").html(result.Html);
+                        else
+                            alert('error');
+                    },
+                    error: function ()
+                    {
+                        alert('error')
+                    }
+                })
             $("#DetailModal").modal('toggle')
             $("#DetailModal").modal('show')
         }
