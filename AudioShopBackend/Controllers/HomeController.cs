@@ -65,19 +65,19 @@ namespace AudioShopBackend.Controllers
             }
             if (categoryAdded)
             {
-                List<Tuple<string, string>> labels = new List<Tuple<string, string>>();
+                List<Tuple<string, string,bool>> labels = new List<Tuple<string, string,bool>>();
                 if (brandAdded)
                 {
                     foreach (var lbl in dbTransfer.GetCategoryBrandsByNidCategory(tmpNidcategory))
                     {
-                        labels.Add(new Tuple<string, string>(lbl.NidBrand.ToString(), lbl.BrandName));
+                        labels.Add(new Tuple<string, string,bool>(lbl.NidBrand.ToString(), lbl.BrandName,true));
                     }
                 }
                 if(typeAdded)
                 {
                     foreach (var lbl in dbTransfer.GetCategoryTypesByNidCategory(tmpNidcategory))
                     {
-                        labels.Add(new Tuple<string, string>(lbl.NidType.ToString(), lbl.TypeName));
+                        labels.Add(new Tuple<string, string,bool>(lbl.NidType.ToString(), lbl.TypeName,false));
                     }
                 }
                 return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryBrandAndTypeLabel", labels), tmpNidCategory = tmpNidcategory });
@@ -127,7 +127,64 @@ namespace AudioShopBackend.Controllers
         {
             dbTransfer = new DbTransfer();
             Category category = dbTransfer.GetCategoryByNidCategory(NidCategory);
-            return Json(new JsonResults() {  HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryEditForm", category)});
+            List<Tuple<string, string,bool>> typelabels = new List<Tuple<string, string,bool>>();
+            List<Tuple<string, string,bool>> brandlabels = new List<Tuple<string, string,bool>>();
+            foreach (var lbl in category.Category_Types)
+            {
+                typelabels.Add(new Tuple<string, string,bool>(lbl.NidType.ToString(), lbl.TypeName,false));
+            }
+            foreach (var lbl in category.Category_Brands)
+            {
+                brandlabels.Add(new Tuple<string, string,bool>(lbl.NidBrand.ToString(), lbl.BrandName,true));
+            }
+            string types = RenderViewToString(this.ControllerContext, "_CategoryBrandAndTypeLabel",typelabels);
+            string brands = RenderViewToString(this.ControllerContext, "_CategoryBrandAndTypeLabel", brandlabels);
+            return Json(new JsonCategoryEdit() {  CategoryName = category.CategoryName, Description = category.Description, Keywords = category.keywords, NidCategory = category.NidCategory, BrandWrap = brands, TypeWrap = types});
+        }
+        public ActionResult DeleteCategory(int NidCategory)
+        {
+            dbTransfer = new DbTransfer();
+            //check for brands and type and product
+            if (dbTransfer.CheckForBrandByNidcategory(NidCategory) || dbTransfer.CheckForTypeByNidcategory(NidCategory) || dbTransfer.CheckForProductByNidcategory(NidCategory))
+                return Json(new JsonResults() {  HasValue = false, Message = "type or brand or product included"});
+            else
+            {
+                dbTransfer.Delete(dbTransfer.GetCategoryByNidCategory(NidCategory));
+                if(dbTransfer.Save())
+                    return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+            }
+        }
+        public ActionResult DeleteType(string NidType)
+        {
+            dbTransfer = new DbTransfer();
+            //check for product
+            if (dbTransfer.CheckForProductByNidType(Guid.Parse(NidType)))
+                return Json(new JsonResults() { HasValue = false, Message = "product included" });
+            else
+            {
+                dbTransfer.Delete(dbTransfer.GetCategoryTypeByNidType(Guid.Parse(NidType)));
+                if (dbTransfer.Save())
+                    return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+            }
+        }
+        public ActionResult DeleteBrand(string NidBrand)
+        {
+            dbTransfer = new DbTransfer();
+            //check for product
+            if (dbTransfer.CheckForProductByNidBrand(Guid.Parse(NidBrand)))
+                return Json(new JsonResults() { HasValue = false, Message = "product included" });
+            else
+            {
+                dbTransfer.Delete(dbTransfer.GetCategoryBrandByNidBrand(Guid.Parse(NidBrand)));
+                if (dbTransfer.Save())
+                    return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+            }
         }
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
         {
@@ -153,5 +210,14 @@ namespace AudioShopBackend.Controllers
         public string Message { get; set; }
         public string Html { get; set; }
         public int tmpNidCategory { get; set; }
+    }
+    public class JsonCategoryEdit
+    {
+        public int NidCategory { get; set; }
+        public string CategoryName { get; set; }
+        public string Description { get; set; }
+        public string Keywords { get; set; }
+        public string BrandWrap { get; set; }
+        public string TypeWrap { get; set; }
     }
 }

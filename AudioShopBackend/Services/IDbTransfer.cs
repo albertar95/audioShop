@@ -20,7 +20,15 @@ namespace AudioShopBackend.Services
         List<Category> GetAllCategories(int PageSize = 10,bool IncludeTypes = false, bool IncludeBrands = false);
         //sub-section : Brand 
         List<Category_Brands> GetCategoryBrandsByNidCategory(int NidCategory,int PageSize);
+        Category_Brands GetCategoryBrandByNidBrand(Guid NidBrand);
         //sub-section : type 
         List<Category_Types> GetCategoryTypesByNidCategory(int NidCategory, int PageSize);
+        Category_Types GetCategoryTypeByNidType(Guid NidType);
+        //generals
+        bool CheckForBrandByNidcategory(int NidCategory);
+        bool CheckForTypeByNidcategory(int NidCategory);
+        bool CheckForProductByNidcategory(int NidCategory);
+        bool CheckForProductByNidBrand(Guid NidBrand);
+        bool CheckForProductByNidType(Guid NidType);
     }
 }

@@ -64,5 +64,40 @@ namespace AudioShopBackend.Services
         {
             return db.Categories.Where(p => p.IsSubmmited == true).Take(PageSize).ToList();
         }
+
+        public bool CheckForBrandByNidcategory(int NidCategory)
+        {
+            return db.Category_Brands.Where(p => p.NidCategory == NidCategory).Any();
+        }
+
+        public bool CheckForTypeByNidcategory(int NidCategory)
+        {
+            return db.Category_Types.Where(p => p.NidCategory == NidCategory).Any();
+        }
+
+        public bool CheckForProductByNidcategory(int NidCategory)
+        {
+            return db.Products.Where(p => p.NidCategory == NidCategory).Any();
+        }
+
+        public bool CheckForProductByNidBrand(Guid NidBrand)
+        {
+            return db.Products.Where(p => p.NidBrand == NidBrand).Any();
+        }
+
+        public bool CheckForProductByNidType(Guid NidType)
+        {
+            return db.Products.Where(p => p.NidType == NidType).Any();
+        }
+
+        public Category_Brands GetCategoryBrandByNidBrand(Guid NidBrand)
+        {
+            return db.Category_Brands.Where(p => p.NidBrand == NidBrand).FirstOrDefault();
+        }
+
+        public Category_Types GetCategoryTypeByNidType(Guid NidType)
+        {
+            return db.Category_Types.Where(p => p.NidType == NidType).FirstOrDefault();
+        }
     }
 }

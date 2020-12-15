@@ -382,7 +382,7 @@
     <Content Include="Views\Home\Categories.cshtml" />
     <Content Include="Views\Home\_CategoryBrandAndTypeLabel.cshtml" />
     <Content Include="Views\Home\_CategoryTable.cshtml" />
-    <Content Include="Views\Home\_CategoryEditForm.cshtml" />
+    <Content Include="Views\Home\_CategoryDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

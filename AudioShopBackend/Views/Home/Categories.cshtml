@@ -92,10 +92,12 @@
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group ic-cmp-int">
+                                <a href="#" style="text-decoration:underline;">manage category types</a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group ic-cmp-int">
+                                <a href="#" style="text-decoration:underline;">manage category brand</a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -165,8 +167,8 @@
                                         </td>
                                         <td>
                                             <button onclick="EditThis(@cat.NidCategory)" class="btn btn-warning notika-btn-warning waves-effect">Edit</button>
-                                            <button class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
-                                            <button class="btn btn-info notika-btn-info waves-effect"  data-toggle="modal" data-target="#myModal">Detail</button>
+                                            <button onclick="DeleteThis(@cat.NidCategory)" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                                            <button onclick="DetailThis(@cat.NidCategory)" class="btn btn-info notika-btn-info waves-effect"  data-toggle="modal">Detail</button>
                                         </td>
                                     </tr>
                                 }
@@ -193,6 +195,23 @@
         <button class="btn btn-primary">Save changes</button>
     </div>
 </div>
+<div class="modal animated bounce" id="DetailModal" role="dialog" style="display: none;">
+    <div class="modal-dialog modals-default">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <h2>Modal title</h2>
+                <p>Curabitur blandit mollis lacus. Nulla sit amet est. Suspendisse nisl elit, rhoncus eget, elementum ac, condimentum eget, diam. Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi. Cras sagittis.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 @section styles
@@ -204,11 +223,10 @@
     {
 <script src="@Url.Content("~/Content/js/data-table/jquery.dataTables.min.js")"></script>
 <script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
-   <script src="@Url.Content("~/Content/js/vendor/jquery-1.12.4.min.js")"></script>
     <script type="text/javascript">
+        var IsCategoryAdded = false;
+        var NidCurrentCategory = 0;
         $(function () {
-            var IsCategoryAdded = false;
-            var NidCurrentCategory = 0;
             $("#btnAddCategory").click(function (e) {
                 e.preventDefault();
                 if ($("#txtCategoryName").val() == '') {
@@ -227,21 +245,7 @@
                                 data: { IsNewCategory: false, Name: $("#txtCategoryName").val(), NidCategory: NidCurrentCategory, CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
                                 success: function (result) {
                                     if (result.HasValue) {
-                                        $.ajax(
-                                            {
-                                                url: '@Url.Action("SyncCategoryTable","Home")',
-                                                type: 'post',
-                                                datatype: 'json',
-                                                data: {},
-                                                success: function (result) {
-                                                    if (result.HasValue) {
-                                                        $("#tblCategory").html(result.Html);
-                                                    }
-                                                },
-                                                error: function () {
-                                                    alert('error');
-                                                }
-                                            })
+                                        UpdateTableContent();
                                         $("#txtCategoryName").val("");
                                         $("#txtDescription").val("");
                                         $("#txtKeywords").val("");
@@ -280,21 +284,7 @@
         data: { IsNewCategory: true, Name: $("#txtCategoryName").val(), CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
         success: function (result) {
             if (result.HasValue) {
-                $.ajax(
-    {
-        url: '@Url.Action("SyncCategoryTable","Home")',
-        type: 'post',
-        datatype: 'json',
-        data: {},
-        success: function (result) {
-            if (result.HasValue) {
-                $("#tblCategory").html(result.Html);
-            }
-        },
-        error: function () {
-            alert('error');
-        }
-    })
+                UpdateTableContent();
                 $("#txtCategoryName").val("");
                 $("#txtDescription").val("");
                 $("#txtKeywords").val("");
@@ -477,13 +467,75 @@
                     data:{NidCategory:nidcat},
                     success: function (result)
                     {
-                        $("#divCategoryForm").html(result.Html);
+                        $("#txtCategoryName").val(result.CategoryName);
+                        $("#txtDescription").val(result.Description);
+                        $("#txtKeywords").val(result.Keywords);
+                        $("#TypeWrap").html(result.TypeWrap);
+                        $("#BrandWrap").html(result.BrandWrap);
+                        IsCategoryAdded = true;
+                        NidCurrentCategory = result.NidCategory;
                     },
                     error: function ()
                     {
                         alert('error');
                     }
                 })
+        }
+        function DeleteThis(nidcat)
+        {
+            swal({   
+                title: "Are you sure?",   
+                text: "You will not be able to recover this imaginary file!",   
+                type: "warning",   
+                showCancelButton: true,   
+                confirmButtonText: "Yes, delete it!",
+            }).then(function () {
+                $.ajax(
+                    {
+                        url: '@Url.Action("DeleteCategory","Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: {NidCategory:nidcat},
+                        success: function (result)
+                        {
+                            if (result.HasValue)
+                            {
+                                swal("deleted!", result.Message, "success");
+                                UpdateTableContent();
+                            } else {
+                                swal(result.Message);
+                            }
+                        },
+                        error: function ()
+                        {
+                            swal("error");
+                        }
+                    })
+            });
+        }
+        function UpdateTableContent()
+        {
+            $.ajax(
+         {
+    url: '@Url.Action("SyncCategoryTable","Home")',
+    type: 'post',
+    datatype: 'json',
+    data: {},
+    success: function (result) {
+        if (result.HasValue) {
+            $("#tblCategory").html(result.Html);
+        }
+    },
+    error: function () {
+        alert('error');
+    }
+})
+        }
+        function DetailThis(nidcat)
+        {
+            //call ajax
+            $("#DetailModal").modal('toggle')
+            $("#DetailModal").modal('show')
         }
     </script>
     }

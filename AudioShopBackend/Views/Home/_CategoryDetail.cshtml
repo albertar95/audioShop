@@ -1,0 +1,30 @@
+﻿@model AudioShopBackend.Models.Category
+
+<div class="modal-dialog modals-default">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        <div class="modal-body">
+            <h2>@Model.CategoryName</h2>
+            <p>@Model.Description</p>
+            <h3>@Model.keywords</h3>
+            @foreach (var brd in Model.Category_Brands)
+            {
+                <div class="dropdown-trig-sgn open">
+                    <button class="btn triger-shake waves-effect" data-toggle="dropdown" aria-expanded="true">@brd.BrandName</button>
+                </div>
+            }
+            @foreach (var typ in Model.Category_Types)
+            {
+                <div class="dropdown-trig-sgn open">
+                    <button class="btn triger-shake waves-effect" data-toggle="dropdown" aria-expanded="true">@typ.TypeName</button>
+                </div>
+            }
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+
