@@ -6,6 +6,25 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="breadcomb-list">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="breadcomb-wp">
+                            <div class="breadcomb-icon">
+                                <i class="notika-icon notika-windows"></i>
+                            </div>
+                            <div class="breadcomb-ctn">
+                                <h2>Manage Brand and Type</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
+                        <div class="breadcomb-report">
+                            <a href="@Url.Action("categories","Home")" class="btn btn-info">go to categories</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="text-align:right;direction:rtl;">
                 <div class="form-example-area">
                     <div class="form-element-list" id="divCategoryForm">
@@ -49,7 +68,15 @@
                         <div class="row">
                             <div class="form-group ic-cmp-int">
                                 <div class="nk-int-st">
-                                    <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddCategory">add this!</button>
+                                    @if (Model.IsBrand)
+                                    {
+                                        <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddBrand">add this!</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddType">add this!</button>
+                                    }
+                                    <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">clear form</button>
                                 </div>
                             </div>
                         </div>
@@ -61,7 +88,7 @@
                 <div class="data-table-area">
                     <div class="data-table-list">
                         <div class="basic-tb-hd">
-                            <h2>category name : @Model.category_Brand.FirstOrDefault().Category.CategoryName</h2>
+                            <h2>category name : @Model.CategoryName</h2>
                             <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
                         </div>
                         <div class="table-responsive">
@@ -116,8 +143,189 @@
     {
     <script type="text/javascript">
         var NidCurrent = "";
+        var IsNewBrandorType = true;
         $(function () {
-
+            $("#btnAddBrand").click(function (e)
+            {
+                e.preventDefault();
+                if ($("#txtName").val() == '') {
+                    $("#warningMessageDiv").html('name is null');
+                    $("#warningMessageDiv").removeAttr('hidden');
+                    setTimeout(function () {
+                        $("#warningMessageDiv").prop('hidden', 'hidden');
+                    }, 3000);
+                } else {
+                    if (IsNewBrandorType)
+                    {
+                        $.ajax(
+    {
+        url: '@Url.Action("ManageBrand","Home")',
+        type: 'post',
+        datatype: 'json',
+        data: { IsNewBrand: true, Name: $("#txtName").val(), Description: $("#txtDescription").val(), Keywords: $("#txtKeywords").val(),NidCategory: @Model.NidCategory },
+        success: function (result) {
+            if (result.HasValue) {
+                UpdateTableContent(true);
+                $("#txtName").val("");
+                $("#txtDescription").val("");
+                $("#txtKeywords").val("");
+                IsNewBrandorType = false;
+                NidCurrent = "";
+                $("#successfullMessageDiv").html('brand added successfully!');
+                $("#successfullMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#successfullMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            } else {
+                $("#errorMessageDiv").html(result.Message);
+                $("#errorMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#errorMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            }
+        },
+        error: function (result) {
+            $("#errorMessageDiv").html(result.Message);
+            $("#errorMessageDiv").removeAttr('hidden');
+            setTimeout(function () {
+                $("#errorMessageDiv").prop('hidden', 'hidden');
+            }, 5000);
+        }
+    })
+                    }else{
+                        $.ajax(
+    {
+        url: '@Url.Action("ManageBrand","Home")',
+        type: 'post',
+        datatype: 'json',
+        data: { IsNewBrand: false,NidBrand:NidCurrent, Name: $("#txtName").val(), Description: $("#txtDescription").val(), Keywords: $("#txtKeywords").val(),NidCategory: @Model.NidCategory },
+        success: function (result) {
+            if (result.HasValue) {
+                UpdateTableContent(true);
+                $("#txtName").val("");
+                $("#txtDescription").val("");
+                $("#txtKeywords").val("");
+                IsNewBrandorType = false;
+                NidCurrent = "";
+                $("#successfullMessageDiv").html('brand edited successfully!');
+                $("#successfullMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#successfullMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            } else {
+                $("#errorMessageDiv").html(result.Message);
+                $("#errorMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#errorMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            }
+        },
+        error: function (result) {
+            $("#errorMessageDiv").html(result.Message);
+            $("#errorMessageDiv").removeAttr('hidden');
+            setTimeout(function () {
+                $("#errorMessageDiv").prop('hidden', 'hidden');
+            }, 5000);
+        }
+    })
+                    }
+                }
+            });
+            $("#btnAddType").click(function (e)
+            {
+                e.preventDefault();
+                if ($("#txtName").val() == '') {
+                    $("#warningMessageDiv").html('name is null');
+                    $("#warningMessageDiv").removeAttr('hidden');
+                    setTimeout(function () {
+                        $("#warningMessageDiv").prop('hidden', 'hidden');
+                    }, 3000);
+                } else {
+                    if (IsNewBrandorType)
+                    {
+                        $.ajax(
+    {
+        url: '@Url.Action("ManageType","Home")',
+        type: 'post',
+        datatype: 'json',
+        data: { IsNewType: true, Name: $("#txtName").val(), Description: $("#txtDescription").val(), Keywords: $("#txtKeywords").val(),NidCategory: @Model.NidCategory },
+        success: function (result) {
+            if (result.HasValue) {
+                UpdateTableContent(false);
+                $("#txtName").val("");
+                $("#txtDescription").val("");
+                $("#txtKeywords").val("");
+                IsNewBrandorType = false;
+                NidCurrent = "";
+                $("#successfullMessageDiv").html('type added successfully!');
+                $("#successfullMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#successfullMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            } else {
+                $("#errorMessageDiv").html(result.Message);
+                $("#errorMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#errorMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            }
+        },
+        error: function (result) {
+            $("#errorMessageDiv").html(result.Message);
+            $("#errorMessageDiv").removeAttr('hidden');
+            setTimeout(function () {
+                $("#errorMessageDiv").prop('hidden', 'hidden');
+            }, 5000);
+        }
+    })
+                    }else{
+                        $.ajax(
+    {
+        url: '@Url.Action("ManageType","Home")',
+        type: 'post',
+        datatype: 'json',
+        data: { IsNewType: false,NidType:NidCurrent, Name: $("#txtName").val(), Description: $("#txtDescription").val(), Keywords: $("#txtKeywords").val(),NidCategory: @Model.NidCategory },
+        success: function (result) {
+            if (result.HasValue) {
+                UpdateTableContent(false);
+                $("#txtName").val("");
+                $("#txtDescription").val("");
+                $("#txtKeywords").val("");
+                IsNewBrandorType = false;
+                NidCurrent = "";
+                $("#successfullMessageDiv").html('type edited successfully!');
+                $("#successfullMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#successfullMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            } else {
+                $("#errorMessageDiv").html(result.Message);
+                $("#errorMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#errorMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            }
+        },
+        error: function (result) {
+            $("#errorMessageDiv").html(result.Message);
+            $("#errorMessageDiv").removeAttr('hidden');
+            setTimeout(function () {
+                $("#errorMessageDiv").prop('hidden', 'hidden');
+            }, 5000);
+        }
+    })
+                    }
+                }
+            });
+            $("#btnClearForm").click(function(e)
+            {
+                e.preventDefault();
+                $("#txtName").val("")
+                $("#txtDescription").val("")
+                $("#txtKeywords").val("")
+                NidCurrent = "";
+                IsNewBrandorType = true;
+            });
         });
         function EditBrand(nidBrand) {
             $.ajax(
@@ -132,6 +340,7 @@
                         $("#txtDescription").val(result.Description)
                         $("#txtKeywords").val(result.Keywords)
                         NidCurrent = result.Nid;
+                        IsNewBrandorType = false;
                     },
                     error: function () {
                         alert('error')
@@ -156,6 +365,8 @@
                             if (result.HasValue) {
                                 swal("deleted!", result.Message, "success");
                                 UpdateTableContent(true);
+                                nidBrand = "";
+                                IsNewBrandorType = true;
                             } else {
                                 swal(result.Message);
                             }
@@ -178,6 +389,7 @@
                         $("#txtDescription").val(result.Description)
                         $("#txtKeywords").val(result.Keywords)
                         NidCurrent = result.Nid;
+                        IsNewBrandorType = false;
                     },
                     error: function () {
                         alert('error')
@@ -202,6 +414,8 @@
                             if (result.HasValue) {
                                 swal("deleted!", result.Message, "success");
                                 UpdateTableContent(false);
+                                nidBrand = "";
+                                IsNewBrandorType = true;
                             } else {
                                 swal(result.Message);
                             }
@@ -218,7 +432,7 @@
              url: '@Url.Action("SyncBnTTable","Home")',
              type: 'post',
              datatype: 'json',
-             data: {IsBrand:isBrand},
+             data: {IsBrand:isBrand,NidCategory:@Model.NidCategory},
              success: function (result) {
                  if (result.HasValue) {
                      $("#tblBnT").html(result.Html);

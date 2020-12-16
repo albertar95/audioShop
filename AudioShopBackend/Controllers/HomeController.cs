@@ -197,21 +197,25 @@ namespace AudioShopBackend.Controllers
         public ActionResult ManageTypeAndBrand(bool IsBrand)
         {
             int NidCategory = int.Parse(TempData["NidEditcategory"].ToString());
+            dbTransfer = new DbTransfer();
             ViewModels.CategoryAndBrandViewModel cbvm = new ViewModels.CategoryAndBrandViewModel();
             if (NidCategory != -1)
             {
-                dbTransfer = new DbTransfer();
+            Category category = dbTransfer.GetCategoryByNidCategory(NidCategory);
                 if(IsBrand)
                 {
-                    cbvm.category_Brand = dbTransfer.GetCategoryByNidCategory(NidCategory).Category_Brands.ToList();
+                    cbvm.category_Brand = category.Category_Brands.ToList();
                     cbvm.IsBrand = true;
                 }
                 else
                 {
-                    cbvm.category_Type = dbTransfer.GetCategoryByNidCategory(NidCategory).Category_Types.ToList();
+                    cbvm.category_Type = category.Category_Types.ToList();
                     cbvm.IsBrand = false;
                 }
+                cbvm.NidCategory = category.NidCategory;
+                cbvm.CategoryName = category.CategoryName;
             }
+
             return View(cbvm);
         }
         public ActionResult EditBrand(Guid NidBrand)
@@ -226,9 +230,54 @@ namespace AudioShopBackend.Controllers
             Category_Types type = dbTransfer.GetCategoryTypeByNidType(NidType);
             return Json(new JsonBnTEdit() { Description = type.Description, Keywords = type.Keywords, Name = type.TypeName, Nid = type.NidType.ToString() });
         }
-        public ActionResult SyncBnTTable(bool IsBrand)
+        public ActionResult ManageBrand(bool IsNewBrand,string Name,int NidCategory, string Description = "",string Keywords = "", string NidBrand = "")
         {
-            int NidCategory = int.Parse(TempData["NidEditcategory"].ToString());
+            dbTransfer = new DbTransfer();
+            if(IsNewBrand)
+            {
+                Category_Brands cb = new Category_Brands() {  BrandName = Name, NidBrand = Guid.NewGuid(), Description = Description, Keywords = Keywords, NidCategory = NidCategory};
+                dbTransfer.Add(cb);
+                if (dbTransfer.Save())
+                    return Json(new JsonResults() {  HasValue = true});
+                else
+                    return Json(new JsonResults() { HasValue = false,Message = "error in db" });
+            }
+            else
+            {
+                Category_Brands cb = dbTransfer.GetCategoryBrandByNidBrand(Guid.Parse(NidBrand));
+                cb.BrandName = Name;cb.Description = Description;cb.Keywords = Keywords;
+                dbTransfer.Update(cb);
+                if (dbTransfer.Save())
+                    return Json(new JsonResults() { HasValue = true });
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error in db" });
+            }
+        }
+        public ActionResult ManageType(bool IsNewType, string Name, int NidCategory, string Description = "", string Keywords = "", string NidType = "")
+        {
+            dbTransfer = new DbTransfer();
+            if (IsNewType)
+            {
+                Category_Types cb = new Category_Types() { TypeName = Name, NidType = Guid.NewGuid(), Description = Description, Keywords = Keywords, NidCategory = NidCategory };
+                dbTransfer.Add(cb);
+                if (dbTransfer.Save())
+                    return Json(new JsonResults() { HasValue = true });
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error in db" });
+            }
+            else
+            {
+                Category_Types cb = dbTransfer.GetCategoryTypeByNidType(Guid.Parse(NidType));
+                cb.TypeName = Name; cb.Description = Description; cb.Keywords = Keywords;
+                dbTransfer.Update(cb);
+                if (dbTransfer.Save())
+                    return Json(new JsonResults() { HasValue = true });
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error in db" });
+            }
+        }
+        public ActionResult SyncBnTTable(bool IsBrand,int NidCategory)
+        {
             ViewModels.CategoryAndBrandViewModel cbvm = new ViewModels.CategoryAndBrandViewModel();
             if (NidCategory != -1)
             {

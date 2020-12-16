@@ -11,5 +11,7 @@ namespace AudioShopBackend.ViewModels
         public List<Category_Brands> category_Brand { get; set; }
         public List<Category_Types> category_Type { get; set; }
         public bool IsBrand { get; set; }
+        public int NidCategory { get; set; }
+        public string CategoryName { get; set; }
     }
 }

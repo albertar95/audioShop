@@ -104,6 +104,7 @@
                             <div class="form-group ic-cmp-int">
                                 <div class="nk-int-st">
                                     <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddCategory">add this!</button>
+                                    <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">clear form</button>
                                 </div>
                             </div>
                         </div>
@@ -425,6 +426,17 @@
                                 )
                     }
                 }
+            });
+            $("#btnClearForm").click(function (e)
+            {
+                e.preventDefault();
+                $("#txtCategoryName").val("");
+                $("#txtDescription").val("");
+                $("#txtKeywords").val("");
+                NidCurrentCategory = 0;
+                IsCategoryAdded = false;
+                $("#BrandWrap").html("");
+                $("#TypeWrap").html("");
             });
         });
         function EditThis(nidcat)
