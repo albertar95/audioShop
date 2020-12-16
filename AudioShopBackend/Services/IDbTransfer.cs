@@ -24,6 +24,9 @@ namespace AudioShopBackend.Services
         //sub-section : type 
         List<Category_Types> GetCategoryTypesByNidCategory(int NidCategory, int PageSize);
         Category_Types GetCategoryTypeByNidType(Guid NidType);
+
+        //products
+        List<Product> GetAllProducts(int pagesize = 10);
         //generals
         bool CheckForBrandByNidcategory(int NidCategory);
         bool CheckForTypeByNidcategory(int NidCategory);

@@ -99,5 +99,10 @@ namespace AudioShopBackend.Services
         {
             return db.Category_Types.Where(p => p.NidType == NidType).FirstOrDefault();
         }
+
+        public List<Product> GetAllProducts(int pagesize = 10)
+        {
+            return db.Products.Where(p => p.State == 0).Take(pagesize).ToList();
+        }
     }
 }

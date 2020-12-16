@@ -386,6 +386,9 @@
     <Content Include="Views\Home\_CategoryDetail.cshtml" />
     <Content Include="Views\Home\ManageTypeAndBrand.cshtml" />
     <Content Include="Views\Home\_BnTTable.cshtml" />
+    <Content Include="Views\Home\Products.cshtml" />
+    <Content Include="Views\Home\AddProduct.cshtml" />
+    <Content Include="Views\Home\EditProduct.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

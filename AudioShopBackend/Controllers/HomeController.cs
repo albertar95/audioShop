@@ -17,6 +17,8 @@ namespace AudioShopBackend.Controllers
         {
             return View();
         }
+
+        //category section
         public ActionResult Categories()
         {
             dbTransfer = new DbTransfer();
@@ -297,6 +299,27 @@ namespace AudioShopBackend.Controllers
                 cbvm.IsBrand = true;
             return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_BnTTable", cbvm) });
         }
+
+        //products
+        public ActionResult Products()
+        {
+            dbTransfer = new DbTransfer();
+            var prods = dbTransfer.GetAllProducts();
+            return View(prods);
+        }
+        public ActionResult AddProduct()
+        {
+            return View();
+        }
+        public ActionResult EditProduct()
+        {
+            return View();
+        }
+        public ActionResult DeleteProduct()
+        {
+            return View();
+        }
+        //generals
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
         {
             if (string.IsNullOrEmpty(viewName))
