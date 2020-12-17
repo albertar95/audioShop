@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "AddProduct";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @using (Html.BeginForm("SubmitAddProduct", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "ProductForm" }))
@@ -47,7 +47,14 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group ic-cmp-int">
-                                    <textarea style="min-height:300px;" placeholder="description"></textarea>
+                                    <div class="tinymce-single nt-mg-b-30">
+                                        <div class="alert-title">
+                                            <h2>Basic Summernote WYSIWYG editor</h2>
+                                            <p>The fastest way to get Summernote WYSIWYG editor is powerfull JavaScript plugin. you can easily maintance typography system.</p>
+                                        </div>
+                                        <div id="summernote">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -98,3 +105,24 @@
         </div>
     </div>
 }
+
+@section styles
+    {
+<!-- summernote CSS
+============================================ -->
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="@Url.Content("~/Content/css/summernote/summernote.css")">
+    }
+@section scripts
+    {
+<!-- summernote JS
+============================================ -->
+<script src="@Url.Content("~/Content/js/summernote/summernote.min.js")"></script>
+<script src="@Url.Content("~/Content/js/summernote/summernote-active.js")"></script>
+    <script type="text/javascript">
+        $(function ()
+        {
+            $("#summernote").summernote()
+        });
+    </script>
+    }
