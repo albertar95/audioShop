@@ -27,11 +27,13 @@ namespace AudioShopBackend.Services
 
         //products
         List<Product> GetAllProducts(int pagesize = 10);
+        Product GetProductByProductId(Guid NidProduct);
         //generals
         bool CheckForBrandByNidcategory(int NidCategory);
         bool CheckForTypeByNidcategory(int NidCategory);
         bool CheckForProductByNidcategory(int NidCategory);
         bool CheckForProductByNidBrand(Guid NidBrand);
         bool CheckForProductByNidType(Guid NidType);
+        bool CheckForOrderByNidProduct(Guid NidProduct);
     }
 }

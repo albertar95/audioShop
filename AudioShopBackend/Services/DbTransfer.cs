@@ -22,10 +22,18 @@ namespace AudioShopBackend.Services
 
         public bool Save()
         {
-            if (db.SaveChanges() > 0)
-                return true;
-            else
+            try
+            {
+                if (db.SaveChanges() > 0)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+
                 return false;
+            }
         }
 
         public void Update<T>(T entity) where T : class
@@ -103,6 +111,16 @@ namespace AudioShopBackend.Services
         public List<Product> GetAllProducts(int pagesize = 10)
         {
             return db.Products.Where(p => p.State == 0).Take(pagesize).ToList();
+        }
+
+        public Product GetProductByProductId(Guid NidProduct)
+        {
+            return db.Products.Where(p => p.NidProduct == NidProduct).FirstOrDefault();
+        }
+
+        public bool CheckForOrderByNidProduct(Guid NidProduct)
+        {
+            return db.Orders.Where(p => p.NidProduct == NidProduct).Any();
         }
     }
 }

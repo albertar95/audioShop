@@ -299,7 +299,17 @@ namespace AudioShopBackend.Controllers
                 cbvm.IsBrand = true;
             return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_BnTTable", cbvm) });
         }
-
+        public ActionResult GetBnTOptions(int NidCategory,bool IsBrand)
+        {
+            dbTransfer = new DbTransfer();
+            ViewModels.CategoryAndBrandViewModel cbvm = new ViewModels.CategoryAndBrandViewModel();
+            if(IsBrand)
+                cbvm.category_Brand = dbTransfer.GetCategoryBrandsByNidCategory(NidCategory);
+            else
+                cbvm.category_Type = dbTransfer.GetCategoryTypesByNidCategory(NidCategory);
+            cbvm.IsBrand = IsBrand;
+            return Json(new JsonResults() {  HasValue = true, Html = RenderViewToString(this.ControllerContext, "_BnTOptions", cbvm)});
+        }
         //products
         public ActionResult Products()
         {
@@ -309,15 +319,71 @@ namespace AudioShopBackend.Controllers
         }
         public ActionResult AddProduct()
         {
-            return View();
+            ViewModels.ProductViewModel pvm = new ViewModels.ProductViewModel();
+            dbTransfer = new DbTransfer();
+            pvm.Categories = dbTransfer.GetAllCategories();
+            return View(pvm);
         }
-        public ActionResult EditProduct()
+        public ActionResult EditProduct(Guid NidProduct)
         {
-            return View();
+            ViewModels.ProductViewModel pvm = new ViewModels.ProductViewModel();
+            dbTransfer = new DbTransfer();
+            Product product = dbTransfer.GetProductByProductId(NidProduct);
+            pvm.Categories = dbTransfer.GetAllCategories();
+            pvm.Category_Brands = dbTransfer.GetCategoryBrandsByNidCategory(product.NidCategory);
+            pvm.category_Types = dbTransfer.GetCategoryTypesByNidCategory(product.NidCategory);
+            pvm.Product = product;
+            return View(pvm);
         }
-        public ActionResult DeleteProduct()
+        [ValidateInput(false)]
+        public ActionResult SubmitEditProduct(ViewModels.ProductViewModel pvm)
         {
-            return View();
+            dbTransfer = new DbTransfer();
+            pvm.Product.LastModified = DateTime.Now;
+            dbTransfer.Update(pvm.Product);
+            if(dbTransfer.Save())
+            {
+                TempData["SucessfullAddProduct"] = "product edited successfully";
+                return RedirectToAction("Products");
+            }
+            else
+            {
+                TempData["ErrorEditProduct"] = "error in db";
+                return RedirectToAction("EditProduct",new { NidProduct = pvm.Product.NidProduct});
+            }
+        }
+        public ActionResult DeleteProduct(Guid NidProduct)
+        {
+            dbTransfer = new DbTransfer();
+            //check for orders
+            if (dbTransfer.CheckForOrderByNidProduct(NidProduct))
+                return Json(new JsonResults() { HasValue = false, Message = "order included" });
+            else
+            {
+                dbTransfer.Delete(dbTransfer.GetProductByProductId(NidProduct));
+                if (dbTransfer.Save())
+                    return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+            }
+        }
+        [ValidateInput(false)]
+        public ActionResult SubmitAddProduct(ViewModels.ProductViewModel pvm)
+        {
+            pvm.Product.CreateDate = DateTime.Now;
+            pvm.Product.NidProduct = Guid.NewGuid();
+            dbTransfer = new DbTransfer();
+            dbTransfer.Add(pvm.Product);
+            if(dbTransfer.Save())
+            {
+                TempData["SucessfullAddProduct"] = "product added sucessfully";
+                return RedirectToAction("Products");
+            }
+            else
+            {
+                TempData["ErrorAddProduct"] = "error in db";
+                return RedirectToAction("AddProduct");
+            }
         }
         //generals
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
