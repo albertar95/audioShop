@@ -14,16 +14,22 @@ namespace AudioShopBackend.Models
     
     public partial class Order
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Order()
+        {
+            this.Ships = new HashSet<Ship>();
+        }
+    
         public System.Guid NidOrder { get; set; }
         public System.Guid NidUser { get; set; }
         public System.Guid NidProduct { get; set; }
         public int Quantity { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public Nullable<System.Guid> NidShip { get; set; }
         public byte state { get; set; }
     
         public virtual Product Product { get; set; }
-        public virtual Ship Ship { get; set; }
         public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ship> Ships { get; set; }
     }
 }

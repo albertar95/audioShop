@@ -352,6 +352,7 @@
     <Compile Include="Services\IDbTransfer.cs" />
     <Compile Include="ViewModels\CategoryAndBrandViewModel.cs" />
     <Compile Include="ViewModels\ProductViewModel.cs" />
+    <Compile Include="ViewModels\ShipsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -391,6 +392,11 @@
     <Content Include="Views\Home\AddProduct.cshtml" />
     <Content Include="Views\Home\EditProduct.cshtml" />
     <Content Include="Views\Home\_BnTOptions.cshtml" />
+    <Content Include="Views\Home\Orders.cshtml" />
+    <Content Include="Views\Home\_OrderDetail.cshtml" />
+    <Content Include="Views\Home\Ships.cshtml" />
+    <Content Include="Views\Home\_ShipDetail.cshtml" />
+    <Content Include="Views\Home\_ShipTable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

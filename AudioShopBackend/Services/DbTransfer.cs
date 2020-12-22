@@ -122,5 +122,30 @@ namespace AudioShopBackend.Services
         {
             return db.Orders.Where(p => p.NidProduct == NidProduct).Any();
         }
+
+        public List<Order> GetAllOrders(int pagesize = 10)
+        {
+            return db.Orders.Where(p => p.state == 0).Take(pagesize).ToList();
+        }
+
+        public Order GetOrderByNidOrder(Guid NidOrder)
+        {
+            return db.Orders.Where(p => p.NidOrder == NidOrder && p.state == 0).FirstOrDefault();
+        }
+
+        public List<Ship> GetAllDoneShips(int pagesize = 10)
+        {
+            return db.Ships.Where(p => p.State == 1).Take(pagesize).ToList();
+        }
+
+        public List<Ship> GetAllDoingShips(int pagesize = 10)
+        {
+            return db.Ships.Where(p => p.State == 0).Take(pagesize).ToList();
+        }
+
+        public Ship GetShipByNidShip(Guid NidShip)
+        {
+            return db.Ships.Where(p => p.NidShip == NidShip).FirstOrDefault();
+        }
     }
 }

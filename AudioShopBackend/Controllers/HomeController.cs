@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using AudioShopBackend.Services;
 using AudioShopBackend.Models;
+using AudioShopBackend.ViewModels;
 
 namespace AudioShopBackend.Controllers
 {
@@ -200,7 +201,7 @@ namespace AudioShopBackend.Controllers
         {
             int NidCategory = int.Parse(TempData["NidEditcategory"].ToString());
             dbTransfer = new DbTransfer();
-            ViewModels.CategoryAndBrandViewModel cbvm = new ViewModels.CategoryAndBrandViewModel();
+            CategoryAndBrandViewModel cbvm = new CategoryAndBrandViewModel();
             if (NidCategory != -1)
             {
             Category category = dbTransfer.GetCategoryByNidCategory(NidCategory);
@@ -280,7 +281,7 @@ namespace AudioShopBackend.Controllers
         }
         public ActionResult SyncBnTTable(bool IsBrand,int NidCategory)
         {
-            ViewModels.CategoryAndBrandViewModel cbvm = new ViewModels.CategoryAndBrandViewModel();
+            CategoryAndBrandViewModel cbvm = new CategoryAndBrandViewModel();
             if (NidCategory != -1)
             {
                 dbTransfer = new DbTransfer();
@@ -302,7 +303,7 @@ namespace AudioShopBackend.Controllers
         public ActionResult GetBnTOptions(int NidCategory,bool IsBrand)
         {
             dbTransfer = new DbTransfer();
-            ViewModels.CategoryAndBrandViewModel cbvm = new ViewModels.CategoryAndBrandViewModel();
+            CategoryAndBrandViewModel cbvm = new CategoryAndBrandViewModel();
             if(IsBrand)
                 cbvm.category_Brand = dbTransfer.GetCategoryBrandsByNidCategory(NidCategory);
             else
@@ -319,14 +320,14 @@ namespace AudioShopBackend.Controllers
         }
         public ActionResult AddProduct()
         {
-            ViewModels.ProductViewModel pvm = new ViewModels.ProductViewModel();
+            ProductViewModel pvm = new ProductViewModel();
             dbTransfer = new DbTransfer();
             pvm.Categories = dbTransfer.GetAllCategories();
             return View(pvm);
         }
         public ActionResult EditProduct(Guid NidProduct)
         {
-            ViewModels.ProductViewModel pvm = new ViewModels.ProductViewModel();
+            ProductViewModel pvm = new ProductViewModel();
             dbTransfer = new DbTransfer();
             Product product = dbTransfer.GetProductByProductId(NidProduct);
             pvm.Categories = dbTransfer.GetAllCategories();
@@ -336,7 +337,7 @@ namespace AudioShopBackend.Controllers
             return View(pvm);
         }
         [ValidateInput(false)]
-        public ActionResult SubmitEditProduct(ViewModels.ProductViewModel pvm)
+        public ActionResult SubmitEditProduct(ProductViewModel pvm)
         {
             dbTransfer = new DbTransfer();
             pvm.Product.LastModified = DateTime.Now;
@@ -368,7 +369,7 @@ namespace AudioShopBackend.Controllers
             }
         }
         [ValidateInput(false)]
-        public ActionResult SubmitAddProduct(ViewModels.ProductViewModel pvm)
+        public ActionResult SubmitAddProduct(ProductViewModel pvm)
         {
             pvm.Product.CreateDate = DateTime.Now;
             pvm.Product.NidProduct = Guid.NewGuid();
@@ -384,6 +385,56 @@ namespace AudioShopBackend.Controllers
                 TempData["ErrorAddProduct"] = "error in db";
                 return RedirectToAction("AddProduct");
             }
+        }
+        //orders
+        public ActionResult Orders()
+        {
+            dbTransfer = new DbTransfer();
+            var orders = dbTransfer.GetAllOrders();
+            return View(orders);
+        }
+        public ActionResult OrderDetail(Guid NidOrder)
+        {
+            dbTransfer = new DbTransfer();
+            Order order = dbTransfer.GetOrderByNidOrder(NidOrder);
+            return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_OrderDetail", order) });
+        }
+        //ships
+        public ActionResult Ships()
+        {
+            dbTransfer = new DbTransfer();
+            ShipsViewModel svm = new ShipsViewModel();
+            svm.Doing = dbTransfer.GetAllDoingShips();
+            svm.Done = dbTransfer.GetAllDoneShips();
+            return View(svm);
+        }
+        public ActionResult ShipDetail(Guid NidShip)
+        {
+            dbTransfer = new DbTransfer();
+            Ship ship = dbTransfer.GetShipByNidShip(NidShip);
+            return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_ShipDetail", ship) });
+        }
+        public ActionResult AcceptShip(Guid NidShip)
+        {
+            dbTransfer = new DbTransfer();
+            Ship current = dbTransfer.GetShipByNidShip(NidShip);
+            current.State = 1;
+            dbTransfer.Update(current);
+            if (dbTransfer.Save())
+                return Json(new JsonResults() { HasValue = true, Message = "accepted successfully" });
+            else
+                return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+        }
+        public ActionResult SyncShipsTable(bool IsShipDone)
+        {
+            dbTransfer = new DbTransfer();
+            ShipsViewModel svm = new ShipsViewModel();
+            if (IsShipDone)
+                svm.Done = dbTransfer.GetAllDoneShips();
+            else
+                svm.Doing = dbTransfer.GetAllDoingShips();
+            svm.IsDone = IsShipDone;
+            return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_ShipTable", svm) });
         }
         //generals
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
