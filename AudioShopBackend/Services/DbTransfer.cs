@@ -147,5 +147,15 @@ namespace AudioShopBackend.Services
         {
             return db.Ships.Where(p => p.NidShip == NidShip).FirstOrDefault();
         }
+
+        public User GetUserByNidUser(Guid NidUser)
+        {
+            return db.Users.Where(p => p.NidUser == NidUser).FirstOrDefault();
+        }
+
+        public List<User> GetAllUsers(int PageSize = 10)
+        {
+            return db.Users.Where(p => p.Enabled == true).Take(10).ToList();
+        }
     }
 }

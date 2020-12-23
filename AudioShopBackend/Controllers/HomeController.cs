@@ -436,6 +436,63 @@ namespace AudioShopBackend.Controllers
             svm.IsDone = IsShipDone;
             return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_ShipTable", svm) });
         }
+        //users
+        public ActionResult Users()
+        {
+            dbTransfer = new DbTransfer();
+            var userList = dbTransfer.GetAllUsers();
+            return View("Users", userList);
+        }
+        public ActionResult AddUser(bool IsNewCategory, string Name, string CategoryDescription, string categoryKeywords, int NidCategory = 0)
+        {
+            bool categoryAdded = false;
+            dbTransfer = new DbTransfer();
+            if (IsNewCategory)
+            {
+                Category category = new Category() { NidCategory = dbTransfer.GenerateNewNidCategory(), CategoryName = Name, IsSubmmited = true, Description = CategoryDescription, keywords = categoryKeywords };
+                dbTransfer.Add(category);
+                if (dbTransfer.Save())
+                    categoryAdded = true;
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error adding category" });
+            }
+            else
+            {
+                Category category = dbTransfer.GetCategoryByNidCategory(NidCategory);
+                category.IsSubmmited = true;
+                category.CategoryName = Name;
+                category.Description = CategoryDescription;
+                category.keywords = categoryKeywords;
+                dbTransfer.Update(category);
+                if (dbTransfer.Save())
+                    categoryAdded = true;
+                else
+                    return Json(new JsonResults() { HasValue = false, Message = "error adding category" });
+            }
+            TempData["NidEditcategory"] = -1;
+            if (categoryAdded)
+                return Json(new JsonResults() { HasValue = true });
+            else
+                return Json(new JsonResults() { HasValue = false, Message = "unexcpected error" });
+
+        }
+        public ActionResult SyncUserTable()
+        {
+            dbTransfer = new DbTransfer();
+            var categoryList = dbTransfer.GetAllCategories();
+            return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryTable", categoryList) });
+        }
+        public ActionResult DeleteUser(Guid NidUser)
+        {
+            dbTransfer = new DbTransfer();
+            User u = dbTransfer.GetUserByNidUser(NidUser);
+            u.Enabled = false;
+            dbTransfer.Update(u);
+            if (dbTransfer.Save())
+                return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+            else
+                return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+        }
         //generals
         public static string RenderViewToString(ControllerContext context, string viewName, object model)
         {

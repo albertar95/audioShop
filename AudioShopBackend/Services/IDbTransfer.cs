@@ -35,6 +35,9 @@ namespace AudioShopBackend.Services
         List<Ship> GetAllDoneShips(int pagesize = 10);
         List<Ship> GetAllDoingShips(int pagesize = 10);
         Ship GetShipByNidShip(Guid NidShip);
+        //user
+        User GetUserByNidUser(Guid NidUser);
+        List<User> GetAllUsers(int PageSize = 10);
         //generals
         bool CheckForBrandByNidcategory(int NidCategory);
         bool CheckForTypeByNidcategory(int NidCategory);
