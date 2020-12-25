@@ -145,6 +145,8 @@
         var NidCurrent = "";
         var IsNewBrandorType = true;
         $(function () {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liCategories").addClass('active');
             $("#btnAddBrand").click(function (e)
             {
                 e.preventDefault();

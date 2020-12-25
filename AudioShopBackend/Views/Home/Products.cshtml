@@ -96,6 +96,8 @@ else
     <script type="text/javascript">
         $(function ()
         {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liProducts").addClass('active');
             if($("#txtShowMessage").val() == '0')
             {
                 myNotify('bottom', 'center', '', 'success', 'animated fadeInLeft', 'animated fadeOutLeft', '@TempData["SucessfullAddProduct"]');

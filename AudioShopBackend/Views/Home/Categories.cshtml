@@ -198,6 +198,8 @@
         var IsCategoryAdded = false;
         var NidCurrentCategory = 0;
         $(function () {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liCategories").addClass('active');
             $("#btnAddCategory").click(function (e) {
                 e.preventDefault();
                 if ($("#txtCategoryName").val() == '') {

@@ -112,6 +112,8 @@
     <script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
     <script type="text/javascript">
         $(function () {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liUsers").addClass('active');
             $("#btnAddUser").click(function (e) {
                 e.preventDefault();
                 if ($("#txtUserName").val() == '' || $("#txtPassword").val() == '') {

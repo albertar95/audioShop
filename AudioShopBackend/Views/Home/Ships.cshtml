@@ -101,6 +101,8 @@
         $(function ()
         {
             $("#data-table-basic2").DataTable();
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liShips").addClass('active');
         });
         function DetailThis(nidShip) {
             $.ajax(

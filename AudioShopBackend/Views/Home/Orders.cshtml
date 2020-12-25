@@ -59,7 +59,8 @@
     <script type="text/javascript">
         $(function ()
         {
-
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liOrders").addClass('active');
         });
         function DetailThis(nidOrder) {
             $.ajax(
