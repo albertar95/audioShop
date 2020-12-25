@@ -157,5 +157,23 @@ namespace AudioShopBackend.Services
         {
             return db.Users.Where(p => p.Enabled == true).Take(10).ToList();
         }
+
+        public bool CheckForUserExistance(string Username)
+        {
+            return db.Users.Where(p => p.Username == Username).Any();
+        }
+
+        public Comment GetCommentByNidComment(Guid NidComment)
+        {
+            return db.Comments.Where(p => p.NidComment == NidComment).FirstOrDefault();
+        }
+
+        public List<Comment> GetAllComments(int Pagesize = 10,bool Accepted = false)
+        {
+            if(Accepted)
+            return db.Comments.Where(p => p.State == 1).Take(Pagesize).ToList();
+            else
+                return db.Comments.Where(p => p.State == 0).Take(Pagesize).ToList();
+        }
     }
 }

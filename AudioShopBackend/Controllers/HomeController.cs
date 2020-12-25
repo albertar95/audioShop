@@ -443,44 +443,27 @@ namespace AudioShopBackend.Controllers
             var userList = dbTransfer.GetAllUsers();
             return View("Users", userList);
         }
-        public ActionResult AddUser(bool IsNewCategory, string Name, string CategoryDescription, string categoryKeywords, int NidCategory = 0)
+        public ActionResult AddUser(string Username, string Password, string Name = "", string LastName = "")
         {
-            bool categoryAdded = false;
             dbTransfer = new DbTransfer();
-            if (IsNewCategory)
+            if (!dbTransfer.CheckForUserExistance(Username.Trim()))
             {
-                Category category = new Category() { NidCategory = dbTransfer.GenerateNewNidCategory(), CategoryName = Name, IsSubmmited = true, Description = CategoryDescription, keywords = categoryKeywords };
-                dbTransfer.Add(category);
-                if (dbTransfer.Save())
-                    categoryAdded = true;
+                dbTransfer.Add(new User() {  NidUser = Guid.NewGuid(), CreateDate = DateTime.Now, Enabled = true, FirstName = Name, LastName = LastName, IsAdmin = true, Password = Password, Username = Username});
+                if(dbTransfer.Save())
+                    return Json(new JsonResults() { HasValue = true, Message = "user added successfully!" });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error adding category" });
+                    return Json(new JsonResults() { HasValue = false, Message = "error in db" });
             }
             else
             {
-                Category category = dbTransfer.GetCategoryByNidCategory(NidCategory);
-                category.IsSubmmited = true;
-                category.CategoryName = Name;
-                category.Description = CategoryDescription;
-                category.keywords = categoryKeywords;
-                dbTransfer.Update(category);
-                if (dbTransfer.Save())
-                    categoryAdded = true;
-                else
-                    return Json(new JsonResults() { HasValue = false, Message = "error adding category" });
+                return Json(new JsonResults() { HasValue = false, Message = "username exists already" });
             }
-            TempData["NidEditcategory"] = -1;
-            if (categoryAdded)
-                return Json(new JsonResults() { HasValue = true });
-            else
-                return Json(new JsonResults() { HasValue = false, Message = "unexcpected error" });
-
         }
         public ActionResult SyncUserTable()
         {
             dbTransfer = new DbTransfer();
-            var categoryList = dbTransfer.GetAllCategories();
-            return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryTable", categoryList) });
+            var userlist = dbTransfer.GetAllUsers();
+            return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_UserTable", userlist) });
         }
         public ActionResult DeleteUser(Guid NidUser)
         {
@@ -490,6 +473,43 @@ namespace AudioShopBackend.Controllers
             dbTransfer.Update(u);
             if (dbTransfer.Save())
                 return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+            else
+                return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+        }
+        //comments
+        public ActionResult Comments()
+        {
+            dbTransfer = new DbTransfer();
+            var comments = dbTransfer.GetAllComments();
+            TempData["Comments"] = "0";
+            return View(comments);
+        }
+        public ActionResult AcceptedComments()
+        {
+            dbTransfer = new DbTransfer();
+            var comments = dbTransfer.GetAllComments(10, true);
+            TempData["Comments"] = "1";
+            return View("Comments",comments);
+        }
+        public ActionResult DeleteComment(Guid NidComment)
+        {
+            dbTransfer = new DbTransfer();
+            var cmt = dbTransfer.GetCommentByNidComment(NidComment);
+            cmt.State = 2;
+            dbTransfer.Update(cmt);
+            if (dbTransfer.Save())
+                return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+            else
+                return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+        }
+        public ActionResult AcceptComment(Guid NidComment)
+        {
+            dbTransfer = new DbTransfer();
+            var cmt = dbTransfer.GetCommentByNidComment(NidComment);
+            cmt.State = 1;
+            dbTransfer.Update(cmt);
+            if (dbTransfer.Save())
+                return Json(new JsonResults() { HasValue = true, Message = "accepted successfully" });
             else
                 return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
         }

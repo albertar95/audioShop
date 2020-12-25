@@ -1,0 +1,13 @@
+﻿@model List<AudioShopBackend.Models.User>
+
+@foreach (var usr in Model)
+{
+    <tr>
+        @*<td><img /></td>*@
+        <td>@usr.FirstName @usr.LastName</td>
+        <td>@usr.Username</td>
+        <td>
+            <button onclick="DeleteThis('@usr.NidUser')" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+        </td>
+    </tr>
+}

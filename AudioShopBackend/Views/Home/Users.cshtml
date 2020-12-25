@@ -44,13 +44,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    @*<div class="row">
                         <div class="form-group ic-cmp-int" style="width:80%;">
                             <div class="nk-int-st">
                                 <input type="file" class="form-control" placeholder="profile" id="txtProfile">
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="row">
                         <div class="form-group ic-cmp-int">
                             <div class="nk-int-st">
@@ -71,7 +71,7 @@
                         <table id="data-table-basic" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    @*<th></th>*@
                                     <th>Name</th>
                                     <th>UserName</th>
                                     <th>Action</th>
@@ -81,11 +81,11 @@
                                 @foreach (var usr in Model)
                                 {
                                     <tr>
-                                        <td><img /></td>
+                                        @*<td><img /></td>*@
                                         <td>@usr.FirstName @usr.LastName</td>
                                         <td>@usr.Username</td>
                                         <td>
-                                            <button onclick="DeleteThis(@usr.NidUser)" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                                            <button onclick="DeleteThis('@usr.NidUser')" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
                                         </td>
                                     </tr>
                                 }
@@ -111,8 +111,6 @@
     <script src="@Url.Content("~/Content/js/data-table/jquery.dataTables.min.js")"></script>
     <script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
     <script type="text/javascript">
-        var IsCategoryAdded = false;
-        var NidCurrentCategory = 0;
         $(function () {
             $("#btnAddUser").click(function (e) {
                 e.preventDefault();
@@ -132,14 +130,11 @@
         success: function (result) {
             if (result.HasValue) {
                 UpdateTableContent();
-                $("#txtCategoryName").val("");
-                $("#txtDescription").val("");
-                $("#txtKeywords").val("");
-                NidCurrentCategory = 0;
-                IsCategoryAdded = false;
-                $("#BrandWrap").html("");
-                $("#TypeWrap").html("");
-                $("#successfullMessageDiv").html('category added successfully!');
+                $("#txtName").val("");
+                $("#txtLastName").val("");
+                $("#txtUserName").val("");
+                $("#txtPassword").val("");
+                $("#successfullMessageDiv").html(result.Message);
                 $("#successfullMessageDiv").removeAttr('hidden');
                 setTimeout(function () {
                     $("#successfullMessageDiv").prop('hidden', 'hidden');
@@ -182,10 +177,10 @@
             }).then(function () {
                 $.ajax(
                     {
-                        url: '@Url.Action("DeleteCategory","Home")',
+                        url: '@Url.Action("DeleteUser", "Home")',
                         type: 'post',
                         datatype: 'json',
-                        data: {NidCategory:nidcat},
+                        data: { NidUser: niduser },
                         success: function (result)
                         {
                             if (result.HasValue)
@@ -207,13 +202,13 @@
         {
             $.ajax(
          {
-    url: '@Url.Action("SyncCategoryTable","Home")',
+    url: '@Url.Action("SyncUserTable", "Home")',
     type: 'post',
     datatype: 'json',
     data: {},
     success: function (result) {
         if (result.HasValue) {
-            $("#tblCategory").html(result.Html);
+            $("#tblUser").html(result.Html);
         }
     },
     error: function () {

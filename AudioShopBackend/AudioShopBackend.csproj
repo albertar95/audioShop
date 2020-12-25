@@ -398,6 +398,8 @@
     <Content Include="Views\Home\_ShipDetail.cshtml" />
     <Content Include="Views\Home\_ShipTable.cshtml" />
     <Content Include="Views\Home\Users.cshtml" />
+    <Content Include="Views\Home\_UserTable.cshtml" />
+    <Content Include="Views\Home\Comments.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

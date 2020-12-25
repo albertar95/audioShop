@@ -35,9 +35,12 @@ namespace AudioShopBackend.Services
         List<Ship> GetAllDoneShips(int pagesize = 10);
         List<Ship> GetAllDoingShips(int pagesize = 10);
         Ship GetShipByNidShip(Guid NidShip);
-        //user
+        //users
         User GetUserByNidUser(Guid NidUser);
         List<User> GetAllUsers(int PageSize = 10);
+        //comments
+        Comment GetCommentByNidComment(Guid NidComment);
+        List<Comment> GetAllComments(int Pagesize = 10, bool Accepted = false);
         //generals
         bool CheckForBrandByNidcategory(int NidCategory);
         bool CheckForTypeByNidcategory(int NidCategory);
@@ -45,5 +48,6 @@ namespace AudioShopBackend.Services
         bool CheckForProductByNidBrand(Guid NidBrand);
         bool CheckForProductByNidType(Guid NidType);
         bool CheckForOrderByNidProduct(Guid NidProduct);
+        bool CheckForUserExistance(string Username);
     }
 }
