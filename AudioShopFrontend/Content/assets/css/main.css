@@ -55,6 +55,28 @@ Template URL: https://hasthemes.com/
 01 - Base - Default
 *****************************/
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap");
+@font-face {
+    font-family: 'BYekan';
+    src: url('../fonts/BYekan.eot');
+    src: local('*'), url('../fonts/BYekan.woff')format('woff'), url('../fonts/BYekan.ttf')format('truetype'), url('../fonts/BYekan.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'B Nazanin';
+    src: url('../fonts/B Nazanin/B Nazanin.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'B Titr Bold_0';
+    src: url('../fonts/B-Titr/B Titr Bold_0.ttf') format('truetype');
+}
+@font-face
+{
+ font-family:'YJ';
+src: url('Yekan.eot?#') format('eot'),  /* IE6–8 */
+    url('Yekan.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+    url('Yekan.ttf') format('truetype');  /* Saf3—5, Chrome4+, FF3.5, Opera 10+ */
+}
 * {
   margin: 0;
   padding: 0;
@@ -66,8 +88,9 @@ Template URL: https://hasthemes.com/
 }
 
 body {
-  font-family: "Rubik", sans-serif;
+  font-family: 'BYekan' !important;
   font-size: 16px;
+  text-align:right;
 }
 
 dl, ol, ul {
@@ -717,7 +740,11 @@ button.btn--block {
 .inner__nav:hover {
   color: #fff;
 }
-
+.firstPageNav {
+    direction:rtl !important;
+    margin:auto !important;
+    margin-right:0 !important;
+}
 .swiper-outside-arrow-hover:hover .default__nav {
   visibility: hidden;
   opacity: 0;
@@ -772,7 +799,7 @@ button.btn--block {
 }
 @media (min-width: 1200px) {
   .hero-img--1 {
-    height: 498px;
+    height: 398px;
   }
 }
 .hero-img--2 {
@@ -1031,29 +1058,31 @@ button.btn--block {
 .banner__box:hover .banner__img {
   transform: scale(1.1);
 }
-
+.ForceRTL{
+    direction:rtl !important;
+}
 /*****************************
 09 - Component - Product
 *****************************/
 .product--1 {
-  margin-top: 57px;
+  margin-top: 10px;
 }
 @media (min-width: 768px) {
   .product--1 {
-    margin-top: 76px;
+    margin-top: 10px;
   }
 }
 @media (min-width: 992px) {
   .product--1 {
-    margin-top: 96px;
+    margin-top: 10px;
   }
 }
 .product .swiper-outside-arrow-fix .m-t-50 {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 @media (min-width: 992px) {
   .product .swiper-outside-arrow-fix .m-t-50 {
-    margin-top: 50px;
+    margin-top: 10px;
   }
 }
 .product__box {
@@ -1578,7 +1607,7 @@ button.btn--block {
 .select-sort__arrow::after {
   content: "";
   position: absolute;
-  font-family: "Font Awesome 5 Free";
+  font-family: 'BYekan' !important;
   font-weight: 600;
   top: 50%;
   transform: translateY(-50%);
@@ -2068,7 +2097,7 @@ input[type=checkbox]::after {
 
 input[type=checkbox]:checked::after {
   content: "";
-  font-family: "Font Awesome 5 Light";
+  font-family: 'BYekan' !important;
   color: #fff;
   background: #0063d1;
 }
@@ -2082,7 +2111,7 @@ input[type=radio] {
 input[type=radio]::after {
   position: absolute;
   content: "";
-  font-family: "Font Awesome 5 Free";
+  font-family: 'BYekan' !important;
   background: #fff;
   text-align: center;
   transition: all 0.3s ease;
@@ -2125,7 +2154,7 @@ input[type=radio]:checked::after {
 input[type=radio].shipping-select::after {
   position: absolute;
   content: "";
-  font-family: "Font Awesome 5 Free";
+  font-family: 'BYekan' !important;
   background: transparent;
   text-align: center;
   transition: all 0.3s ease;
@@ -3000,6 +3029,9 @@ input[type=radio].shipping-select:checked::after {
   display: flex;
   margin: 0;
 }
+.header__nav li {
+    float:right !important;
+}
 .header__nav-item {
   padding-right: 40px;
   display: inline-block;
@@ -3211,7 +3243,7 @@ input[type=radio].shipping-select:checked::after {
 .offcanvas__user-expand::after {
   content: "";
   position: absolute;
-  font-family: "plaza-icon";
+  font-family: 'BYekan' !important;
   right: 0;
   transition: all 0.3s ease;
 }
@@ -3250,7 +3282,7 @@ input[type=radio].shipping-select:checked::after {
 .offcanvas__menu-expand::after {
   content: "";
   position: absolute;
-  font-family: "plaza-icon";
+  font-family: 'BYekan' !important;
   right: 0;
   transition: all 0.3s ease;
 }
@@ -3262,7 +3294,7 @@ input[type=radio].shipping-select:checked::after {
 }
 .offcanvas-menu .active > .offcanvas__menu-expand::after, .sub-menu > .active .offcanvas__menu-expand::after {
   content: "";
-  font-family: "plaza-icon";
+  font-family: 'BYekan' !important;
 }
 .offcanvas-buttons {
   display: flex;
@@ -3328,6 +3360,7 @@ input[type=radio].shipping-select:checked::after {
   padding: 15px 20px;
   border-radius: 3px;
   display: block;
+  text-align:right;
 }
 .header-menu-vertical .menu-content {
   width: 100%;
@@ -3336,19 +3369,24 @@ input[type=radio].shipping-select:checked::after {
   top: 100%;
   left: 0;
   display: none;
+  overflow: hidden;
+  text-align:right;
 }
 @media (min-width: 992px) {
   .header-menu-vertical .menu-content {
     display: block;
+    overflow: hidden;
   }
 }
 .header-menu-vertical .menu-content li {
   display: block;
   position: relative;
+  text-align:right;
 }
 .header-menu-vertical .menu-content li:hover .sub-menu {
   opacity: 1;
   visibility: visible;
+  text-align:right;
 }
 .header-menu-vertical .menu-content li a {
   position: relative;
@@ -3367,6 +3405,7 @@ input[type=radio].shipping-select:checked::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  text-align:right;
 }
 .header-menu-vertical .menu-content li a:hover {
   color: #0063d1;
@@ -3389,6 +3428,7 @@ input[type=radio].shipping-select:checked::after {
   transition: all 0.3s linear;
   border: 1px solid #eaeaea;
   width: 705px;
+  text-align:right;
 }
 @media (min-width: 1200px) {
   .header-menu-vertical .menu-content li .sub-menu {
