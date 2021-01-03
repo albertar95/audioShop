@@ -1061,6 +1061,9 @@ button.btn--block {
 .ForceRTL{
     direction:rtl !important;
 }
+.ForceFloat{
+    float:right !important;
+}
 /*****************************
 09 - Component - Product
 *****************************/
