@@ -284,6 +284,7 @@
     <Content Include="Content\js\wow.min.js" />
     <Content Include="Content\pages\form-components.html" />
     <Content Include="Content\pages\form-examples.html" />
+    <Content Include="Content\pages\login-register.html" />
     <Content Include="Content\pages\modals.html" />
     <Content Include="Content\style.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
@@ -400,6 +401,7 @@
     <Content Include="Views\Home\Users.cshtml" />
     <Content Include="Views\Home\_UserTable.cshtml" />
     <Content Include="Views\Home\Comments.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

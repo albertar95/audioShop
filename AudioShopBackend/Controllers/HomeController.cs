@@ -13,6 +13,10 @@ namespace AudioShopBackend.Controllers
     public class HomeController : Controller
     {
         DbTransfer dbTransfer = null;
+        public ActionResult Login()
+        {
+            return View();
+        }
         // GET: Home
         public ActionResult Index()
         {
