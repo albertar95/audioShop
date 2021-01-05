@@ -17,6 +17,10 @@ namespace AudioShopBackend.Controllers
         {
             return View();
         }
+        public ActionResult SignIn(string Username,string Password,bool IsChecked)
+        {
+            return RedirectToAction("Index");
+        }
         // GET: Home
         public ActionResult Index()
         {
