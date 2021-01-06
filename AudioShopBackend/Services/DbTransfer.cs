@@ -4,11 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using AudioShopBackend.Models;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace AudioShopBackend.Services
 {
     public class DbTransfer : IDbTransfer
     {
+        static string hashkey { get; set; } = "A!9HHhi%XjjYY4YP2@Nob009X";
         ASDbEntities db = new ASDbEntities();
         public void Add<T>(T entity) where T : class
         {
@@ -174,6 +177,58 @@ namespace AudioShopBackend.Services
             return db.Comments.Where(p => p.State == 1).Take(Pagesize).ToList();
             else
                 return db.Comments.Where(p => p.State == 0).Take(Pagesize).ToList();
+        }
+
+        public Tuple<byte,User> Authenticate(string Username, string Password)
+        {
+            if(db.Users.Where(p => p.Username.Trim().ToLower() == Username.Trim().ToLower()).Any())
+            {
+                var tmpUser = db.Users.Where(p => p.Username.Trim().ToLower() == Username.Trim().ToLower()).FirstOrDefault();
+                if (tmpUser.Password == Password)
+                    return new Tuple<byte, User>(0,tmpUser);
+                else
+                    return new Tuple<byte, User>(1, null);
+            }else
+                return new Tuple<byte, User>(2, null);
+        }
+        public static string Encrypt(string text)
+        {
+            using (var md5 = new MD5CryptoServiceProvider())
+            {
+                using (var tdes = new TripleDESCryptoServiceProvider())
+                {
+                    tdes.Key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(hashkey));
+                    tdes.Mode = CipherMode.ECB;
+                    tdes.Padding = PaddingMode.PKCS7;
+
+                    using (var transform = tdes.CreateEncryptor())
+                    {
+                        byte[] textBytes = UTF8Encoding.UTF8.GetBytes(text);
+                        byte[] bytes = transform.TransformFinalBlock(textBytes, 0, textBytes.Length);
+                        return Convert.ToBase64String(bytes, 0, bytes.Length);
+                    }
+                }
+            }
+        }
+
+        public static string Decrypt(string cipher)
+        {
+            using (var md5 = new MD5CryptoServiceProvider())
+            {
+                using (var tdes = new TripleDESCryptoServiceProvider())
+                {
+                    tdes.Key = md5.ComputeHash(UTF8Encoding.UTF8.GetBytes(hashkey));
+                    tdes.Mode = CipherMode.ECB;
+                    tdes.Padding = PaddingMode.PKCS7;
+
+                    using (var transform = tdes.CreateDecryptor())
+                    {
+                        byte[] cipherBytes = Convert.FromBase64String(cipher);
+                        byte[] bytes = transform.TransformFinalBlock(cipherBytes, 0, cipherBytes.Length);
+                        return UTF8Encoding.UTF8.GetString(bytes);
+                    }
+                }
+            }
         }
     }
 }

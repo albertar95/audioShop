@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using AudioShopBackend.Services;
 using AudioShopBackend.Models;
 using AudioShopBackend.ViewModels;
+using System.Web.Security;
 
 namespace AudioShopBackend.Controllers
 {
@@ -19,7 +20,21 @@ namespace AudioShopBackend.Controllers
         }
         public ActionResult SignIn(string Username,string Password,bool IsChecked)
         {
-            return RedirectToAction("Index");
+            dbTransfer = new DbTransfer();
+            Tuple<byte, User> result = dbTransfer.Authenticate(Username,Password);
+            if(result.Item1 == 1)
+                return Json(new JsonResults() {  HasValue = false, Message = "password incorrect"});
+            else if (result.Item1 == 2)
+                return Json(new JsonResults() { HasValue = false, Message = "user not found" });
+            else if (result.Item1 == 0)
+            {
+                FormsAuthenticationTicket Ticket = new FormsAuthenticationTicket(1, result.Item2.Username, DateTime.Now, DateTime.Now.AddMinutes(30), IsChecked, result.Item2.NidUser.ToString(),FormsAuthentication.FormsCookiePath);
+                string encTicket = FormsAuthentication.Encrypt(Ticket);
+                Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                return Json(new JsonResults() { HasValue = true});
+            }
+            else
+                return Json(new JsonResults() { HasValue = false, Message = "unexpected result" });
         }
         // GET: Home
         public ActionResult Index()

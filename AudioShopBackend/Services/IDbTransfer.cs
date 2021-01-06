@@ -41,6 +41,8 @@ namespace AudioShopBackend.Services
         //comments
         Comment GetCommentByNidComment(Guid NidComment);
         List<Comment> GetAllComments(int Pagesize = 10, bool Accepted = false);
+        //login
+        Tuple<byte,User> Authenticate(string Username,string Password);
         //generals
         bool CheckForBrandByNidcategory(int NidCategory);
         bool CheckForTypeByNidcategory(int NidCategory);
