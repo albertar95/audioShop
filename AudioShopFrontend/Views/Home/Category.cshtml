@@ -1,4 +1,5 @@
-﻿
+﻿@model AudioShopFrontend.ViewModels.CategoryViewModel
+
 @{
     ViewBag.Title = "Category";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,8 +10,8 @@
         <div class="row">
             <div class="col-12">
                 <ul class="page-breadcrumb__menu ForceRTL">
-                    <li class="page-breadcrumb__nav"><a href="#">Home</a></li>
-                    <li class="page-breadcrumb__nav active">Blog Single Right Sidebar Page</li>
+                    <li class="page-breadcrumb__nav"><a href="#">خانه</a></li>
+                    <li class="page-breadcrumb__nav active">دسته بندی</li>
                 </ul>
             </div>
         </div>
@@ -27,36 +28,31 @@
                 <!-- Start Single Sidebar Widget -->
                 <div class="sidebar__widget gray-bg">
                     <div class="sidebar__box">
-                        <h5 class="sidebar__title">Filter By</h5>
-                        <a href="" class="btn btn--box btn--blue btn--small"><i class="far fa-times"></i> Clear All</a>
+                        <h5 class="sidebar__title">فیلتر</h5>
+                        <a href="" class="btn btn--box btn--blue btn--small"><i class="far fa-times"></i> حذف فیلتر ها</a>
                     </div>
                     <div class="sidebar__box m-t-40">
-                        <h5 class="sidebar__title">Fashion</h5>
+                        <h5 class="sidebar__title">نوع</h5>
                     </div>
                     <ul class="sidebar__menu-filter ">
-                        <!-- Start Single Menu Filter List -->
-                        <li class="sidebar__menu-filter-list">
-                            <label for="men"><input type="checkbox" name="gender" value="Men" id="men"><span>Men</span></label>
-                        </li>  <!-- End Single Menu Filter List -->
-                        <li class="sidebar__menu-filter-list">
-                            <label for="women"><input type="checkbox" name="gender" value="women" id="women"><span>Women</span></label>
-                        </li>  <!-- End Single Menu Filter List -->
-                        <li class="sidebar__menu-filter-list">
-                            <label for="kids"><input type="checkbox" name="gender" value="kids" id="kids"><span>Kids</span></label>
-                        </li>  <!-- End Single Menu Filter List -->
+                        @foreach (var catType in Model.CategoryTypes)
+                        {
+                            <li class="sidebar__menu-filter-list">
+                                <label for="men"><span>@catType.TypeName</span><input type="checkbox" name="catType" value="'@catType.NidType'" id="'@catType.NidType'"></label>
+                            </li>
+                        }
                     </ul>
 
                     <div class="sidebar__box m-t-40">
-                        <h5 class="sidebar__title">Brand</h5>
+                        <h5 class="sidebar__title">برند</h5>
                     </div>
                     <ul class="sidebar__menu-filter ">
-                        <!-- Start Single Menu Filter List -->
-                        <li class="sidebar__menu-filter-list">
-                            <label for="graphic-corner"><input type="checkbox" name="brand" value="graphic-corner" id="graphic-corner"><span>Graphic Corner</span></label>
-                        </li>  <!-- End Single Menu Filter List -->
-                        <li class="sidebar__menu-filter-list">
-                            <label for="studio-design"><input type="checkbox" name="brand" value="studio-design" id="studio-design"><span>Studio Design</span></label>
-                        </li>  <!-- End Single Menu Filter List -->
+                        @foreach (var catBrand in Model.CategoryBrands)
+                        {
+                            <li class="sidebar__menu-filter-list">
+                                <label for="graphic-corner"><span>@catBrand.BrandName</span><input type="checkbox" name="catBrand" value="'@catBrand.NidBrand'" id="graphic-corner"></label>
+                            </li>
+                        }
                     </ul>
                 </div>  <!-- End Single Sidebar Widget -->
                 <!-- Start Single Sidebar Widget -->
