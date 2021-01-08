@@ -15,7 +15,11 @@ namespace AudioShopFrontend.Controllers
         }
         public ActionResult Category()
         {
-            return View();
+            ViewModels.CategoryViewModel cvm = new ViewModels.CategoryViewModel();
+            cvm.CategoryBrands = new List<Models.Category_Brands>();
+            cvm.CategoryTypes = new List<Models.Category_Types>();
+            cvm.Products = new List<Models.Product>();
+            return View(cvm);
         }
         public ActionResult Generals()
         {

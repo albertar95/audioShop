@@ -17,22 +17,23 @@ namespace AudioShopBackend.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Category()
         {
+            this.Category_Brands = new HashSet<Category_Brands>();
             this.Category_Types = new HashSet<Category_Types>();
             this.Products = new HashSet<Product>();
-            this.Category_Brands = new HashSet<Category_Brands>();
         }
     
         public int NidCategory { get; set; }
         public string CategoryName { get; set; }
+        public string Pictures { get; set; }
         public string Description { get; set; }
         public string keywords { get; set; }
         public Nullable<bool> IsSubmmited { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Category_Brands> Category_Brands { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category_Types> Category_Types { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Category_Brands> Category_Brands { get; set; }
     }
 }

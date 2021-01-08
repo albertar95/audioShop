@@ -25,6 +25,7 @@ namespace AudioShopBackend.Models
         public int NidCategory { get; set; }
         public System.Guid NidBrand { get; set; }
         public System.Guid NidType { get; set; }
+        public string Pictures { get; set; }
         public System.DateTime CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
         public string Description { get; set; }
@@ -32,10 +33,10 @@ namespace AudioShopBackend.Models
         public decimal Price { get; set; }
         public byte State { get; set; }
     
-        public virtual Category_Types Category_Types { get; set; }
-        public virtual Category Category { get; set; }
         public virtual Category_Brands Category_Brands { get; set; }
+        public virtual Category_Types Category_Types { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

@@ -8,6 +8,7 @@
 @using (Html.BeginForm("SubmitAddProduct", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "ProductForm" }))
 {
     @Html.HiddenFor(p => p.Product.Description)
+    @Html.HiddenFor(p => p.Product.Pictures)
     if (TempData["ErrorAddProduct"] != null)
     {
         <input id="txtShowMessage" value="0" hidden />
@@ -99,6 +100,19 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group" id="UploadPics">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <div class="nk-int-st">
+                                        <input type="file" class="form-control" id="UploadHeaderPic" multiple="multiple" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                 </div>
                             </div>
@@ -120,9 +134,6 @@
 
 @section styles
     {
-<!-- summernote CSS
-============================================ -->
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
 <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet">
 <link href="@Url.Content("~/Content/css/bootstrap-select/bootstrap-select.css")" rel="stylesheet" />
 <link href="@Url.Content("~/Content/css/notification/notification.css")" rel="stylesheet" />
@@ -187,6 +198,34 @@
                         },
                         error: function () { }
                     });
+            });
+            $("#UploadHeaderPic").change(function () {
+                var formData = new FormData();
+                var totalFiles = document.getElementById("UploadHeaderPic").files.length;
+                for (var i = 0; i < totalFiles; i++) {
+                    var file = document.getElementById("UploadHeaderPic").files[i];
+                    formData.append("UploadHeaderPic", file);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UploadFiles","Home")',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function(result) {
+                        if(result.HasValue)
+                        {
+                            $("#Product_Pictures").val(result.Message);
+                            $("#UploadPics").html(result.Html);
+                        } else {
+                            alert("no file recieved");
+                        }
+                    },
+                    error: function(error) {
+                        alert("errror");
+                    }
+                })
             });
         });
         function myNotify(from, align, icon, type, animIn, animOut, myMessage) {

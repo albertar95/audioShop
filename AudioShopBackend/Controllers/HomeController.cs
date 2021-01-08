@@ -111,13 +111,13 @@ namespace AudioShopBackend.Controllers
             else
                 return Json(new JsonResults() { HasValue = false, Message = "unexpected error" });
         }
-        public ActionResult AddCategory(bool IsNewCategory,string Name,string CategoryDescription,string categoryKeywords, int NidCategory = 0)
+        public ActionResult AddCategory(bool IsNewCategory,string Name,string CategoryDescription,string categoryKeywords, int NidCategory = 0,string pictures = "")
         {
             bool categoryAdded = false;
             dbTransfer = new DbTransfer();
             if(IsNewCategory)
             {
-                Category category = new Category() { NidCategory = dbTransfer.GenerateNewNidCategory(), CategoryName = Name, IsSubmmited = true, Description = CategoryDescription, keywords = categoryKeywords };
+                Category category = new Category() { NidCategory = dbTransfer.GenerateNewNidCategory(), CategoryName = Name, IsSubmmited = true, Description = CategoryDescription, keywords = categoryKeywords, Pictures = pictures };
                 dbTransfer.Add(category);
                 if (dbTransfer.Save())
                     categoryAdded = true;
@@ -131,6 +131,7 @@ namespace AudioShopBackend.Controllers
                 category.CategoryName = Name;
                 category.Description = CategoryDescription;
                 category.keywords = categoryKeywords;
+                category.Pictures = pictures;
                 dbTransfer.Update(category);
                 if (dbTransfer.Save())
                     categoryAdded = true;
@@ -166,8 +167,9 @@ namespace AudioShopBackend.Controllers
             }
             string types = RenderViewToString(this.ControllerContext, "_CategoryBrandAndTypeLabel",typelabels);
             string brands = RenderViewToString(this.ControllerContext, "_CategoryBrandAndTypeLabel", brandlabels);
+            string pics = RenderViewToString(this.ControllerContext, "_UploadedImages", category.Pictures.Split(',').ToList());
             TempData["NidEditcategory"] = category.NidCategory;
-            return Json(new JsonCategoryEdit() {  CategoryName = category.CategoryName, Description = category.Description, Keywords = category.keywords, NidCategory = category.NidCategory, BrandWrap = brands, TypeWrap = types});
+            return Json(new JsonCategoryEdit() {  CategoryName = category.CategoryName, Description = category.Description, Keywords = category.keywords, NidCategory = category.NidCategory, BrandWrap = brands, TypeWrap = types, PicturesWrap = pics, Pictures = category.Pictures});
         }
         public ActionResult DeleteCategory(int NidCategory)
         {
@@ -553,6 +555,28 @@ namespace AudioShopBackend.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
+        [HttpPost]
+        public ActionResult UploadFiles()
+        {
+            List<string> Uploaded = new List<string>();
+            if (Request.Files.Count != 0)
+            {
+
+                for (int i = 0; i < Request.Files.Count; i++)
+                {
+                    var file = Request.Files[i];
+
+                    var fileName = "Image_" + DateTime.Now.ToShortDateString().Replace('/','_') + "_" + DateTime.Now.ToShortTimeString().Replace(':', '_') + "_" + Path.GetFileName(file.FileName);
+                    var path = Path.Combine(Server.MapPath("~/Uploads/"), fileName);
+                    file.SaveAs(path);
+                    Uploaded.Add("http://localhost:9000/Uploads/" + fileName);
+                }
+                return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext,"_UploadedImages",Uploaded), Message = string.Join(",",Uploaded) });
+            }
+            else
+                return Json(new JsonResults() {  HasValue = false});
+
+        }
 
     }
     public class JsonResults
@@ -570,6 +594,8 @@ namespace AudioShopBackend.Controllers
         public string Keywords { get; set; }
         public string BrandWrap { get; set; }
         public string TypeWrap { get; set; }
+        public string PicturesWrap { get; set; }
+        public string Pictures { get; set; }
     }
     public class JsonBnTEdit
     {

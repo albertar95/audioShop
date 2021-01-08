@@ -103,12 +103,31 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group ic-cmp-int">
                                 <div class="nk-int-st">
+                                    <input type="file" class="form-control" id="UploadHeaderPic" multiple="multiple" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group ic-cmp-int">
+                                <input type="text" hidden="hidden" id="txtPictures" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group ic-cmp-int" id="UploadPics">
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="form-group ic-cmp-int">
+                                <div class="nk-int-st">
                                     <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddCategory">add this!</button>
                                     <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">clear form</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -215,17 +234,19 @@
                                 url: '@Url.Action("AddCategory","Home")',
                                 type: 'post',
                                 datatype: 'json',
-                                data: { IsNewCategory: false, Name: $("#txtCategoryName").val(), NidCategory: NidCurrentCategory, CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
+                                data: { IsNewCategory: false, Name: $("#txtCategoryName").val(), NidCategory: NidCurrentCategory, CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val(),pictures: $("#txtPictures").val() },
                                 success: function (result) {
                                     if (result.HasValue) {
                                         UpdateTableContent();
                                         $("#txtCategoryName").val("");
                                         $("#txtDescription").val("");
                                         $("#txtKeywords").val("");
+                                        $("#txtPictures").val("");
                                         NidCurrentCategory = 0;
                                         IsCategoryAdded = false;
                                         $("#BrandWrap").html("");
                                         $("#TypeWrap").html("");
+                                        $("#UploadPics").html("");
                                         $("#successfullMessageDiv").html('category added successfully!');
                                         $("#successfullMessageDiv").removeAttr('hidden');
                                         setTimeout(function () {
@@ -254,17 +275,19 @@
         url: '@Url.Action("AddCategory","Home")',
         type: 'post',
         datatype: 'json',
-        data: { IsNewCategory: true, Name: $("#txtCategoryName").val(), CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val() },
+        data: { IsNewCategory: true, Name: $("#txtCategoryName").val(), CategoryDescription: $("#txtDescription").val(), categoryKeywords: $("#txtKeywords").val(), pictures: $("#txtPictures").val() },
         success: function (result) {
             if (result.HasValue) {
                 UpdateTableContent();
                 $("#txtCategoryName").val("");
                 $("#txtDescription").val("");
                 $("#txtKeywords").val("");
+                $("#txtPictures").val("");
                 NidCurrentCategory = 0;
                 IsCategoryAdded = false;
                 $("#BrandWrap").html("");
                 $("#TypeWrap").html("");
+                $("#UploadPics").html("");
                 $("#successfullMessageDiv").html('category added successfully!');
                 $("#successfullMessageDiv").removeAttr('hidden');
                 setTimeout(function () {
@@ -429,6 +452,33 @@
                     }
                 }
             });
+            $("#UploadHeaderPic").change(function () {
+                var formData = new FormData();
+                var totalFiles = document.getElementById("UploadHeaderPic").files.length;
+                for (var i = 0; i < totalFiles; i++) {
+                    var file = document.getElementById("UploadHeaderPic").files[i];
+                    formData.append("UploadHeaderPic", file);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UploadFiles","Home")',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if (result.HasValue) {
+                            $("#txtPictures").val(result.Message);
+                            $("#UploadPics").html(result.Html);
+                        } else {
+                            alert("no file recieved");
+                        }
+                    },
+                    error: function (error) {
+                        alert("errror");
+                    }
+                })
+            });
             $("#btnClearForm").click(function (e)
             {
                 e.preventDefault();
@@ -439,6 +489,7 @@
                 IsCategoryAdded = false;
                 $("#BrandWrap").html("");
                 $("#TypeWrap").html("");
+                $("#UploadPics").html("");
             });
         });
         function EditThis(nidcat)
@@ -454,8 +505,10 @@
                         $("#txtCategoryName").val(result.CategoryName);
                         $("#txtDescription").val(result.Description);
                         $("#txtKeywords").val(result.Keywords);
+                        $("#txtPictures").val(result.Pictures);
                         $("#TypeWrap").html(result.TypeWrap);
                         $("#BrandWrap").html(result.BrandWrap);
+                        $("#UploadPics").html(result.PicturesWrap);
                         IsCategoryAdded = true;
                         NidCurrentCategory = result.NidCategory;
                     },
