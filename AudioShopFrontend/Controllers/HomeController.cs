@@ -19,8 +19,8 @@ namespace AudioShopFrontend.Controllers
             dataTransfer = new DataTransfer();
             ivm.Categories = dataTransfer.GetcategoryList();
             ivm.LatestProducts = dataTransfer.GetLatestProducts();
-            ivm.LatestProducts = dataTransfer.GetPopularProducts();
-            ivm.LatestProducts = dataTransfer.GetSpecialProducts();
+            ivm.PopularProducts = dataTransfer.GetPopularProducts();//to edit
+            ivm.SpecialProducts = dataTransfer.GetSpecialProducts();//to edit
             return View(ivm);
         }
         public ActionResult Category(int Nidcategory)
@@ -33,9 +33,25 @@ namespace AudioShopFrontend.Controllers
             cvm.Products = tmpCategory.Products.ToList();
             return View(cvm);
         }
-        public ActionResult Generals()
+        public ActionResult Generals(int Typo)
         {
-            return View();
+            List<ProductDTO> Products = new List<ProductDTO>();
+            dataTransfer = new DataTransfer();
+            switch (Typo)
+            {
+                case 1:
+                    Products = dataTransfer.GetLatestProducts();
+                    break;
+                case 2:
+                    Products = dataTransfer.GetSpecialProducts();
+                    break;
+                case 3:
+                    Products = dataTransfer.GetSpecialProducts();
+                    break;
+                default:
+                    break;
+            }
+            return View(Products);
         }
     }
 }
