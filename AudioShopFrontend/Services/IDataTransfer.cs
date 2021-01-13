@@ -15,5 +15,8 @@ namespace AudioShopFrontend.Services
         //category
         Category GetCategoryByNidCategory(int Nidcategory);
         Category GetCategoryByCategoryName(string CategoryName);
+        List<ProductDTO> GetLatestProducts(int pagesize = 10);
+        List<ProductDTO> GetPopularProducts(int pagesize = 10);
+        List<ProductDTO> GetSpecialProducts(int pagesize = 10);
     }
 }

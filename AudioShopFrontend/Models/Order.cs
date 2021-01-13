@@ -22,8 +22,8 @@ namespace AudioShopFrontend.Models
         public Nullable<System.Guid> NidShip { get; set; }
         public byte state { get; set; }
     
-        public virtual Product Product { get; set; }
         public virtual Ship Ship { get; set; }
         public virtual User User { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

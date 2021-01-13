@@ -18,7 +18,10 @@ namespace AudioShopFrontend.Controllers
             IndexViewModel ivm = new IndexViewModel();
             dataTransfer = new DataTransfer();
             ivm.Categories = dataTransfer.GetcategoryList();
-            return View();
+            ivm.LatestProducts = dataTransfer.GetLatestProducts();
+            ivm.LatestProducts = dataTransfer.GetPopularProducts();
+            ivm.LatestProducts = dataTransfer.GetSpecialProducts();
+            return View(ivm);
         }
         public ActionResult Category(int Nidcategory)
         {

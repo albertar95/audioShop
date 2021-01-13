@@ -5,17 +5,32 @@ using System.Web;
 using AutoMapper;
 using AudioShopFrontend.Models;
 using AudioShopFrontend.DTO;
+using AudioShopFrontend.App_Start;
 
 namespace AudioShopFrontend.DTO
 {
     public class DataMapper
     {
-        private readonly IMapper _mapper;
-        public CategoryLiteDTO MapToCategoryLite(Category category)
+         static MapperConfiguration config = MapperConfig.Configure();
+
+        //build the mapper
+         IMapper mapper = config.CreateMapper();
+        public  CategoryLiteDTO MapToCategoryLite(Category category)
         {
             try
             {
-                return _mapper.Map<CategoryLiteDTO>(category);
+                return mapper.Map<CategoryLiteDTO>(category);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public ProductDTO MapToProductDto(Product product)
+        {
+            try
+            {
+                return mapper.Map<ProductDTO>(product);
             }
             catch (Exception)
             {

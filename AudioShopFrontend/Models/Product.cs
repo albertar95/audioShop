@@ -25,6 +25,7 @@ namespace AudioShopFrontend.Models
         public int NidCategory { get; set; }
         public System.Guid NidBrand { get; set; }
         public System.Guid NidType { get; set; }
+        public string Pictures { get; set; }
         public System.DateTime CreateDate { get; set; }
         public Nullable<System.DateTime> LastModified { get; set; }
         public string Description { get; set; }
