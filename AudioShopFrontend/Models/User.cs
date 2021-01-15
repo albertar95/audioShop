@@ -33,6 +33,7 @@ namespace AudioShopFrontend.Models
         public Nullable<System.DateTime> LastLoginDate { get; set; }
         public Nullable<decimal> ZipCode { get; set; }
         public string Address { get; set; }
+        public Nullable<bool> Remember { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments { get; set; }

@@ -28,8 +28,10 @@ namespace AudioShopFrontend.Models
         public Nullable<decimal> ZipCode { get; set; }
         public byte State { get; set; }
         public Nullable<decimal> ShipPrice { get; set; }
+        public System.Guid NidOrder { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

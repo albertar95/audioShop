@@ -17,8 +17,8 @@ namespace AudioShopBackend.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.Orders = new HashSet<Order>();
             this.Comments = new HashSet<Comment>();
+            this.Orders = new HashSet<Order>();
         }
     
         public System.Guid NidUser { get; set; }
@@ -33,10 +33,11 @@ namespace AudioShopBackend.Models
         public Nullable<System.DateTime> LastLoginDate { get; set; }
         public Nullable<decimal> ZipCode { get; set; }
         public string Address { get; set; }
+        public Nullable<bool> Remember { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Comment> Comments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

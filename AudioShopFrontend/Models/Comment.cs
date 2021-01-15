@@ -18,6 +18,7 @@ namespace AudioShopFrontend.Models
         public System.Guid NidUser { get; set; }
         public string CommentText { get; set; }
         public Nullable<byte> State { get; set; }
+        public System.DateTime CreateDate { get; set; }
     
         public virtual User User { get; set; }
     }

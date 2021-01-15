@@ -28,6 +28,7 @@ namespace AudioShopFrontend.Models
         public string Description { get; set; }
         public string keywords { get; set; }
         public Nullable<bool> Issubmmited { get; set; }
+        public Nullable<bool> IsSubmmited { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Category_Brands> Category_Brands { get; set; }

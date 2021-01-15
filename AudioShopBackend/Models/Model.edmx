@@ -104,6 +104,7 @@
           <Property Name="LastLoginDate" Type="datetime" />
           <Property Name="ZipCode" Type="decimal" Precision="12" Scale="0" />
           <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="Remember" Type="bit" />
         </EntityType>
         <Association Name="FK_Categories_Category_Brands">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -275,44 +276,16 @@
           <NavigationProperty Name="Products" Relationship="ASDbModel.FK_Products_Category_Types" FromRole="Category_Types" ToRole="Product" />
           <NavigationProperty Name="Category" Relationship="ASDbModel.FK_Categories_Category_Types" FromRole="Category_Types" ToRole="Category" />
         </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="NidUser" />
-          </Key>
-          <Property Name="NidUser" Type="Guid" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UserImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Enabled" Type="Boolean" />
-          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
-          <Property Name="ZipCode" Type="Decimal" Precision="12" Scale="0" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Orders" Relationship="ASDbModel.FK_Orders_Users" FromRole="User" ToRole="Order" />
-          <NavigationProperty Name="Comments" Relationship="ASDbModel.FK_Comments_Users" FromRole="User" ToRole="Comment" />
-        </EntityType>
         <EntityContainer Name="ASDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Category_Types" EntityType="Self.Category_Types" />
-          <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="Category_Brands" EntityType="ASDbModel.Category_Brands" />
           <EntitySet Name="Orders" EntityType="ASDbModel.Order" />
           <EntitySet Name="Ships" EntityType="ASDbModel.Ship" />
-          <AssociationSet Name="FK_Orders_Users" Association="ASDbModel.FK_Orders_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Order" EntitySet="Orders" />
-          </AssociationSet>
           <AssociationSet Name="FK_Ships_Orders" Association="ASDbModel.FK_Ships_Orders">
             <End Role="Order" EntitySet="Orders" />
             <End Role="Ship" EntitySet="Ships" />
           </AssociationSet>
           <EntitySet Name="Comments" EntityType="ASDbModel.Comment" />
-          <AssociationSet Name="FK_Comments_Users" Association="ASDbModel.FK_Comments_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Comment" EntitySet="Comments" />
-          </AssociationSet>
           <EntitySet Name="Products" EntityType="ASDbModel.Product" />
           <AssociationSet Name="FK_Products_Category_Brands" Association="ASDbModel.FK_Products_Category_Brands">
             <End Role="Category_Brands" EntitySet="Category_Brands" />
@@ -339,6 +312,15 @@
             <End Role="Category" EntitySet="Categories" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
+          <EntitySet Name="Users" EntityType="ASDbModel.User" />
+          <AssociationSet Name="FK_Comments_Users" Association="ASDbModel.FK_Comments_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="ASDbModel.FK_Orders_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Category_Brands">
           <Key>
@@ -362,9 +344,9 @@
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="state" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="ASDbModel.FK_Orders_Users" FromRole="Order" ToRole="User" />
           <NavigationProperty Name="Ships" Relationship="ASDbModel.FK_Ships_Orders" FromRole="Order" ToRole="Ship" />
           <NavigationProperty Name="Product" Relationship="ASDbModel.FK_Orders_Products" FromRole="Order" ToRole="Product" />
+          <NavigationProperty Name="User" Relationship="ASDbModel.FK_Orders_Users" FromRole="Order" ToRole="User" />
         </EntityType>
         <EntityType Name="Ship">
           <Key>
@@ -381,18 +363,6 @@
           <Property Name="NidOrder" Type="Guid" Nullable="false" />
           <NavigationProperty Name="Order" Relationship="ASDbModel.FK_Ships_Orders" FromRole="Ship" ToRole="Order" />
         </EntityType>
-        <Association Name="FK_Orders_Users">
-          <End Type="ASDbModel.User" Role="User" Multiplicity="1" />
-          <End Type="ASDbModel.Order" Role="Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="NidUser" />
-            </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="NidUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Ships_Orders">
           <End Type="ASDbModel.Order" Role="Order" Multiplicity="1" />
           <End Type="ASDbModel.Ship" Role="Ship" Multiplicity="*" />
@@ -416,18 +386,6 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="User" Relationship="ASDbModel.FK_Comments_Users" FromRole="Comment" ToRole="User" />
         </EntityType>
-        <Association Name="FK_Comments_Users">
-          <End Type="ASDbModel.User" Role="User" Multiplicity="1" />
-          <End Type="ASDbModel.Comment" Role="Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="NidUser" />
-            </Principal>
-            <Dependent Role="Comment">
-              <PropertyRef Name="NidUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="NidProduct" />
@@ -535,6 +493,50 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="NidUser" />
+          </Key>
+          <Property Name="NidUser" Type="Guid" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Enabled" Type="Boolean" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+          <Property Name="ZipCode" Type="Decimal" Precision="12" Scale="0" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Remember" Type="Boolean" />
+          <NavigationProperty Name="Comments" Relationship="ASDbModel.FK_Comments_Users" FromRole="User" ToRole="Comment" />
+          <NavigationProperty Name="Orders" Relationship="ASDbModel.FK_Orders_Users" FromRole="User" ToRole="Order" />
+        </EntityType>
+        <Association Name="FK_Comments_Users">
+          <End Type="ASDbModel.User" Role="User" Multiplicity="1" />
+          <End Type="ASDbModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="NidUser" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="NidUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Type="ASDbModel.User" Role="User" Multiplicity="1" />
+          <End Type="ASDbModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="NidUser" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="NidUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -549,24 +551,6 @@
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Keywords" ColumnName="Keywords" />
                 <ScalarProperty Name="NidCategory" ColumnName="NidCategory" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="ASDbModel.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="NidUser" ColumnName="NidUser" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="UserImage" ColumnName="UserImage" />
-                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
-                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -646,6 +630,25 @@
                 <ScalarProperty Name="Pictures" ColumnName="Pictures" />
                 <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
                 <ScalarProperty Name="NidCategory" ColumnName="NidCategory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ASDbModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Remember" ColumnName="Remember" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="UserImage" ColumnName="UserImage" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="NidUser" ColumnName="NidUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

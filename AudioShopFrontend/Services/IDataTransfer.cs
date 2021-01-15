@@ -18,5 +18,7 @@ namespace AudioShopFrontend.Services
         List<ProductDTO> GetLatestProducts(int pagesize = 10);
         List<ProductDTO> GetPopularProducts(int pagesize = 10);
         List<ProductDTO> GetSpecialProducts(int pagesize = 10);
+        //product
+        Product GetProductByID(Guid NidProduct);
     }
 }

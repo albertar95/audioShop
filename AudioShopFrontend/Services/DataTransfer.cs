@@ -53,6 +53,11 @@ namespace AudioShopFrontend.Services
             return result;
         }
 
+        public Product GetProductByID(Guid NidProduct)
+        {
+            return db.Products.Where(p => p.NidProduct == NidProduct).FirstOrDefault();
+        }
+
         public List<ProductDTO> GetSpecialProducts(int pagesize = 10)
         {
             List<ProductDTO> result = new List<ProductDTO>();

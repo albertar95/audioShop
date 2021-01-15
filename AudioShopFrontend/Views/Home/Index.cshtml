@@ -152,7 +152,7 @@
 
                                                 <a href="#modalAddCart" data-toggle="modal" class="btn btn--box btn--small btn--gray btn--uppercase btn--weight btn--hover-zoom product__upper-btn">اضافه کردن به لیست</a>
                                                 <span class="product__tag product__tag--discount">-12%</span>
-                                                <a href="wishlist.html" class="product__wishlist-icon"><i class="icon-heart"></i></a>
+                                                <a href="@Url.Action("Product",new { NidProduct = lates.NidProduct})" class="product__wishlist-icon"><i class="icon-heart"></i></a>
                                             </div>
                                             <div class="product__price m-t-10">
                                                 <span class="product__price-del">@lates.Price</span>
@@ -201,7 +201,7 @@
                                     {
                                         <div class="product__box product__box--default product__box--border-hover swiper-slide text-center">
                                             <div class="product__img-box">
-                                                <a href="#" class="product__img--link">
+                                                <a href="@Url.Action("Product",new { NidProduct = specials.NidProduct})" class="product__img--link">
                                                     @if (specials.Pictures != null)
                                                     {
                                                         <img class="product__img" src="@specials.Pictures.Split(',').FirstOrDefault()" alt="">
@@ -263,7 +263,7 @@
                                     {
                                         <div class="product__box product__box--default product__box--border-hover swiper-slide text-center">
                                             <div class="product__img-box">
-                                                <a href="single-1.html" class="product__img--link">
+                                                <a href="@Url.Action("Product",new { NidProduct = popular.NidProduct})" class="product__img--link">
                                                     @if (popular.Pictures != null)
                                                     {
                                                         <img class="product__img" src="@popular.Pictures.Split(',').FirstOrDefault()" alt="">

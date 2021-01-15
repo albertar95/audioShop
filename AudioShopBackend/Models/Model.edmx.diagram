@@ -6,14 +6,11 @@
     <edmx:Diagrams>
       <Diagram DiagramId="d41b25ce2461413f97c71b2d6e11108d" Name="Diagram1">
         <EntityTypeShape EntityType="ASDbModel.Category_Types" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ASDbModel.User" Width="1.5" PointX="5.25" PointY="9.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ASDbModel.Category_Brands" Width="1.5" PointX="3" PointY="3.25" />
         <EntityTypeShape EntityType="ASDbModel.Order" Width="1.5" PointX="7.5" PointY="6.25" />
         <EntityTypeShape EntityType="ASDbModel.Ship" Width="1.5" PointX="9.75" PointY="6.25" />
-        <AssociationConnector Association="ASDbModel.FK_Orders_Users" />
         <AssociationConnector Association="ASDbModel.FK_Ships_Orders" />
         <EntityTypeShape EntityType="ASDbModel.Comment" Width="1.5" PointX="7.5" PointY="10" />
-        <AssociationConnector Association="ASDbModel.FK_Comments_Users" />
         <EntityTypeShape EntityType="ASDbModel.Product" Width="1.5" PointX="5.25" PointY="4.125" />
         <AssociationConnector Association="ASDbModel.FK_Products_Category_Brands" />
         <AssociationConnector Association="ASDbModel.FK_Products_Category_Types" />
@@ -22,6 +19,9 @@
         <AssociationConnector Association="ASDbModel.FK_Categories_Category_Brands" />
         <AssociationConnector Association="ASDbModel.FK_Categories_Category_Types" />
         <AssociationConnector Association="ASDbModel.FK_Categories_Products" />
+        <EntityTypeShape EntityType="ASDbModel.User" Width="1.5" PointX="5.25" PointY="9.25" />
+        <AssociationConnector Association="ASDbModel.FK_Comments_Users" />
+        <AssociationConnector Association="ASDbModel.FK_Orders_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

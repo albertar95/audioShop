@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using AudioShopFrontend.Services;
 using AudioShopFrontend.DTO;
 using AudioShopFrontend.ViewModels;
+using AudioShopFrontend.Models;
 
 namespace AudioShopFrontend.Controllers
 {
@@ -52,6 +53,24 @@ namespace AudioShopFrontend.Controllers
                     break;
             }
             return View(Products);
+        }
+        public ActionResult Product(Guid NidProduct)
+        {
+            dataTransfer = new DataTransfer();
+            var product = dataTransfer.GetProductByID(NidProduct);
+            return View(product);
+        }
+        public ActionResult Register()
+        {
+            return View();
+        }
+        public ActionResult SubmitLogin(User User)
+        {
+            return RedirectToAction("Index");
+        }
+        public ActionResult SubmitRegister(User User)
+        {
+            return RedirectToAction("Index");
         }
     }
 }

@@ -393,6 +393,7 @@
         </div>
         <!--end of mobile section-->
         <div class="offcanvas-overlay"></div>
+        @RenderSection("styles",false)
     </header>
     <main id="main-container" class="main-container">@RenderBody()</main>
     <footer class="footer">
@@ -529,5 +530,6 @@
     <script src="@Url.Content("~/Content/assets/js/plugin/jquery.elevateZoom-3.0.8.min.js")"></script>
     <script src="@Url.Content("~/Content/assets/js/plugin/venobox.min.js")"></script>
     <script src="@Url.Content("~/Content/assets/js/main.js")"></script>
+    @RenderSection("scripts", false)
 </body>
 </html>

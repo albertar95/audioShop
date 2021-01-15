@@ -14,7 +14,7 @@
           <Property Name="Pictures" Type="nvarchar(max)" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="keywords" Type="nvarchar(max)" />
-          <Property Name="Issubmmited" Type="bit" />
+          <Property Name="IsSubmmited" Type="bit" />
         </EntityType>
         <EntityType Name="Category_Brands">
           <Key>
@@ -44,6 +44,7 @@
           <Property Name="NidUser" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CommentText" Type="nvarchar(max)" />
           <Property Name="State" Type="tinyint" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -54,7 +55,6 @@
           <Property Name="NidProduct" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
-          <Property Name="NidShip" Type="uniqueidentifier" />
           <Property Name="state" Type="tinyint" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
@@ -86,6 +86,7 @@
           <Property Name="ZipCode" Type="decimal" Precision="12" Scale="0" />
           <Property Name="State" Type="tinyint" Nullable="false" />
           <Property Name="ShipPrice" Type="decimal" Precision="15" Scale="0" />
+          <Property Name="NidOrder" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -103,6 +104,7 @@
           <Property Name="LastLoginDate" Type="datetime" />
           <Property Name="ZipCode" Type="decimal" Precision="12" Scale="0" />
           <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="Remember" Type="bit" />
         </EntityType>
         <Association Name="FK_Categories_Category_Brands">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -164,18 +166,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Orders_Ships">
-          <End Role="Ships" Type="Self.Ships" Multiplicity="0..1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Ships">
-              <PropertyRef Name="NidShip" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="NidShip" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Orders_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
@@ -212,6 +202,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Ships_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Ships" Type="Self.Ships" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="NidOrder" />
+            </Principal>
+            <Dependent Role="Ships">
+              <PropertyRef Name="NidOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ASDbModelStoreContainer">
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category_Brands" EntityType="Self.Category_Brands" Schema="dbo" store:Type="Tables" />
@@ -241,10 +243,6 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_Orders_Ships" Association="Self.FK_Orders_Ships">
-            <End Role="Ships" EntitySet="Ships" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
           <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
@@ -256,6 +254,10 @@
           <AssociationSet Name="FK_Products_Category_Types" Association="Self.FK_Products_Category_Types">
             <End Role="Category_Types" EntitySet="Category_Types" />
             <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ships_Orders" Association="Self.FK_Ships_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Ships" EntitySet="Ships" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -294,7 +296,8 @@
           <Property Name="NidUser" Type="Guid" Nullable="false" />
           <Property Name="CommentText" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="State" Type="Byte" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Comments_Users" FromRole="Comments" ToRole="Users" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="User" Relationship="ASDbModel.FK_Comments_Users" FromRole="Comment" ToRole="User" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -308,8 +311,9 @@
           <Property Name="NidShip" Type="Guid" />
           <Property Name="state" Type="Byte" Nullable="false" />
           <NavigationProperty Name="Ship" Relationship="Self.FK_Orders_Ships" FromRole="Orders" ToRole="Ships" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
           <NavigationProperty Name="Product" Relationship="ASDbModel.FK_Orders_Products" FromRole="Order" ToRole="Product" />
+          <NavigationProperty Name="User" Relationship="ASDbModel.FK_Orders_Users" FromRole="Order" ToRole="User" />
+          <NavigationProperty Name="Ships" Relationship="ASDbModel.FK_Ships_Orders" FromRole="Order" ToRole="Ship" />
         </EntityType>
         <EntityType Name="Ship">
           <Key>
@@ -324,38 +328,9 @@
           <Property Name="State" Type="Byte" Nullable="false" />
           <Property Name="ShipPrice" Type="Decimal" Precision="15" Scale="0" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Ships" FromRole="Ships" ToRole="Orders" />
+          <Property Name="NidOrder" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="ASDbModel.FK_Ships_Orders" FromRole="Ship" ToRole="Order" />
         </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="NidUser" />
-          </Key>
-          <Property Name="NidUser" Type="Guid" Nullable="false" />
-          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UserImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Enabled" Type="Boolean" />
-          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
-          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
-          <Property Name="ZipCode" Type="Decimal" Precision="12" Scale="0" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Users" FromRole="Users" ToRole="Comments" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
-        </EntityType>
-        <Association Name="FK_Comments_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Comments" Type="Self.Comment" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="NidUser" />
-            </Principal>
-            <Dependent Role="Comments">
-              <PropertyRef Name="NidUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Orders_Ships">
           <End Role="Ships" Type="Self.Ship" Multiplicity="0..1" />
           <End Role="Orders" Type="Self.Order" Multiplicity="*" />
@@ -368,35 +343,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Orders_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="NidUser" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="NidUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ASDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Category_Brands" EntityType="Self.Category_Brands" />
           <EntitySet Name="Category_Types" EntityType="Self.Category_Types" />
           <EntitySet Name="Comments" EntityType="Self.Comment" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="Ships" EntityType="Self.Ship" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <AssociationSet Name="FK_Comments_Users" Association="Self.FK_Comments_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Comments" EntitySet="Comments" />
-          </AssociationSet>
           <AssociationSet Name="FK_Orders_Ships" Association="Self.FK_Orders_Ships">
             <End Role="Ships" EntitySet="Ships" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
-            <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
           <EntitySet Name="Categories" EntityType="ASDbModel.Category" />
@@ -425,6 +379,19 @@
             <End Role="Product" EntitySet="Products" />
             <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
+          <EntitySet Name="Users" EntityType="ASDbModel.User" />
+          <AssociationSet Name="FK_Comments_Users" Association="ASDbModel.FK_Comments_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Comment" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="ASDbModel.FK_Orders_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ships_Orders" Association="ASDbModel.FK_Ships_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Ship" EntitySet="Ships" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Category">
           <Key>
@@ -439,6 +406,7 @@
           <NavigationProperty Name="Category_Brands" Relationship="ASDbModel.FK_Categories_Category_Brands" FromRole="Category" ToRole="Category_Brands" />
           <NavigationProperty Name="Category_Types" Relationship="ASDbModel.FK_Categories_Category_Types" FromRole="Category" ToRole="Category_Types" />
           <NavigationProperty Name="Products" Relationship="ASDbModel.FK_Categories_Products" FromRole="Category" ToRole="Product" />
+          <Property Name="IsSubmmited" Type="Boolean" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -533,6 +501,62 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="NidUser" />
+          </Key>
+          <Property Name="NidUser" Type="Guid" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserImage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Enabled" Type="Boolean" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+          <Property Name="ZipCode" Type="Decimal" Precision="12" Scale="0" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Remember" Type="Boolean" />
+          <NavigationProperty Name="Comments" Relationship="ASDbModel.FK_Comments_Users" FromRole="User" ToRole="Comment" />
+          <NavigationProperty Name="Orders" Relationship="ASDbModel.FK_Orders_Users" FromRole="User" ToRole="Order" />
+        </EntityType>
+        <Association Name="FK_Comments_Users">
+          <End Type="ASDbModel.User" Role="User" Multiplicity="1" />
+          <End Type="ASDbModel.Comment" Role="Comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="NidUser" />
+            </Principal>
+            <Dependent Role="Comment">
+              <PropertyRef Name="NidUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Type="ASDbModel.User" Role="User" Multiplicity="1" />
+          <End Type="ASDbModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="NidUser" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="NidUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ships_Orders">
+          <End Type="ASDbModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="ASDbModel.Ship" Role="Ship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="NidOrder" />
+            </Principal>
+            <Dependent Role="Ship">
+              <PropertyRef Name="NidOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -564,6 +588,7 @@
           <EntitySetMapping Name="Comments">
             <EntityTypeMapping TypeName="ASDbModel.Comment">
               <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="NidComment" ColumnName="NidComment" />
                 <ScalarProperty Name="NidUser" ColumnName="NidUser" />
                 <ScalarProperty Name="CommentText" ColumnName="CommentText" />
@@ -579,7 +604,6 @@
                 <ScalarProperty Name="NidProduct" ColumnName="NidProduct" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="NidShip" ColumnName="NidShip" />
                 <ScalarProperty Name="state" ColumnName="state" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -587,6 +611,7 @@
           <EntitySetMapping Name="Ships">
             <EntityTypeMapping TypeName="ASDbModel.Ship">
               <MappingFragment StoreEntitySet="Ships">
+                <ScalarProperty Name="NidOrder" ColumnName="NidOrder" />
                 <ScalarProperty Name="NidShip" ColumnName="NidShip" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="DueDate" ColumnName="DueDate" />
@@ -598,28 +623,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="ASDbModel.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="NidUser" ColumnName="NidUser" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
-                <ScalarProperty Name="LastName" ColumnName="LastName" />
-                <ScalarProperty Name="UserImage" ColumnName="UserImage" />
-                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
-                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
-                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
-                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Categories">
             <EntityTypeMapping TypeName="ASDbModel.Category">
               <MappingFragment StoreEntitySet="Categories">
-                <ScalarProperty Name="Issubmmited" ColumnName="Issubmmited" />
+                <ScalarProperty Name="IsSubmmited" ColumnName="IsSubmmited" />
                 <ScalarProperty Name="keywords" ColumnName="keywords" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Pictures" ColumnName="Pictures" />
@@ -643,6 +650,25 @@
                 <ScalarProperty Name="NidCategory" ColumnName="NidCategory" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="NidProduct" ColumnName="NidProduct" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ASDbModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Remember" ColumnName="Remember" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="UserImage" ColumnName="UserImage" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="NidUser" ColumnName="NidUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
