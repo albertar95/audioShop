@@ -64,13 +64,29 @@ namespace AudioShopFrontend.Controllers
         {
             return View();
         }
-        public ActionResult SubmitLogin(User User)
+        public ActionResult SubmitLogin(string Username,string Password,bool isPersistant)
         {
-            return RedirectToAction("Index");
+            dataTransfer = new DataTransfer();
+            var User = dataTransfer.GetUserByUsername(Username);
+            if(User != null)
+            {
+                if (DataTransfer.Encrypt(Password) == User.Password)
+                    return Json(new JsonResults() {  HasValue =true});
+                else
+                    return Json(new JsonResults() { HasValue = false,Message = "incorrect password" });
+            }else
+                return Json(new JsonResults() { HasValue = false,Message = "user not found" });
         }
         public ActionResult SubmitRegister(User User)
         {
             return RedirectToAction("Index");
         }
+    }
+    public class JsonResults
+    {
+        public bool HasValue { get; set; }
+        public string Message { get; set; }
+        public string Html { get; set; }
+        public int tmpNidCategory { get; set; }
     }
 }

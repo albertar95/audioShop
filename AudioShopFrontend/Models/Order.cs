@@ -30,8 +30,8 @@ namespace AudioShopFrontend.Models
     
         public virtual Ship Ship { get; set; }
         public virtual Product Product { get; set; }
-        public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ship> Ships { get; set; }
+        public virtual User User { get; set; }
     }
 }

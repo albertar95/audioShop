@@ -135,6 +135,44 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\assets\css\css\animate.css" />
+    <Content Include="Content\assets\css\css\animation\animation-custom.css" />
+    <Content Include="Content\assets\css\css\bootstrap-select\bootstrap-select.css" />
+    <Content Include="Content\assets\css\css\bootstrap.min.css" />
+    <Content Include="Content\assets\css\css\c3\c3.min.css" />
+    <Content Include="Content\assets\css\css\chosen\chosen-sprite.png" />
+    <Content Include="Content\assets\css\css\chosen\chosen.css" />
+    <Content Include="Content\assets\css\css\code-editor\1.jpg" />
+    <Content Include="Content\assets\css\css\code-editor\ambiance.css" />
+    <Content Include="Content\assets\css\css\code-editor\codemirror.css" />
+    <Content Include="Content\assets\css\css\color-picker\farbtastic.css" />
+    <Content Include="Content\assets\css\css\color-picker\marker.png" />
+    <Content Include="Content\assets\css\css\color-picker\mask.png" />
+    <Content Include="Content\assets\css\css\color-picker\wheel.png" />
+    <Content Include="Content\assets\css\css\cropper\cropper.min.css" />
+    <Content Include="Content\assets\css\css\datapicker\datepicker3.css" />
+    <Content Include="Content\assets\css\css\dialog\dialog.css" />
+    <Content Include="Content\assets\css\css\dialog\sweetalert2.min.css" />
+    <Content Include="Content\assets\css\css\dropzone\dropzone.css" />
+    <Content Include="Content\assets\css\css\font-awesome.min.css" />
+    <Content Include="Content\assets\css\css\jquery.dataTables.min.css" />
+    <Content Include="Content\assets\css\css\jvectormap\jquery-jvectormap-2.0.3.css" />
+    <Content Include="Content\assets\css\css\main.css" />
+    <Content Include="Content\assets\css\css\meanmenu\meanmenu.min.css" />
+    <Content Include="Content\assets\css\css\metisMenu\metisMenu-vertical.css" />
+    <Content Include="Content\assets\css\css\metisMenu\metisMenu.min.css" />
+    <Content Include="Content\assets\css\css\normalize.css" />
+    <Content Include="Content\assets\css\css\notification\notification.css" />
+    <Content Include="Content\assets\css\css\notika-custom-icon.css" />
+    <Content Include="Content\assets\css\css\owl.carousel.css" />
+    <Content Include="Content\assets\css\css\owl.theme.css" />
+    <Content Include="Content\assets\css\css\owl.transitions.css" />
+    <Content Include="Content\assets\css\css\responsive.css" />
+    <Content Include="Content\assets\css\css\scrollbar\jquery.mCustomScrollbar.min.css" />
+    <Content Include="Content\assets\css\css\summernote\summernote.css" />
+    <Content Include="Content\assets\css\css\themesaller-forms.css" />
+    <Content Include="Content\assets\css\css\wave\button.css" />
+    <Content Include="Content\assets\css\css\wave\waves.min.css" />
     <Content Include="Content\assets\css\main.css" />
     <Content Include="Content\assets\css\main.min.css" />
     <Content Include="Content\assets\css\plugin\in-number.css" />
@@ -273,6 +311,8 @@
     <Content Include="Content\assets\img\user\image-2.png" />
     <Content Include="Content\assets\img\user\image-3.png" />
     <Content Include="Content\assets\js\main.js" />
+    <Content Include="Content\assets\js\notification\bootstrap-growl.min.js" />
+    <Content Include="Content\assets\js\notification\notification-active.js" />
     <Content Include="Content\assets\js\plugin\in-number.js" />
     <Content Include="Content\assets\js\plugin\jquery.countdown.min.js" />
     <Content Include="Content\assets\js\plugin\jquery.elevateZoom-3.0.8.min.js" />

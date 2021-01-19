@@ -104,7 +104,6 @@
           <Property Name="LastLoginDate" Type="datetime" />
           <Property Name="ZipCode" Type="decimal" Precision="12" Scale="0" />
           <Property Name="Address" Type="nvarchar(max)" />
-          <Property Name="Remember" Type="bit" />
         </EntityType>
         <Association Name="FK_Categories_Category_Brands">
           <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
@@ -312,8 +311,8 @@
           <Property Name="state" Type="Byte" Nullable="false" />
           <NavigationProperty Name="Ship" Relationship="Self.FK_Orders_Ships" FromRole="Orders" ToRole="Ships" />
           <NavigationProperty Name="Product" Relationship="ASDbModel.FK_Orders_Products" FromRole="Order" ToRole="Product" />
-          <NavigationProperty Name="User" Relationship="ASDbModel.FK_Orders_Users" FromRole="Order" ToRole="User" />
           <NavigationProperty Name="Ships" Relationship="ASDbModel.FK_Ships_Orders" FromRole="Order" ToRole="Ship" />
+          <NavigationProperty Name="User" Relationship="ASDbModel.FK_Orders_Users" FromRole="Order" ToRole="User" />
         </EntityType>
         <EntityType Name="Ship">
           <Key>
@@ -379,6 +378,10 @@
             <End Role="Product" EntitySet="Products" />
             <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
+          <AssociationSet Name="FK_Ships_Orders" Association="ASDbModel.FK_Ships_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Ship" EntitySet="Ships" />
+          </AssociationSet>
           <EntitySet Name="Users" EntityType="ASDbModel.User" />
           <AssociationSet Name="FK_Comments_Users" Association="ASDbModel.FK_Comments_Users">
             <End Role="User" EntitySet="Users" />
@@ -387,10 +390,6 @@
           <AssociationSet Name="FK_Orders_Users" Association="ASDbModel.FK_Orders_Users">
             <End Role="User" EntitySet="Users" />
             <End Role="Order" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Ships_Orders" Association="ASDbModel.FK_Ships_Orders">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="Ship" EntitySet="Ships" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Category">
@@ -501,6 +500,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Ships_Orders">
+          <End Type="ASDbModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="ASDbModel.Ship" Role="Ship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="NidOrder" />
+            </Principal>
+            <Dependent Role="Ship">
+              <PropertyRef Name="NidOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="NidUser" />
@@ -517,7 +528,6 @@
           <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
           <Property Name="ZipCode" Type="Decimal" Precision="12" Scale="0" />
           <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Remember" Type="Boolean" />
           <NavigationProperty Name="Comments" Relationship="ASDbModel.FK_Comments_Users" FromRole="User" ToRole="Comment" />
           <NavigationProperty Name="Orders" Relationship="ASDbModel.FK_Orders_Users" FromRole="User" ToRole="Order" />
         </EntityType>
@@ -542,18 +552,6 @@
             </Principal>
             <Dependent Role="Order">
               <PropertyRef Name="NidUser" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Ships_Orders">
-          <End Type="ASDbModel.Order" Role="Order" Multiplicity="1" />
-          <End Type="ASDbModel.Ship" Role="Ship" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Order">
-              <PropertyRef Name="NidOrder" />
-            </Principal>
-            <Dependent Role="Ship">
-              <PropertyRef Name="NidOrder" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -656,7 +654,6 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ASDbModel.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="Remember" ColumnName="Remember" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="ZipCode" ColumnName="ZipCode" />
                 <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />

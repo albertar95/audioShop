@@ -20,5 +20,7 @@ namespace AudioShopFrontend.Services
         List<ProductDTO> GetSpecialProducts(int pagesize = 10);
         //product
         Product GetProductByID(Guid NidProduct);
+        //User
+        User GetUserByUsername(string Username);
     }
 }

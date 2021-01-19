@@ -19,10 +19,10 @@
         <AssociationConnector Association="ASDbModel.FK_Products_Category_Brands" />
         <AssociationConnector Association="ASDbModel.FK_Products_Category_Types" />
         <AssociationConnector Association="ASDbModel.FK_Orders_Products" />
-        <EntityTypeShape EntityType="ASDbModel.User" Width="1.5" PointX="5.25" PointY="9.625" />
+        <AssociationConnector Association="ASDbModel.FK_Ships_Orders" />
+        <EntityTypeShape EntityType="ASDbModel.User" Width="1.5" PointX="5.25" PointY="9.75" />
         <AssociationConnector Association="ASDbModel.FK_Comments_Users" />
         <AssociationConnector Association="ASDbModel.FK_Orders_Users" />
-        <AssociationConnector Association="ASDbModel.FK_Ships_Orders" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
