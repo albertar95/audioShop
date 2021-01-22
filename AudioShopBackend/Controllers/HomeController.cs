@@ -473,7 +473,7 @@ namespace AudioShopBackend.Controllers
             dbTransfer = new DbTransfer();
             if (!dbTransfer.CheckForUserExistance(Username.Trim()))
             {
-                dbTransfer.Add(new User() {  NidUser = Guid.NewGuid(), CreateDate = DateTime.Now, Enabled = true, FirstName = Name, LastName = LastName, IsAdmin = true, Password = Password, Username = Username});
+                dbTransfer.Add(new User() {  NidUser = Guid.NewGuid(), CreateDate = DateTime.Now, Enabled = true, FirstName = Name, LastName = LastName, IsAdmin = true, Password = DbTransfer.Encrypt(Password), Username = Username});
                 if(dbTransfer.Save())
                     return Json(new JsonResults() { HasValue = true, Message = "user added successfully!" });
                 else

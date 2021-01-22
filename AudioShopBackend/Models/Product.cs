@@ -33,10 +33,10 @@ namespace AudioShopBackend.Models
         public decimal Price { get; set; }
         public byte State { get; set; }
     
+        public virtual Category Category { get; set; }
         public virtual Category_Brands Category_Brands { get; set; }
         public virtual Category_Types Category_Types { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
-        public virtual Category Category { get; set; }
     }
 }

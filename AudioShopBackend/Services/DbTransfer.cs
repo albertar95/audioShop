@@ -184,7 +184,7 @@ namespace AudioShopBackend.Services
             if(db.Users.Where(p => p.Username.Trim().ToLower() == Username.Trim().ToLower()).Any())
             {
                 var tmpUser = db.Users.Where(p => p.Username.Trim().ToLower() == Username.Trim().ToLower()).FirstOrDefault();
-                if (tmpUser.Password == Password)
+                if (tmpUser.Password == Encrypt(Password))
                     return new Tuple<byte, User>(0,tmpUser);
                 else
                     return new Tuple<byte, User>(1, null);

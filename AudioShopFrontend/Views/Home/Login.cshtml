@@ -1,0 +1,162 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="page-breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="page-breadcrumb__menu ForceRTL">
+                    <li class="page-breadcrumb__nav"><a href="@Url.Action("Index")">خانه</a></li>
+                    <li class="page-breadcrumb__nav active">ورود </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <!-- login area start -->
+            <div class="login-register-area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-7 col-md-12 ml-auto mr-auto">
+                            <div class="login-register-wrapper">
+                                <div class="login-register-tab-list nav">
+                                    <a class="active" data-toggle="tab" href="#lg1">
+                                        <h4>ورود</h4>
+                                    </a>
+                                </div>
+                                <div class="tab-content" style="text-align:right;">
+                                    <div id="lg1" class="tab-pane active">
+                                        <div class="login-form-container">
+                                            <div class="login-register-form">
+                                                @using (Html.BeginForm("SubmitLogin", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "LoginForm" }))
+                                                {
+                                                    <form action="#" method="post">
+                                                        <div class="form-box__single-group">
+                                                            <input type="text" id="LoginUsername" name="Login.Username" placeholder="نام کاربری">
+                                                        </div>
+                                                        <div class="form-box__single-group">
+                                                            <input type="password" id="LoginPassword" name="Login.Password" placeholder="رمز عبور">
+                                                        </div>
+                                                        <div class="d-flex justify-content-between flex-wrap m-tb-20">
+                                                            <label for="account-remember">
+                                                                <input type="checkbox" id="UserRemember">
+                                                                <span>مرا به خاطر بسپار</span>
+                                                            </label>
+                                                            <a class="link--gray" href="">بازیابی رمز عبور</a>
+                                                        </div>
+                                                        <button class="btn btn--box btn--small btn--blue btn--uppercase btn--weight" id="btnLogin" type="submit">ورود</button>
+                                                    </form>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- login area end -->
+        </div>
+    </div>
+</div>
+
+@section styles
+    {
+
+    <link href="@Url.Content("~/Content/assets/css/notification/notification.css")" rel="stylesheet" />
+}
+@section scripts
+    {
+    <script src="@Url.Content("~/Content/assets/js/notification/bootstrap-growl.min.js")"></script>
+    <script src="@Url.Content("~/Content/assets/js/notification/notification-active.js")"></script>
+    <script type="text/javascript">
+        $(function ()
+        {
+            var isChecked = false;
+            $("#UserRemember").change(function ()
+            {
+                if(this.checked)
+                {
+                    isChecked = true;
+                } else
+                {
+                    isChecked = false;
+                }
+            });
+            $("#btnLogin").click(function (e)
+            {
+                e.preventDefault();
+                $.ajax(
+                    {
+                        url: '@Url.Action("SubmitLogin","Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { Username: $("#LoginUsername").val(), Password: $("#LoginPassword").val(), isPersistant: isChecked },
+                        success: function (result)
+                        {
+                            if(result.HasValue)
+                            {
+                                window.location.href = '@Url.Action("Index","Home")';
+                            } else
+                            {
+                                myNotify('bottom', 'center', '', 'warning', 'animated fadeInLeft', 'animated fadeOutLeft', result.Message);
+                            }
+                        },
+                        error: function ()
+                        {
+                            myNotify('bottom', 'center', '', 'warning', 'animated fadeInLeft', 'animated fadeOutLeft', 'error');
+                        }
+                    });
+            });
+        });
+        function myNotify(from, align, icon, type, animIn, animOut, myMessage) {
+            $.growl({
+                icon: icon,
+                title: '',
+                message: myMessage,
+                url: ''
+            }, {
+                element: 'body',
+                type: type,
+                allow_dismiss: true,
+                placement: {
+                    from: from,
+                    align: align
+                },
+                offset: {
+                    x: 20,
+                    y: 85
+                },
+                spacing: 10,
+                z_index: 1031,
+                delay: 2500,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: false,
+                animate: {
+                    enter: animIn,
+                    exit: animOut
+                },
+                icon_type: 'class',
+                template: '<div data-growl="container" class="alert" role="alert">' +
+								'<button type="button" class="close" data-growl="dismiss">' +
+									'<span aria-hidden="true">&times;</span>' +
+									'<span class="sr-only">Close</span>' +
+								'</button>' +
+								'<span data-growl="icon"></span>' +
+								'<span data-growl="title"></span>' +
+								'<span data-growl="message"></span>' +
+								'<a href="#" data-growl="url"></a>' +
+							'</div>'
+            });
+        };
+    </script>
+}
+

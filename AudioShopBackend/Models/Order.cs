@@ -27,9 +27,9 @@ namespace AudioShopBackend.Models
         public System.DateTime CreateDate { get; set; }
         public byte state { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ship> Ships { get; set; }
         public virtual Product Product { get; set; }
         public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Ship> Ships { get; set; }
     }
 }

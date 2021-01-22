@@ -27,15 +27,15 @@
                         <div class="col-lg-7 col-md-12 ml-auto mr-auto">
                             <div class="login-register-wrapper">
                                 <div class="login-register-tab-list nav">
-                                    <a class="active" data-toggle="tab" href="#lg1">
+                                    <a data-toggle="tab" href="#lg1">
                                         <h4>ورود</h4>
                                     </a>
-                                    <a data-toggle="tab" href="#lg2">
+                                    <a class="active" data-toggle="tab" href="#lg2">
                                         <h4>ثبت نام</h4>
                                     </a>
                                 </div>
                                 <div class="tab-content" style="text-align:right;">
-                                    <div id="lg1" class="tab-pane active">
+                                    <div id="lg1" class="tab-pane">
                                         <div class="login-form-container">
                                             <div class="login-register-form">
                                                 @using (Html.BeginForm("SubmitLogin", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "LoginForm" }))
@@ -60,11 +60,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="lg2" class="tab-pane">
+                                    <div id="lg2" class="tab-pane active">
                                         <div class="login-form-container">
                                             <div class="login-register-form">
                                                @using (Html.BeginForm("SubmitRegister", "Home", FormMethod.Post, new { enctype = "multipart/form-data", id = "RegisterForm" }))
                                                {
+                                                   if (TempData["RegisterError"] != null)
+                                                   {
+                                                    <div class="alert alert-warning" role="alert" id="warningMessageDiv">
+                                                        @TempData["RegisterError"]
+                                                    </div>
+                                                   }
                                                 <form action="#" method="post">
                                                     <div class="form-box__single-group">
                                                         <input type="text" id="User_FirstName" name="User.FirstName" placeholder="نام" required>
@@ -76,7 +82,7 @@
                                                         <input type="email" id="User.Username" name="User.Username" placeholder="ایمیل" required>
                                                     </div>
                                                     <div class="form-box__single-group m-b-20">
-                                                        <input type="password" id="User_Password" name="User.Paswword" placeholder="رمز عبور" required>
+                                                        <input type="password" id="User_Password" name="User.Password" placeholder="رمز عبور" required>
                                                     </div>
                                                     <div class="form-box__single-group m-b-20">
                                                         <input type="password" id="User_Password2" name="User.Password2" placeholder="تکرار رمز عبور" required>
@@ -116,6 +122,9 @@
     <script type="text/javascript">
         $(function ()
         {
+            setTimeout(function () {
+                $("#warningMessageDiv").prop('hidden', 'hidden');
+            }, 10000);
             var isChecked = false;
             $("#UserRemember").change(function ()
             {
@@ -125,6 +134,14 @@
                 } else
                 {
                     isChecked = false;
+                }
+            });
+            $("#btnRegister").click(function (e)
+            {
+                if($("#User_Password").val() != $("#User_Password2").val())
+                {
+                    e.preventDefault();
+                    myNotify('bottom', 'center', '', 'warning', 'animated fadeInLeft', 'animated fadeOutLeft', 'passwords doesnt match!');
                 }
             });
             $("#btnLogin").click(function (e)

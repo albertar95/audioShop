@@ -14,12 +14,6 @@ namespace AudioShopFrontend.Models
     
     public partial class Ship
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Ship()
-        {
-            this.Orders = new HashSet<Order>();
-        }
-    
         public System.Guid NidShip { get; set; }
         public System.DateTime CreateDate { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
@@ -30,8 +24,6 @@ namespace AudioShopFrontend.Models
         public Nullable<decimal> ShipPrice { get; set; }
         public System.Guid NidOrder { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
         public virtual Order Order { get; set; }
     }
 }

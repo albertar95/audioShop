@@ -7,6 +7,7 @@ using AudioShopFrontend.Services;
 using AudioShopFrontend.DTO;
 using AudioShopFrontend.ViewModels;
 using AudioShopFrontend.Models;
+using System.Web.Security;
 
 namespace AudioShopFrontend.Controllers
 {
@@ -64,6 +65,10 @@ namespace AudioShopFrontend.Controllers
         {
             return View();
         }
+        public ActionResult Login()
+        {
+            return View();
+        }
         public ActionResult SubmitLogin(string Username,string Password,bool isPersistant)
         {
             dataTransfer = new DataTransfer();
@@ -71,15 +76,41 @@ namespace AudioShopFrontend.Controllers
             if(User != null)
             {
                 if (DataTransfer.Encrypt(Password) == User.Password)
-                    return Json(new JsonResults() {  HasValue =true});
+                {
+                    FormsAuthenticationTicket Ticket = new FormsAuthenticationTicket(1, User.Username, DateTime.Now, DateTime.Now.AddMinutes(30), isPersistant, User.NidUser.ToString(), FormsAuthentication.FormsCookiePath);
+                    string encTicket = FormsAuthentication.Encrypt(Ticket);
+                    Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                    return Json(new JsonResults() { HasValue = true });
+                }
                 else
-                    return Json(new JsonResults() { HasValue = false,Message = "incorrect password" });
+                    return Json(new JsonResults() { HasValue = false, Message = "incorrect password" });
             }else
                 return Json(new JsonResults() { HasValue = false,Message = "user not found" });
         }
         public ActionResult SubmitRegister(User User)
         {
-            return RedirectToAction("Index");
+            dataTransfer = new DataTransfer();
+            if(!dataTransfer.CheckUsername(User.Username))
+            {
+                User.CreateDate = DateTime.Now;
+                User.Enabled = true;
+                User.IsAdmin = false;
+                User.NidUser = Guid.NewGuid();
+                User.Password = DataTransfer.Encrypt(User.Password);
+                if(dataTransfer.AddUser(User))
+                    return RedirectToAction("Index");
+                else
+                {
+                    TempData["RegisterError"] = "error in database";
+                    return View("Register");
+                }
+            }
+            else
+            {
+                TempData["RegisterError"] = "username already exists";
+                return RedirectToAction("Register");
+            }
+            
         }
     }
     public class JsonResults

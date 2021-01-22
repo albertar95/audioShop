@@ -29,7 +29,7 @@ namespace AudioShopFrontend.Services
         public List<CategoryLiteDTO> GetcategoryList()
         {
             List<CategoryLiteDTO> result = new List<CategoryLiteDTO>();
-            foreach (var cat in db.Categories.Where(p => p.Issubmmited == true))
+            foreach (var cat in db.Categories.Where(p => p.IsSubmmited == true))
             {
                 result.Add(mapper.MapToCategoryLite(cat));
             }
@@ -73,7 +73,15 @@ namespace AudioShopFrontend.Services
 
         public User GetUserByUsername(string Username)
         {
-            return db.Users.Where(p => p.Username == Username.Trim()).FirstOrDefault();
+            try
+            {
+                return db.Users.Where(p => p.Username == Username).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                string s = ex.InnerException.Message;
+                return null;
+            }
         }
 
         public static string Encrypt(string text)
@@ -114,6 +122,20 @@ namespace AudioShopFrontend.Services
                     }
                 }
             }
+        }
+
+        public bool CheckUsername(string Username)
+        {
+            return db.Users.Where(p => p.Username == Username).Any();
+        }
+
+        public bool AddUser(User User)
+        {
+            db.Users.Add(User);
+            if (db.SaveChanges() == 1)
+                return true;
+            else
+                return false;
         }
     }
 }
