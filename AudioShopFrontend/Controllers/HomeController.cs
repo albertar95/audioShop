@@ -116,6 +116,11 @@ namespace AudioShopFrontend.Controllers
         {
             return View();
         }
+        public ActionResult MyFavorites()
+        {
+            string name = User.Identity.Name;
+            return View();
+        }
     }
     public class JsonResults
     {

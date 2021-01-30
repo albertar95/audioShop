@@ -22,6 +22,8 @@ namespace AudioShopFrontend.Services
         Product GetProductByID(Guid NidProduct);
         //User
         User GetUserByUsername(string Username);
+        //favorites
+        List<ProductDTO> GetUserFavorites(Guid UserId);
         bool CheckUsername(string Username);
         bool AddUser(User User);
     }

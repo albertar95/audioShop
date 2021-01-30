@@ -137,5 +137,10 @@ namespace AudioShopFrontend.Services
             else
                 return false;
         }
+
+        public List<ProductDTO> GetUserFavorites(Guid UserId)
+        {
+            return null;
+        }
     }
 }
