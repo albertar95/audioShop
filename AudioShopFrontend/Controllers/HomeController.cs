@@ -79,7 +79,10 @@ namespace AudioShopFrontend.Controllers
                 {
                     FormsAuthenticationTicket Ticket = new FormsAuthenticationTicket(1, User.Username, DateTime.Now, DateTime.Now.AddMinutes(30), isPersistant, User.NidUser.ToString(), FormsAuthentication.FormsCookiePath);
                     string encTicket = FormsAuthentication.Encrypt(Ticket);
-                    Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                    Response.Cookies.Add(new HttpCookie("AudioShopLogin", encTicket));
+                    Response.Cookies["AudioShopLogin"].Expires = DateTime.Now.AddMinutes(30);
+                    //Response.Cookies["AudioShopLogin"].HttpOnly = true;
+                    //Response.Cookies["AudioShopLogin"].Secure = true;
                     return Json(new JsonResults() { HasValue = true });
                 }
                 else
@@ -118,8 +121,46 @@ namespace AudioShopFrontend.Controllers
         }
         public ActionResult MyFavorites()
         {
-            string name = User.Identity.Name;
+            HttpCookie myuserCookie = Request.Cookies["AudioShopLogin"];
+            //HttpCookie myuserCookie2 = System.Web.HttpContext.Current.Response.Cookies["AudioShopLogin"];
+            if(myuserCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(myuserCookie.Value);
+                string niduser = ticket.UserData;
+                string username = ticket.Name;
+            }
             return View();
+        }
+        public ActionResult AddProductToFavorites(Guid NidProduct)
+        {
+            HttpCookie myuserCookie = Response.Cookies["AudioShopLogin"];
+            int count = 0;
+            //HttpCookie myuserCookie2 = System.Web.HttpContext.Current.Response.Cookies["AudioShopLogin"];
+            if (myuserCookie != null)
+            {
+                var ticket = FormsAuthentication.Decrypt(myuserCookie.Value);
+                string niduser = ticket.UserData;
+                HttpCookie favoritesCookie = Request.Cookies["AudioShopFavorites"];
+                if(favoritesCookie != null)
+                {
+                    string[] favs = favoritesCookie.Value.Split(',');
+                    if(!favs.Contains(NidProduct.ToString()))
+                    {
+                        Response.Cookies["AudioShopFavorites"].Value += "," + NidProduct.ToString();
+                        count = favs.Count() + 1;
+                    }
+                    else
+                    {
+                        count = favs.Count();
+                    }
+                }
+                else
+                {
+                    HttpCookie newCookie = new HttpCookie("AudioShopFavorites", NidProduct.ToString());
+                    count = 1;
+                }
+            }
+            return Json(new JsonResults() {  HasValue = true,Html = count.ToString()});
         }
     }
     public class JsonResults

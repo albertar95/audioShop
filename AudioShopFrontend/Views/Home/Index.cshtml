@@ -139,7 +139,7 @@
                                     {
                                         <div class="product__box product__box--default product__box--border-hover swiper-slide text-center">
                                             <div class="product__img-box">
-                                                <a href="#" class="product__img--link">
+                                                <a href="@Url.Action("Product",new { NidProduct = lates.NidProduct})" class="product__img--link">
                                                     @if (lates.Pictures != null)
                                                     {
                                                         <img class="product__img" src="@lates.Pictures.Split(',').FirstOrDefault()" alt="">
@@ -152,13 +152,13 @@
 
                                                 <a href="#modalAddCart" data-toggle="modal" class="btn btn--box btn--small btn--gray btn--uppercase btn--weight btn--hover-zoom product__upper-btn">اضافه کردن به لیست</a>
                                                 <span class="product__tag product__tag--discount">-12%</span>
-                                                <a href="@Url.Action("Product",new { NidProduct = lates.NidProduct})" class="product__wishlist-icon"><i class="icon-heart"></i></a>
+                                                <a href="#" onclick="AddThisToFav('@lates.NidProduct')" class="product__wishlist-icon"><i class="icon-heart"></i></a>
                                             </div>
                                             <div class="product__price m-t-10">
                                                 <span class="product__price-del">@lates.Price</span>
                                                 <span class="product__price-reg">$10.71</span>
                                             </div>
-                                            <a href="single-1.html" class="product__link product__link--underline product__link--weight-light m-t-15">
+                                            <a href="@Url.Action("Product",new { NidProduct = lates.NidProduct})" class="product__link product__link--underline product__link--weight-light m-t-15">
                                                 @lates.ProductName
                                             </a>
                                         </div>
@@ -220,7 +220,7 @@
                                                 <span class="product__price-del">@specials.Price</span>
                                                 <span class="product__price-reg">$10.71</span>
                                             </div>
-                                            <a href="single-1.html" class="product__link product__link--underline product__link--weight-light m-t-15">
+                                            <a href="@Url.Action("Product",new { NidProduct = specials.NidProduct})" class="product__link product__link--underline product__link--weight-light m-t-15">
                                                 @specials.ProductName
                                             </a>
                                         </div>
@@ -282,7 +282,7 @@
                                                 <span class="product__price-del">@popular.Price</span>
                                                 <span class="product__price-reg">$10.71</span>
                                             </div>
-                                            <a href="single-1.html" class="product__link product__link--underline product__link--weight-light m-t-15">
+                                            <a href="@Url.Action("Product",new { NidProduct = popular.NidProduct})" class="product__link product__link--underline product__link--weight-light m-t-15">
                                                 @popular.ProductName
                                             </a>
                                         </div>
@@ -570,3 +570,26 @@
 </div>
 <!--end of main section-->
 
+@section scripts
+    {
+    <script type="text/javascript">
+        function AddThisToFav(NidProd)
+        {
+            $.ajax(
+                {
+                    url: '@Url.Action("AddProductToFavorites","Home")',
+                    type: 'post',
+                    datatype: 'json',
+                    data: {NidProduct : NidProd},
+                    success: function (result)
+                    {
+                        if(result.HasValue)
+                        {
+                            $("#FavCount").html(result.Html);
+                        }
+                    },
+                    error: function () { }
+                });
+        }
+    </script>
+    }
