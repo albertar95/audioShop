@@ -150,7 +150,7 @@
                                                     }
                                                 </a>
 
-                                                <a href="#modalAddCart" data-toggle="modal" class="btn btn--box btn--small btn--gray btn--uppercase btn--weight btn--hover-zoom product__upper-btn">اضافه کردن به لیست</a>
+                                                <a href="#modalAddCart" data-toggle="modal" onclick="AddThisToCart('@lates.NidProduct')" class="btn btn--box btn--small btn--gray btn--uppercase btn--weight btn--hover-zoom product__upper-btn">اضافه کردن به لیست</a>
                                                 <span class="product__tag product__tag--discount">-12%</span>
                                                 <a href="#" onclick="AddThisToFav('@lates.NidProduct')" class="product__wishlist-icon"><i class="icon-heart"></i></a>
                                             </div>
@@ -586,6 +586,21 @@
                         if(result.HasValue)
                         {
                             $("#FavCount").html(result.Html);
+                        }
+                    },
+                    error: function () { }
+                });
+        }
+        function AddThisToCart(NidProd) {
+            $.ajax(
+                {
+                    url: '@Url.Action("AddProductToCart","Home")',
+                    type: 'post',
+                    datatype: 'json',
+                    data: { NidProduct: NidProd },
+                    success: function (result) {
+                        if (result.HasValue) {
+                            $("#CartCount").html(result.Html);
                         }
                     },
                     error: function () { }

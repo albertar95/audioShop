@@ -80,7 +80,7 @@ namespace AudioShopFrontend.Controllers
                     FormsAuthenticationTicket Ticket = new FormsAuthenticationTicket(1, User.Username, DateTime.Now, DateTime.Now.AddMinutes(30), isPersistant, User.NidUser.ToString(), FormsAuthentication.FormsCookiePath);
                     string encTicket = FormsAuthentication.Encrypt(Ticket);
                     Response.Cookies.Add(new HttpCookie("AudioShopLogin", encTicket));
-                    Response.Cookies["AudioShopLogin"].Expires = DateTime.Now.AddMinutes(30);
+                    //Response.Cookies["AudioShopLogin"].Expires = DateTime.Now.AddMinutes(30);
                     //Response.Cookies["AudioShopLogin"].HttpOnly = true;
                     //Response.Cookies["AudioShopLogin"].Secure = true;
                     return Json(new JsonResults() { HasValue = true });
@@ -117,36 +117,55 @@ namespace AudioShopFrontend.Controllers
         }
         public ActionResult MyCart()
         {
-            return View();
+            List<ProductDTO> prods = new List<ProductDTO>();
+            dataTransfer = new DataTransfer();
+            if (Request.Cookies.AllKeys.Contains("AudioShopLogin"))
+            {
+                var ticket = FormsAuthentication.Decrypt(Request.Cookies["AudioShopLogin"].Value);
+                string niduser = ticket.UserData;
+                if (Request.Cookies.AllKeys.Contains("AudioShopCart"))
+                {
+                    string[] cart = Request.Cookies["AudioShopCart"].Value.Split(',');
+                    foreach (var f in cart)
+                    {
+                        prods.Add(dataTransfer.GetProductDtoByID(Guid.Parse(f)));
+                    }
+                }
+            }
+            return View(prods);
         }
         public ActionResult MyFavorites()
         {
-            HttpCookie myuserCookie = Request.Cookies["AudioShopLogin"];
-            //HttpCookie myuserCookie2 = System.Web.HttpContext.Current.Response.Cookies["AudioShopLogin"];
-            if(myuserCookie != null)
+            List<ProductDTO> prods = new List<ProductDTO>();
+            dataTransfer = new DataTransfer();
+            if (Request.Cookies.AllKeys.Contains("AudioShopLogin"))
             {
-                var ticket = FormsAuthentication.Decrypt(myuserCookie.Value);
+                var ticket = FormsAuthentication.Decrypt(Request.Cookies["AudioShopLogin"].Value);
                 string niduser = ticket.UserData;
-                string username = ticket.Name;
+                if (Request.Cookies.AllKeys.Contains("AudioShopFavorites"))
+                {
+                    string[] fav = Request.Cookies["AudioShopFavorites"].Value.Split(',');
+                    foreach (var f in fav)
+                    {
+                        prods.Add(dataTransfer.GetProductDtoByID(Guid.Parse(f)));
+                    }
+                }
             }
-            return View();
+            return View(prods);
         }
         public ActionResult AddProductToFavorites(Guid NidProduct)
         {
-            HttpCookie myuserCookie = Response.Cookies["AudioShopLogin"];
             int count = 0;
-            //HttpCookie myuserCookie2 = System.Web.HttpContext.Current.Response.Cookies["AudioShopLogin"];
-            if (myuserCookie != null)
+            if (Request.Cookies.AllKeys.Contains("AudioShopLogin"))
             {
-                var ticket = FormsAuthentication.Decrypt(myuserCookie.Value);
+                var ticket = FormsAuthentication.Decrypt(Request.Cookies["AudioShopLogin"].Value);
                 string niduser = ticket.UserData;
-                HttpCookie favoritesCookie = Request.Cookies["AudioShopFavorites"];
-                if(favoritesCookie != null)
+                if(Request.Cookies.AllKeys.Contains("AudioShopFavorites"))
                 {
-                    string[] favs = favoritesCookie.Value.Split(',');
+                    string[] favs = Request.Cookies["AudioShopFavorites"].Value.Split(',');
                     if(!favs.Contains(NidProduct.ToString()))
                     {
-                        Response.Cookies["AudioShopFavorites"].Value += "," + NidProduct.ToString();
+                        Response.Cookies["AudioShopFavorites"].Value = Request.Cookies["AudioShopFavorites"].Value + "," + NidProduct.ToString();
                         count = favs.Count() + 1;
                     }
                     else
@@ -157,10 +176,40 @@ namespace AudioShopFrontend.Controllers
                 else
                 {
                     HttpCookie newCookie = new HttpCookie("AudioShopFavorites", NidProduct.ToString());
+                    Response.Cookies.Add(newCookie);
                     count = 1;
                 }
             }
             return Json(new JsonResults() {  HasValue = true,Html = count.ToString()});
+        }
+        public ActionResult AddProductToCart(Guid NidProduct)
+        {
+            int count = 0;
+            if (Request.Cookies.AllKeys.Contains("AudioShopLogin"))
+            {
+                var ticket = FormsAuthentication.Decrypt(Request.Cookies["AudioShopLogin"].Value);
+                string niduser = ticket.UserData;
+                if (Request.Cookies.AllKeys.Contains("AudioShopCart"))
+                {
+                    string[] carts = Request.Cookies["AudioShopCart"].Value.Split(',');
+                    if (!carts.Contains(NidProduct.ToString()))
+                    {
+                        Response.Cookies["AudioShopCart"].Value = Request.Cookies["AudioShopCart"].Value + "," + NidProduct.ToString();
+                        count = carts.Count() + 1;
+                    }
+                    else
+                    {
+                        count = carts.Count();
+                    }
+                }
+                else
+                {
+                    HttpCookie newCookie = new HttpCookie("AudioShopCart", NidProduct.ToString());
+                    Response.Cookies.Add(newCookie);
+                    count = 1;
+                }
+            }
+            return Json(new JsonResults() { HasValue = true, Html = count.ToString() });
         }
     }
     public class JsonResults

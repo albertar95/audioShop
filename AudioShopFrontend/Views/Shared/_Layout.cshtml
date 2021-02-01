@@ -52,14 +52,14 @@
                                         <div class="header__wishlist pos-relative">
                                             <a href="wishlist.html" class="header__wishlist-link">
                                                 <i class="icon-heart"></i>
-                                                <span class="wishlist-item-count pos-absolute">3</span>
+                                                <span class="wishlist-item-count pos-absolute" id="FavCount">@AudioShopFrontend.ViewModels.SharedLayotViewModel.GetUserFavoritesCount()</span>
                                             </a>
                                         </div> <!-- End Header Wishlist Box -->
                                         <!-- Start Header Add Cart Box -->
                                         <div class="header-add-cart pos-relative m-l-40">
                                             <a href="#offcanvas-add-cart__box" class="offcanvas-toggle">
                                                 <i class="icon-shopping-cart"></i>
-                                                <span class="wishlist-item-count pos-absolute" id="FavCount"></span>
+                                                <span class="wishlist-item-count pos-absolute" id="CartCount">@AudioShopFrontend.ViewModels.SharedLayotViewModel.GetUserCartCount()</span>
                                             </a>
                                         </div> <!-- End Header Add Cart Box -->
                                     </div>

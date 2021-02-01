@@ -142,5 +142,10 @@ namespace AudioShopFrontend.Services
         {
             return null;
         }
+
+        public ProductDTO GetProductDtoByID(Guid NidProduct)
+        {
+            return mapper.MapToProductDto(db.Products.Where(p => p.NidProduct == NidProduct).FirstOrDefault());
+        }
     }
 }
