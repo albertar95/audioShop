@@ -27,5 +27,7 @@ namespace AudioShopFrontend.Services
         List<ProductDTO> GetUserFavorites(Guid UserId);
         bool CheckUsername(string Username);
         bool AddUser(User User);
+        //search
+        List<ProductDTO> SearchProduct(string input,int Nidcategory = 0);
     }
 }

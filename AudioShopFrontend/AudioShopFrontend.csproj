@@ -556,6 +556,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\MyCart.cshtml" />
     <Content Include="Views\Home\MyFavorites.cshtml" />
+    <Content Include="Views\Home\_SearchResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using AudioShopFrontend.DTO;
 
 namespace AudioShopFrontend.ViewModels
 {
@@ -34,6 +35,33 @@ namespace AudioShopFrontend.ViewModels
             {
             }
             return 0;
+        }
+        public static List<ProductDTO> GetCurrentCartItems()
+        {
+            List<ProductDTO> result = new List<ProductDTO>();
+            if(HttpContext.Current.Request.Cookies.AllKeys.Contains("AudioShopLogin") && HttpContext.Current.Request.Cookies.AllKeys.Contains("AudioShopCart"))
+            {
+                Services.DataTransfer dataTransfer = new Services.DataTransfer();
+                var cookieValue = HttpContext.Current.Request.Cookies["AudioShopCart"].Value;
+                string[] products = cookieValue.Split(',');
+                foreach (var pro in products)
+                {
+                    result.Add(dataTransfer.GetProductDtoByID(Guid.Parse(pro)));
+                }
+            }
+            return result;
+        }
+        public static List<CategoryLiteDTO> GetCategories()
+        {
+            try
+            {
+                Services.DataTransfer dataTransfer = new Services.DataTransfer();
+                return dataTransfer.GetcategoryList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
     }

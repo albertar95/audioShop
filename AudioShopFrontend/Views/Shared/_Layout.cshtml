@@ -50,7 +50,7 @@
                                     <div class="header__wishlist-box">
                                         <!-- Start Header Wishlist Box -->
                                         <div class="header__wishlist pos-relative">
-                                            <a href="wishlist.html" class="header__wishlist-link">
+                                            <a href="@Url.Action("MyFavorites","Home")" class="header__wishlist-link">
                                                 <i class="icon-heart"></i>
                                                 <span class="wishlist-item-count pos-absolute" id="FavCount">@AudioShopFrontend.ViewModels.SharedLayotViewModel.GetUserFavoritesCount()</span>
                                             </a>
@@ -64,27 +64,32 @@
                                         </div> <!-- End Header Add Cart Box -->
                                     </div>
                                 </div>
-                                <div class="col-lg-10">
+                                <div class="col-lg-10" style="padding-right:0 !important;padding-left:0 !important;">
                                     <form class="header__search-form" action="#">
                                         <div class="header__search-category">
-                                            <select class="bootstrap-select" name="poscats">
-                                                <option value="0">همه دسته بندی ها</option>
-                                                <option value="12">
-                                                    صوتی تصویری
-                                                </option>
+                                            <select class="bootstrap-select" name="poscats" id="SearchCategory">
+                                                <option value="0" selected>همه دسته بندی ها</option>
+                                                @foreach (var cate in AudioShopFrontend.ViewModels.SharedLayotViewModel.GetCategories())
+                                                {
+                                                    <option value="@cate.NidCategory">
+                                                        @cate.CategoryName
+                                                    </option>
+                                                }
                                             </select>
                                         </div>
                                         <div class="header__search-input">
-                                            <input type="search" placeholder="نام محصول مورد نظر را وارد کنید">
+                                            <input type="search" id="SearchBox" placeholder="نام محصول مورد نظر را وارد کنید">
                                             <button class="btn btn--submit btn--blue btn--uppercase btn--weight " type="submit">جستجو</button>
                                         </div>
                                     </form>
+                                    <div style="background:#fbf5f5 !important;border-radius: 2px;position: absolute;width: 100%;display:grid;height: auto;z-index:99999;" id="SearchContent" hidden>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-3">
                             <div class="header__logo">
-                                <a href="index.html" class="header__logo-link">
+                                <a href="@Url.Action("Index","Home")" class="header__logo-link">
                                     <img src="@Url.Content("~/Content/assets/img/logo/logo-color.jpg")" alt="" class="header__logo-img">
                                 </a>
                             </div>
@@ -134,16 +139,16 @@
                             <div class="header__wishlist-box">
                                 <!-- Start Header Wishlist Box -->
                                 <div class="header__wishlist pos-relative">
-                                    <a href="wishlist.html" class="header__wishlist-link">
+                                    <a href="@Url.Action("MyFavorites","Home")" class="header__wishlist-link">
                                         <i class="icon-heart"></i>
-                                        <span class="wishlist-item-count pos-absolute">3</span>
+                                        <span class="wishlist-item-count pos-absolute">@AudioShopFrontend.ViewModels.SharedLayotViewModel.GetUserFavoritesCount()</span>
                                     </a>
                                 </div> <!-- End Header Wishlist Box -->
                                 <!-- Start Header Add Cart Box -->
                                 <div class="header-add-cart pos-relative m-l-20">
                                     <a href="#offcanvas-add-cart__box" class="header__wishlist-link offcanvas--open-checkout offcanvas-toggle">
                                         <i class="icon-shopping-cart"></i>
-                                        <span class="wishlist-item-count pos-absolute">3</span>
+                                        <span class="wishlist-item-count pos-absolute">@AudioShopFrontend.ViewModels.SharedLayotViewModel.GetUserCartCount()</span>
                                     </a>
                                 </div> <!-- End Header Add Cart Box -->
 
@@ -326,39 +331,31 @@
         </div>
         <div id="offcanvas-add-cart__box" class="offcanvas offcanvas-cart offcanvas-add-cart">
             <div class="offcanvas-add-cart__top m-b-40">
-                <span class="offcanvas-add-cart__top-text"><i class="icon-shopping-cart"></i> Total Items: 4</span>
-                <button class=" offcanvas-close">&times;</button>
+                <span class="offcanvas-add-cart__top-text"><i class="icon-shopping-cart"></i> Total Items: @AudioShopFrontend.ViewModels.SharedLayotViewModel.GetUserCartCount()</span>
+                <button class="offcanvas-close">&times;</button>
             </div>
             <!-- Start Add Cart Item Box-->
             <ul class="offcanvas-add-cart__menu">
                 <!-- Start Single Add Cart Item-->
+            @foreach (var cartItem in AudioShopFrontend.ViewModels.SharedLayotViewModel.GetCurrentCartItems())
+            {
                 <li class="offcanvas-add-cart__list pos-relative">
                     <div class="offcanvas-add-cart__img-box pos-relative">
-                        <a href="single-1.html" class="offcanvas-add-cart__img-link img-responsive"><img src="assets/img/product/size-small/product-home-1-img-1.jpg" alt="" class="add-cart__img"></a>
+                        <a href="single-1.html" class="offcanvas-add-cart__img-link img-responsive">
+                            @if (cartItem.Pictures != null)
+                            {
+                                <img src="@cartItem.Pictures.Split(',').First()" alt="" class="add-cart__img">
+                            }
+                        </a>
                         <span class="offcanvas-add-cart__item-count pos-absolute">2x</span>
                     </div>
                     <div class="offcanvas-add-cart__detail">
-                        <a href="single-1.html" class="offcanvas-add-cart__link">PlayStation 4 Pro 1TB Star Wars Battlefront II Bundle</a>
-                        <span class="offcanvas-add-cart__price">$29.00</span>
-                        <span class="offcanvas-add-cart__info">Dimension: 40x60cm</span>
-
+                        <a href="single-1.html" class="offcanvas-add-cart__link">@cartItem.ProductName</a>
+                        <span class="offcanvas-add-cart__price">@cartItem.Price</span>
                     </div>
                     <button class="offcanvas-add-cart__item-dismiss pos-absolute">&times;</button>
                 </li> <!-- Start Single Add Cart Item-->
-                <!-- Start Single Add Cart Item-->
-                <li class="offcanvas-add-cart__list pos-relative">
-                    <div class="offcanvas-add-cart__img-box pos-relative">
-                        <a href="single-1.html" class="offcanvas-add-cart__img-link img-responsive"><img src="assets/img/product/size-small/product-home-1-img-2.jpg" alt="" class="add-cart__img"></a>
-                        <span class="offcanvas-add-cart__item-count pos-absolute">1x</span>
-                    </div>
-                    <div class="offcanvas-add-cart__detail">
-                        <a href="single-1.html" class="offcanvas-add-cart__link">PlayStation 4 Pro 1TB Star Wars Battlefront II Bundle</a>
-                        <span class="offcanvas-add-cart__price">$29.00</span>
-                        <span class="offcanvas-add-cart__info">Dimension: 40x60cm</span>
-
-                    </div>
-                    <button class="offcanvas-add-cart__item-dismiss pos-absolute">&times;</button>
-                </li> <!-- Start Single Add Cart Item-->
+            }
             </ul> <!-- Start Add Cart Item Box-->
             <!-- Start Add Cart Checkout Box-->
             <div class="offcanvas-add-cart__checkout-box-bottom">
@@ -387,7 +384,7 @@
                 </ul> <!-- End offcanvas Add Cart Checkout Info-->
 
                 <div class="offcanvas-add-cart__btn-checkout">
-                    <a href="checkout.html" class="btn btn--block btn--box btn--gray btn--large btn--uppercase btn--weight">Checkout</a>
+                    <a href="@Url.Action("MyCart","Home")" class="btn btn--block btn--box btn--gray btn--large btn--uppercase btn--weight">Checkout</a>
                 </div>
             </div> <!-- End Add Cart Checkout Box-->
         </div>
@@ -531,5 +528,35 @@
     <script src="@Url.Content("~/Content/assets/js/plugin/venobox.min.js")"></script>
     <script src="@Url.Content("~/Content/assets/js/main.js")"></script>
     @RenderSection("scripts", false)
+    <script type="text/javascript">
+        $(function () {
+            $("#SearchBox").on('input', function () {
+                if ($("#SearchBox").val().trim().length > 2)
+                {
+                    $.ajax({
+                            url: '@Url.Action("SearchThis","Home")',
+                            type: 'post',
+                            datatype: 'json',
+                            data: { Text: $("#SearchBox").val(), Nidcategory: $('#SearchCategory').find(":selected").val() },
+                            success: function (result) {
+                                if (result.HasValue) {
+                                    $("#SearchContent").removeAttr('hidden');
+                                    $("#SearchContent").html(result.Html);
+                                } else {
+                                    $("#SearchContent").attr('hidden', 'hidden');
+                                }
+                            },
+                            error: function () { }
+                        });
+                } else {
+                    if($("#SearchContent").is(":hidden") == false)
+                    {
+                        $("#SearchContent").attr('hidden', 'hidden');
+                    }
+                    
+                }
+            });
+        });
+    </script>
 </body>
 </html>

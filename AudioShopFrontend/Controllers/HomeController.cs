@@ -8,6 +8,7 @@ using AudioShopFrontend.DTO;
 using AudioShopFrontend.ViewModels;
 using AudioShopFrontend.Models;
 using System.Web.Security;
+using System.IO;
 
 namespace AudioShopFrontend.Controllers
 {
@@ -211,6 +212,36 @@ namespace AudioShopFrontend.Controllers
             }
             return Json(new JsonResults() { HasValue = true, Html = count.ToString() });
         }
+        public ActionResult SearchThis(string Text,int Nidcategory)
+        {
+            dataTransfer = new DataTransfer();
+            var res = dataTransfer.SearchProduct(Text, Nidcategory);
+            if(res.Count != 0)
+            {
+                return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_SearchResult", res) });
+            }
+            else
+            {
+                return Json(new JsonResults() { HasValue = false});
+            }
+        }
+        public static string RenderViewToString(ControllerContext context, string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = context.RouteData.GetRequiredString("action");
+
+            ViewDataDictionary viewData = new ViewDataDictionary(model);
+
+            using (StringWriter sw = new StringWriter())
+            {
+                ViewEngineResult viewResult = ViewEngines.Engines.FindPartialView(context, viewName);
+                ViewContext viewContext = new ViewContext(context, viewResult.View, viewData, new TempDataDictionary(), sw);
+                viewResult.View.Render(viewContext, sw);
+
+                return sw.GetStringBuilder().ToString();
+            }
+        }
+
     }
     public class JsonResults
     {
