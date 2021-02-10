@@ -334,12 +334,17 @@
                         {
                             if(result.HasValue)
                             {
-                                myNotify('bottom', 'center', '', 'success', 'animated fadeInLeft', 'animated fadeOutLeft', 'done');
-                            } else {
+                                myNotify('bottom', 'center', '', 'success', 'animated fadeInLeft', 'animated fadeOutLeft', result.Message);
+                            }
+                            else
+                            {
                                 myNotify('bottom', 'center', '', 'warning', 'animated fadeInLeft', 'animated fadeOutLeft', result.Message);
                             }
                         },
-                        error: function () { }
+                        error: function ()
+                        {
+                            myNotify('bottom', 'center', '', 'warning', 'animated fadeInLeft', 'animated fadeOutLeft', 'error');
+                        }
                     });
             });
         });

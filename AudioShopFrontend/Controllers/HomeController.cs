@@ -277,7 +277,10 @@ namespace AudioShopFrontend.Controllers
                 {
                     CurrentUser.Address = NewAddress;
                     if (dataTransfer.UpdateUser(CurrentUser))
+                    {
+                        message = "done";
                         IsUpdated = true;
+                    }
                 }
                 else
                     message = "user not found";
