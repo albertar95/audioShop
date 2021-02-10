@@ -289,6 +289,10 @@ namespace AudioShopFrontend.Controllers
                 message = "user not logined";
             return Json(new JsonResults() { HasValue = IsUpdated, Message = message });
         }
+        public ActionResult AboutUs()
+        {
+            return View();
+        }
         public ActionResult SearchThis(string Text,int Nidcategory)
         {
             dataTransfer = new DataTransfer();
