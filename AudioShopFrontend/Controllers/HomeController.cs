@@ -293,6 +293,10 @@ namespace AudioShopFrontend.Controllers
         {
             return View();
         }
+        public ActionResult Blog()
+        {
+            return View();
+        }
         public ActionResult SearchThis(string Text,int Nidcategory)
         {
             dataTransfer = new DataTransfer();

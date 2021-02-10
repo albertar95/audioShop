@@ -560,6 +560,7 @@
     <Content Include="Views\Home\_SearchResult.cshtml" />
     <Content Include="Views\Home\MyProfile.cshtml" />
     <Content Include="Views\Home\AboutUs.cshtml" />
+    <Content Include="Views\Home\Blog.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
