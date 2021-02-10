@@ -23,11 +23,15 @@ namespace AudioShopFrontend.Services
         ProductDTO GetProductDtoByID(Guid NidProduct);
         //User
         User GetUserByUsername(string Username);
+        User GetUserByNidUser(Guid NidUser);
+        bool UpdateUser(User user);
         //favorites
         List<ProductDTO> GetUserFavorites(Guid UserId);
         bool CheckUsername(string Username);
         bool AddUser(User User);
         //search
         List<ProductDTO> SearchProduct(string input,int Nidcategory = 0);
+        //orders
+        List<Order> GetUsersOrder(Guid NidUser);
     }
 }

@@ -167,5 +167,45 @@ namespace AudioShopFrontend.Services
             }
             return result;
         }
+
+        public User GetUserByNidUser(Guid NidUser)
+        {
+            try
+            {
+                return db.Users.Where(p => p.NidUser == NidUser).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public List<Order> GetUsersOrder(Guid NidUser)
+        {
+            try
+            {
+                return db.Orders.Where(p => p.NidUser == NidUser).ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public bool UpdateUser(User user)
+        {
+            try
+            {
+                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                if (db.SaveChanges() == 1)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

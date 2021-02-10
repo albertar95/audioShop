@@ -212,6 +212,80 @@ namespace AudioShopFrontend.Controllers
             }
             return Json(new JsonResults() { HasValue = true, Html = count.ToString() });
         }
+        public ActionResult MyProfile()
+        {
+            ProfileViewModel pvm = new ProfileViewModel();
+            List<Order> Orders = new List<Order>();
+            Models.User User = new User();
+            if (Request.Cookies.AllKeys.Contains("AudioShopLogin"))
+            {
+                dataTransfer = new DataTransfer();
+                var ticket = FormsAuthentication.Decrypt(Request.Cookies["AudioShopLogin"].Value);
+                string NidUser = ticket.UserData;
+                User = dataTransfer.GetUserByNidUser(Guid.Parse(NidUser));
+                Orders = dataTransfer.GetUsersOrder(Guid.Parse(NidUser));
+            }
+            pvm.Orders = Orders;
+            pvm.UserInfo = User;
+            return View(pvm);
+        }
+        public ActionResult ChangePassword(string CurrentPassword,string NewPassword)
+        {
+            string message = "";
+            bool IsUpdated = false;
+            if (Request.Cookies.AllKeys.Contains("AudioShopLogin"))
+            {
+                dataTransfer = new DataTransfer();
+                var ticket = FormsAuthentication.Decrypt(Request.Cookies["AudioShopLogin"].Value);
+                string NidUser = ticket.UserData;
+                var CurrentUser = dataTransfer.GetUserByNidUser(Guid.Parse(NidUser));
+                if (CurrentUser != null)
+                {
+                    if (CurrentUser.Password == DataTransfer.Encrypt(CurrentPassword))
+                    {
+                        CurrentUser.Password = DataTransfer.Encrypt(NewPassword);
+                        if (dataTransfer.UpdateUser(CurrentUser))
+                        {
+                            message = "password updated successfully";
+                            IsUpdated = true;
+                        }
+                        else
+                            message = "error in database";
+                    }
+                    else
+                        message = "current password doesnt meet!";
+                }
+                else
+                    message = "user not found";
+            }
+            else
+                message = "user not logined";
+
+            return Json(new JsonResults() { HasValue = IsUpdated, Message = message });
+        }
+        public ActionResult ChangeAddress(string NewAddress)
+        {
+            string message = "";
+            bool IsUpdated = false;
+            if (Request.Cookies.AllKeys.Contains("AudioShopLogin"))
+            {
+                dataTransfer = new DataTransfer();
+                var ticket = FormsAuthentication.Decrypt(Request.Cookies["AudioShopLogin"].Value);
+                string NidUser = ticket.UserData;
+                var CurrentUser = dataTransfer.GetUserByNidUser(Guid.Parse(NidUser));
+                if (CurrentUser != null)
+                {
+                    CurrentUser.Address = NewAddress;
+                    if (dataTransfer.UpdateUser(CurrentUser))
+                        IsUpdated = true;
+                }
+                else
+                    message = "user not found";
+            }
+            else
+                message = "user not logined";
+            return Json(new JsonResults() { HasValue = IsUpdated, Message = message });
+        }
         public ActionResult SearchThis(string Text,int Nidcategory)
         {
             dataTransfer = new DataTransfer();
