@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="form-example-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:right;direction:rtl;">
+                <div class="form-element-list" style="min-height:100vh;">
+                    <h1>welcome</h1>
+                    <h3>audio shop</h3>
+                    <p>note that this website is still in developing stage,so be patient</p>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+@section styles
+    {
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.dataTables.min.css")">
+}
+
+@section scripts
+    {
+    <script type="text/javascript">
+        $(function ()
+        {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liHome").addClass('active');
+        });
+    </script>
+    <script src="@Url.Content("~/Content/js/data-table/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
+    }

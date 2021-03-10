@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="login-content">
+    <!-- Login -->
+    <div class="nk-block toggled" id="l-login">
+        <div class="nk-form">
+            <div class="input-group">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-support"></i></span>
+                <div class="nk-int-st">
+                    <input type="text" class="form-control" placeholder="Username" id="txtUsername">
+                </div>
+            </div>
+            <div class="input-group mg-t-15">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-edit"></i></span>
+                <div class="nk-int-st">
+                    <input type="password" class="form-control" placeholder="Password" id="txtPassword">
+                </div>
+            </div>
+            <div class="fm-checkbox">
+                <label><input type="checkbox" class="i-checks" id="cbKeep"> <i></i> Keep me signed in</label>
+            </div>
+            <a href="#l-register" id="btnLogin" data-ma-action="nk-login-switch" data-ma-block="#l-register" class="btn btn-login btn-success btn-float"><i class="notika-icon notika-right-arrow right-arrow-ant"></i></a>
+        </div>
+        <div class="nk-navigation nk-lg-ic">
+            <a href="#" data-ma-action="nk-login-switch" data-ma-block="#l-forget-password"><i>?</i> <span>Forgot Password</span></a>
+        </div>
+    </div>
+    <!-- Forgot Password -->
+    <div class="nk-block" id="l-forget-password">
+        <div class="nk-form">
+            <p class="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu risus. Curabitur commodo lorem fringilla enim feugiat commodo sed ac lacus.</p>
+            <div class="input-group">
+                <span class="input-group-addon nk-ic-st-pro"><i class="notika-icon notika-mail"></i></span>
+                <div class="nk-int-st">
+                    <input type="text" class="form-control" placeholder="Email Address">
+                </div>
+            </div>
+            <a href="#l-login" data-ma-action="nk-login-switch" data-ma-block="#l-login" class="btn btn-login btn-success btn-float"><i class="notika-icon notika-right-arrow"></i></a>
+        </div>
+        <div class="nk-navigation nk-lg-ic rg-ic-stl">
+            <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-login"><i class="notika-icon notika-right-arrow"></i> <span>Sign in</span></a>
+            <a href="" data-ma-action="nk-login-switch" data-ma-block="#l-register"><i class="notika-icon notika-plus-symbol"></i> <span>Register</span></a>
+        </div>
+    </div>
+</div>
+
+
+@section styles
+    {
+
+    <link href="@Url.Content("~/Content/css/notification/notification.css")" rel="stylesheet" />
+}
+@section scripts
+    {
+    <script src="@Url.Content("~/Content/js/notification/bootstrap-growl.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/notification/notification-active.js")"></script>
+    <script type="text/javascript">
+        $(function ()
+        {
+            $("#btnLogin").click(function (e)
+            {
+                e.preventDefault();
+                var username = $("#txtUsername").val();
+                var password = $("#txtPassword").val();
+                var cbState = false;
+                if($("#cbKeep").checked == true)
+                {
+                    cbState = true;
+                }
+                    $.ajax(
+                        {
+                            url: '@Url.Action("SignIn","Home")',
+                            type: 'post',
+                            datatype: 'json',
+                            data: {Username:username,Password:password,IsChecked:cbState},
+                            success: function (result)
+                            {
+                                if (!result.HasValue)
+                                {
+                                    myNotify('bottom', 'center', '', 'warning', 'animated fadeInLeft', 'animated fadeOutLeft', result.Message);
+                                } else
+                                {
+                                    window.location.href = '@Url.Action("Index","Home")';
+                                }
+                            },
+                            error: function ()
+                            {
+                                alert('error')
+                            }
+                        });
+            });
+        });
+        function myNotify(from, align, icon, type, animIn, animOut, myMessage) {
+            $.growl({
+                icon: icon,
+                title: '',
+                message: myMessage,
+                url: ''
+            }, {
+                element: 'body',
+                type: type,
+                allow_dismiss: true,
+                placement: {
+                    from: from,
+                    align: align
+                },
+                offset: {
+                    x: 20,
+                    y: 85
+                },
+                spacing: 10,
+                z_index: 1031,
+                delay: 2500,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: false,
+                animate: {
+                    enter: animIn,
+                    exit: animOut
+                },
+                icon_type: 'class',
+                template: '<div data-growl="container" class="alert" role="alert">' +
+								'<button type="button" class="close" data-growl="dismiss">' +
+									'<span aria-hidden="true">&times;</span>' +
+									'<span class="sr-only">Close</span>' +
+								'</button>' +
+								'<span data-growl="icon"></span>' +
+								'<span data-growl="title"></span>' +
+								'<span data-growl="message"></span>' +
+								'<a href="#" data-growl="url"></a>' +
+							'</div>'
+            });
+        };
+    </script>
+    }

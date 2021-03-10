@@ -1,0 +1,156 @@
+﻿@model List<AudioShopBackend.Models.Comment>
+@{
+    ViewBag.Title = "Comments";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcomb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="breadcomb-list">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
+                            <div class="breadcomb-report">
+                                @if(TempData["Comments"].ToString() == "0")
+                                {
+                                    <a href="@Url.Action("AcceptedComments","Home")" style="float:left;" class="btn notika-btn-lime btn-reco-mg btn-button-mg waves-effect" id="btnAccepted">Show Accepted Comments</a>
+                                }
+                                else if (TempData["Comments"].ToString() == "1")
+                                {
+                                    <a href="@Url.Action("Comments","Home")" style="float:left;" class="btn notika-btn-lime btn-reco-mg btn-button-mg waves-effect" id="btnAccepted">Show regular Comments</a>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="breadcomb-wp" style="float:right;text-align:right;">
+                                <div class="breadcomb-ctn">
+                                    <h2>Data Table</h2>
+                                    <p>Welcome to Notika <span class="bread-ntd">Admin Template</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="data-table-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="direction:rtl;float:right;text-align:right;">
+                <div class="data-table-list">
+                    <div class="basic-tb-hd">
+                        <h2>Basic Example</h2>
+                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="data-table-basic" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">CreateDate</th>
+                                    <th style="text-align:center;">Username</th>
+                                    <th style="text-align:center;">CommentText</th>
+                                    <th style="text-align:center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblComment">
+                                @foreach (var cmt in Model)
+                                {
+                                    <tr id="@cmt.NidComment">
+                                        <td style="text-align:center;">@cmt.CreateDate</td>
+                                        <td style="text-align:center;">@cmt.User.Username</td>
+                                        <td style="text-align:center;">@cmt.CommentText</td>
+                                        <td style="text-align:center;">
+                                            <button onclick="DeleteThis('@cmt.NidComment')" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                                            @if (TempData["Comments"].ToString() == "0")
+                                            {
+                                                <button onclick="AcceptThis('@cmt.NidComment')" class="btn btn-info notika-btn-info waves-effect">Accept</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles
+    {
+
+    <link href="@Url.Content("~/Content/css/notification/notification.css")" rel="stylesheet" />
+}
+@section scripts
+    {
+    <script src="@Url.Content("~/Content/js/notification/bootstrap-growl.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/notification/notification-active.js")"></script>
+    <script type="text/javascript">
+        $(function ()
+        {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liComments").addClass('active');
+        });
+        function DeleteThis(nidComment)
+        {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+            }).then(function () {
+                $.ajax(
+                    {
+                        url: '@Url.Action("DeleteComment", "Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { NidComment: nidComment },
+                        success: function (result) {
+                            if (result.HasValue) {
+                                swal("deleted!", result.Message, "success");
+                                $('#' + nidComment).attr('hidden','hidden');
+                            } else {
+                                swal(result.Message);
+                            }
+                        },
+                        error: function () {
+                            swal("error");
+                        }
+                    })
+            });
+        }
+        function AcceptThis(nidComment) {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, accept it!",
+            }).then(function () {
+                $.ajax(
+                    {
+                        url: '@Url.Action("AcceptComment", "Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { NidComment: nidComment },
+                        success: function (result) {
+                            if (result.HasValue) {
+                                swal("accepted!", result.Message, "success");
+                                $("#" + nidComment).attr('hidden', 'hidden');
+                            } else {
+                                swal(result.Message);
+                            }
+                        },
+                        error: function () {
+                            swal("error");
+                        }
+                    })
+            });
+        }
+    </script>
+}

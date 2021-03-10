@@ -1,0 +1,186 @@
+﻿@model AudioShopBackend.ViewModels.ShipsViewModel
+
+@{
+    ViewBag.Title = "Ships";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="data-table-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="data-table-list">
+                    <div class="basic-tb-hd">
+                        <h2>Doings</h2>
+                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="data-table-basic" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">CreateDate</th>
+                                    <th style="text-align:center;">Ship Via</th>
+                                    <th style="text-align:center;">Ship Price</th>
+                                    <th style="text-align:center;">Due Date</th>
+                                    <th style="text-align:center;">Product Name</th>
+                                    <th style="text-align:center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDoing">
+                                @foreach (var shp in Model.Doing)
+                                {
+                                    <tr>
+                                        <td style="text-align:center;">@shp.CreateDate</td>
+                                        <td style="text-align:center;">@shp.ShipVia</td>
+                                        <td style="text-align:center;">@shp.ShipPrice</td>
+                                        <td style="text-align:center;">@shp.DueDate</td>
+                                        <td style="text-align:center;">@shp.Order.Product.ProductName</td>
+                                        <td style="text-align:center;">
+                                            <button onclick="DetailThis('@shp.NidShip')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">Detail</button>
+                                            <button onclick="AcceptThis('@shp.NidShip')" class="btn btn-success notika-btn-info waves-effect" data-toggle="modal">Done</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="data-table-list">
+                    <div class="basic-tb-hd">
+                        <h2>Dones</h2>
+                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="data-table-basic2" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">CreateDate</th>
+                                    <th style="text-align:center;">Ship Via</th>
+                                    <th style="text-align:center;">Ship Price</th>
+                                    <th style="text-align:center;">Due Date</th>
+                                    <th style="text-align:center;">Product Name</th>
+                                    <th style="text-align:center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblDone">
+                                @foreach (var shp1 in Model.Done)
+                                {
+                                    <tr>
+                                        <td style="text-align:center;">@shp1.CreateDate</td>
+                                        <td style="text-align:center;">@shp1.ShipVia</td>
+                                        <td style="text-align:center;">@shp1.ShipPrice</td>
+                                        <td style="text-align:center;">@shp1.DueDate</td>
+                                        <td style="text-align:center;">@shp1.Order.Product.ProductName</td>
+                                        <td style="text-align:center;">
+                                            <button onclick="DetailThis('@shp1.NidShip')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">Detail</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal animated bounce" id="DetailModal" role="dialog" style="display: none;"></div>
+
+@section styles
+    {
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.dataTables.min.css")">
+}
+@section scripts
+    {
+    <script src="@Url.Content("~/Content/js/data-table/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
+    <script type="text/javascript">
+        $(function ()
+        {
+            $("#data-table-basic2").DataTable();
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liShips").addClass('active');
+        });
+        function DetailThis(nidShip) {
+            $.ajax(
+                {
+                    url: '@Url.Action("ShipDetail","Home")',
+                    type: 'post',
+                    datatype: 'json',
+                    data: { NidShip: nidShip },
+                    success: function (result) {
+                        if (result.HasValue)
+                            $("#DetailModal").html(result.Html);
+                        else
+                            alert('error');
+                    },
+                    error: function () {
+                        alert('error')
+                    }
+                })
+            $("#DetailModal").modal('toggle')
+            $("#DetailModal").modal('show')
+        }
+        function AcceptThis(nidShip)
+        {
+            swal({
+                title: "Are you sure?",
+                text: "accepting this ship",
+                type: "success",
+                showCancelButton: true,
+                confirmButtonText: "Yes, accept it!",
+            }).then(function () {
+                $.ajax(
+                    {
+                        url: '@Url.Action("AcceptShip","Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { NidShip: nidShip },
+                        success: function (result) {
+                            if (result.HasValue) {
+                                swal("accepted!", result.Message, "success");
+                                UpdateTableContent(false);
+                                UpdateTableContent(true);
+                            } else {
+                                swal(result.Message);
+                            }
+                        },
+                        error: function () {
+                            swal("error");
+                        }
+                    })
+            });
+        }
+        function UpdateTableContent(IsDone) {
+            $.ajax(
+         {
+             url: '@Url.Action("SyncShipsTable","Home")',
+             type: 'post',
+             datatype: 'json',
+             data: {IsShipDone:IsDone},
+             success: function (result) {
+                 if (result.HasValue) {
+                     if (IsDone)
+                     {
+                         $("#tblDone").html(result.Html);
+                     }else
+                     {
+                         $("#tblDoing").html(result.Html);
+                     }
+                 }
+             },
+             error: function () {
+                 alert('error');
+             }
+         })
+        }
+    </script>
+}
+
+
+
+
+

@@ -1,0 +1,26 @@
+﻿@model AudioShopBackend.ViewModels.CategoryAndBrandViewModel
+
+@if (Model.IsBrand)
+{
+    <div style="width:100% !important;margin:5px;">
+        <select class="form-control" name="Product.NidBrand" id="ProductNidBrand">
+            <option selected disabled value="-1">select brand</option>
+            @foreach (var cat in Model.category_Brand)
+            {
+                <option value="@cat.NidBrand">@cat.BrandName</option>
+            }
+        </select>
+        </div>
+}
+else
+{
+    <div style="width:100% !important;margin:5px;">
+        <select class="form-control" name="Product.NidType" id="ProductNidType" >
+            <option selected disabled value="-1">select type</option>
+            @foreach (var cat in Model.category_Type)
+            {
+                <option value="@cat.NidType">@cat.TypeName</option>
+            }
+        </select>
+        </div>
+        }

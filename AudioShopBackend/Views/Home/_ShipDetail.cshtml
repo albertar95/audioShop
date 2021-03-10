@@ -1,0 +1,28 @@
+﻿@model AudioShopBackend.Models.Ship
+
+<div class="modal-dialog modals-default">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        <div class="modal-body">
+            <h2>@Model.CreateDate</h2>
+            <h2>@Model.ShipVia</h2>
+            <h2>@Model.DueDate</h2>
+            <h2>@Model.Address</h2>
+            <h2>@Model.ShipPrice</h2>
+            <h2>@Model.ZipCode</h2>
+            <h2>@Model.Order.Product.ProductName</h2>
+            <h2>@Model.Order.Product.Price</h2>
+            <h2>@Model.Order.CreateDate</h2>
+            <h2>@Model.Order.Quantity</h2>
+            <h2>@Model.Order.User.FirstName @Model.Order.User.LastName</h2>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

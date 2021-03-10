@@ -1,0 +1,18 @@
+﻿@model List<Tuple<string,string,bool>>
+
+@foreach (var lbl in Model)
+{
+<div class="dropdown-trig-sgn open">
+    <button class="btn triger-shake waves-effect" data-toggle="dropdown" aria-expanded="true" id="@lbl.Item1">@lbl.Item2</button>
+    @*<ul class="dropdown-menu triger-shake-dp">
+        @if (lbl.Item3)
+        {
+            <li><a href="#" onclick="deleteBrand(@lbl.Item1.ToString())">Delete</a></li>
+        }
+        else
+        {
+            <li><a href="#" onclick="deleteType(@lbl.Item1.ToString())">Delete</a></li>
+        }
+    </ul>*@
+</div>
+}

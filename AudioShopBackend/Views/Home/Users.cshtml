@@ -1,0 +1,222 @@
+﻿@model List<AudioShopBackend.Models.User>
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="data-table-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="text-align:right;direction:rtl;">
+                <div class="form-element-list" id="divCategoryForm">
+                    <div class="alert alert-success" role="alert" hidden="hidden" id="successfullMessageDiv"></div>
+                    <div class="alert alert-warning" role="alert" hidden="hidden" id="warningMessageDiv"></div>
+                    <div class="alert alert-danger" role="alert" hidden="hidden" id="errorMessageDiv"></div>
+                    <div class="basic-tb-hd">
+                        <h2>Categories</h2>
+                        <p>desc about categories</p>
+                    </div>
+                    <div class="row">
+                        <div class="form-group ic-cmp-int" style="width:80%;">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" placeholder="name" id="txtName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group ic-cmp-int" style="width:80%;">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" placeholder="Last name" id="txtLastName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group ic-cmp-int" style="width:80%;">
+                            <div class="nk-int-st">
+                                <input type="text" class="form-control" placeholder="User name" id="txtUserName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group ic-cmp-int" style="width:80%;">
+                            <div class="nk-int-st">
+                                <input type="password" class="form-control" placeholder="password" id="txtPassword">
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <div class="form-group ic-cmp-int" style="width:80%;">
+                            <div class="nk-int-st">
+                                <input type="file" class="form-control" placeholder="profile" id="txtProfile">
+                            </div>
+                        </div>
+                    </div>*@
+                    <div class="row">
+                        <div class="form-group ic-cmp-int">
+                            <div class="nk-int-st">
+                                <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddUser">add this!</button>
+                                <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">clear form</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="data-table-list">
+                    <div class="basic-tb-hd">
+                        <h2>Basic Example</h2>
+                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="data-table-basic" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    @*<th></th>*@
+                                    <th>Name</th>
+                                    <th>UserName</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblUser">
+                                @foreach (var usr in Model)
+                                {
+                                    <tr>
+                                        @*<td><img /></td>*@
+                                        <td>@usr.FirstName @usr.LastName</td>
+                                        <td>@usr.Username</td>
+                                        <td>
+                                            <button onclick="DeleteThis('@usr.NidUser')" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section styles
+    {
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/jquery.dataTables.min.css")">
+}
+
+@section scripts
+    {
+    <script src="@Url.Content("~/Content/js/data-table/jquery.dataTables.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/data-table/data-table-act.js")"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liUsers").addClass('active');
+            $("#btnAddUser").click(function (e) {
+                e.preventDefault();
+                if ($("#txtUserName").val() == '' || $("#txtPassword").val() == '') {
+                    $("#warningMessageDiv").html('fill the necessary fields');
+                    $("#warningMessageDiv").removeAttr('hidden');
+                    setTimeout(function () {
+                        $("#warningMessageDiv").prop('hidden', 'hidden');
+                    }, 3000);
+                } else {
+                    $.ajax(
+    {
+        url: '@Url.Action("AddUser","Home")',
+        type: 'post',
+        datatype: 'json',
+        data: { Name: $("#txtName").val(), LastName: $("#txtLastName").val(), Username: $("#txtUserName").val(), Password: $("#txtPassword").val()},
+        success: function (result) {
+            if (result.HasValue) {
+                UpdateTableContent();
+                $("#txtName").val("");
+                $("#txtLastName").val("");
+                $("#txtUserName").val("");
+                $("#txtPassword").val("");
+                $("#successfullMessageDiv").html(result.Message);
+                $("#successfullMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#successfullMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            } else {
+                $("#errorMessageDiv").html(result.Message);
+                $("#errorMessageDiv").removeAttr('hidden');
+                setTimeout(function () {
+                    $("#errorMessageDiv").prop('hidden', 'hidden');
+                }, 5000);
+            }
+        },
+        error: function (result) {
+            $("#errorMessageDiv").html(result.Message);
+            $("#errorMessageDiv").removeAttr('hidden');
+            setTimeout(function () {
+                $("#errorMessageDiv").prop('hidden', 'hidden');
+            }, 5000);
+        }
+    })
+                }
+            });
+            $("#btnClearForm").click(function (e)
+            {
+                e.preventDefault();
+                $("#txtName").val("");
+                $("#txtLastName").val("");
+                $("#txtUserName").val("");
+                $("#txtPassword").val("");
+            });
+        });
+        function DeleteThis(niduser)
+        {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+            }).then(function () {
+                $.ajax(
+                    {
+                        url: '@Url.Action("DeleteUser", "Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { NidUser: niduser },
+                        success: function (result)
+                        {
+                            if (result.HasValue)
+                            {
+                                swal("deleted!", result.Message, "success");
+                                UpdateTableContent();
+                            } else {
+                                swal(result.Message);
+                            }
+                        },
+                        error: function ()
+                        {
+                            swal("error");
+                        }
+                    })
+            });
+        }
+        function UpdateTableContent()
+        {
+            $.ajax(
+         {
+    url: '@Url.Action("SyncUserTable", "Home")',
+    type: 'post',
+    datatype: 'json',
+    data: {},
+    success: function (result) {
+        if (result.HasValue) {
+            $("#tblUser").html(result.Html);
+        }
+    },
+    error: function () {
+        alert('error');
+    }
+})
+        }
+    </script>
+}

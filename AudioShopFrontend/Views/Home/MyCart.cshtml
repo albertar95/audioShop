@@ -1,0 +1,127 @@
+﻿@model List<AudioShopFrontend.DTO.ProductDTO>
+@{
+    ViewBag.Title = "MyCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="page-breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="page-breadcrumb__menu">
+                    <li class="page-breadcrumb__nav"><a href="@Url.Action("Index")">خانه</a></li>
+                    <li class="page-breadcrumb__nav active">لیست خرید</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div> <!-- ::::::  End  Breadcrumb Section  ::::::  -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="section-content">
+                <h5 class="section-content__title">Your cart items</h5>
+            </div>
+            <!-- Start Cart Table -->
+            <div class="table-content table-responsive cart-table-content m-t-30">
+                <table>
+                    <thead class="gray-bg">
+                        <tr>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Until Price</th>
+                            <th>Qty</th>
+                            <th>Subtotal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var prods in Model)
+                        {
+                            <tr>
+                                <td class="product-thumbnail">
+                                    @if (prods.Pictures != null)
+                                    {
+                                        <a href="#"><img class="img-fluid" src="@prods.Pictures.Split(',').FirstOrDefault()" alt=""></a>
+                                    }
+                                </td>
+                                <td class="product-name"><a href="#">@prods.ProductName</a></td>
+                                <td class="product-price-cart"><span class="amount">@prods.Price</span></td>
+                                <td class="product-quantities">
+                                    <div class="quantity d-inline-block">
+                                        <input type="number" min="1" step="1" value="1">
+                                    </div>
+                                </td>
+                                <td class="product-subtotal"></td>
+                                <td class="product-remove">
+                                    <a href="#"><i class="fa fa-pencil-alt"></i></a>
+                                    <a href="#"><i class="fa fa-times"></i></a>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>  <!-- End Cart Table -->
+            <!-- Start Cart Table Button -->
+            <div class="cart-table-button m-t-10">
+                <div class="cart-table-button--left">
+                    <a href="#" class="btn btn--box btn--large btn--gray btn--uppercase btn--weight m-t-20">CONTINUE SHOPPING</a>
+                </div>
+                <div class="cart-table-button--right">
+                    <a href="#" class="btn btn--box btn--large btn--gray btn--uppercase btn--weight m-t-20 m-r-20">UPDATE SHOPPING CART</a>
+                    <a href="#" class="btn btn--box btn--large btn--blue btn--uppercase btn--weight m-t-20">Clear Shopping Cart</a>
+                </div>
+            </div>  <!-- End Cart Table Button -->
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="sidebar__widget gray-bg m-t-40">
+                <div class="sidebar__box">
+                    <h5 class="sidebar__title">Use Coupon Code</h5>
+                </div>
+                <span>Enter your coupon code if you have one.</span>
+                <form action="#" method="post" class="form-box">
+                    <div class="form-box__single-group">
+                        <label for="form-coupon">*Enter Coupon Code</label>
+                        <input type="text" id="form-coupon">
+                    </div>
+                    <div class="from-box__buttons m-t-25">
+                        <button class="btn btn--box btn--small btn--blue btn--uppercase btn--weight" type="submit">Apply Coupon</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="sidebar__widget gray-bg m-t-40">
+                <div class="sidebar__box">
+                    <h5 class="sidebar__title">Cart Total</h5>
+                </div>
+                <h6 class="total-cost">Total products Price<span>$260.00</span></h6>
+                <div class="total-shipping">
+                    <span>Total shipping</span>
+                    <ul class="shipping-cost m-t-10">
+                        <li>
+                            <label for="ship-standard">
+                                <input type="radio" class="shipping-select" name="shipping-cost" value="Standard" id="ship-standard" checked><span>Standard</span>
+                            </label>
+                            <span class="ship-price">$20.00</span>
+                        </li>
+                        <li>
+                            <label for="ship-express">
+                                <input type="radio" class="shipping-select" name="shipping-cost" value="Express" id="ship-express"><span>Express</span>
+                            </label>
+                            <span class="ship-price">$30.00</span>
+                        </li>
+                    </ul>
+                </div>
+                <h4 class="grand-total m-tb-25">Grand Total <span>$260.00</span></h4>
+                <button class="btn btn--box btn--small btn--blue btn--uppercase btn--weight" type="submit">PROCEED TO CHECKOUT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

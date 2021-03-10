@@ -1,0 +1,40 @@
+﻿@model List<AudioShopBackend.Models.Category>
+
+    @foreach (var cat in Model)
+    {
+        <tr>
+            <td>@cat.NidCategory</td>
+            <td>@cat.CategoryName</td>
+            <td>
+                <div class="col-sm-12">
+                    @foreach (var typ in cat.Category_Types.Take(4))
+                    {
+                        <div class="col-sm-6">
+                            <button class="btn btn-default btn-icon-notika waves-effect">
+                                @typ.TypeName
+                            </button>
+                        </div>
+                    }
+                </div>
+            </td>
+            <td>
+                <div class="col-sm-12">
+                    @foreach (var brd in cat.Category_Brands.Take(4))
+                    {
+                        <div class="col-sm-6">
+                            <button class="btn btn-default btn-icon-notika waves-effect">
+                                @brd.BrandName
+                            </button>
+                        </div>
+                    }
+                </div>
+            </td>
+            <td>
+                <button onclick="EditThis(@cat.NidCategory)" class="btn btn-warning notika-btn-warning waves-effect">Edit</button>
+                <button onclick="DeleteThis(@cat.NidCategory)" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                <button class="btn btn-info notika-btn-info waves-effect">Detail</button>
+            </td>
+        </tr>
+    }
+
+

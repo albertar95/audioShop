@@ -1,0 +1,38 @@
+﻿@model AudioShopBackend.ViewModels.ShipsViewModel
+
+@if (Model.IsDone)
+{
+    foreach (var shp1 in Model.Done)
+    {
+        <tr>
+            <td style="text-align:center;">@shp1.CreateDate</td>
+            <td style="text-align:center;">@shp1.ShipVia</td>
+            <td style="text-align:center;">@shp1.ShipPrice</td>
+            <td style="text-align:center;">@shp1.DueDate</td>
+            <td style="text-align:center;">@shp1.Order.Product.ProductName</td>
+            <td style="text-align:center;">
+                <button onclick="DetailThis('@shp1.NidShip')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">Detail</button>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    foreach (var shp in Model.Doing)
+    {
+        <tr>
+            <td style="text-align:center;">@shp.CreateDate</td>
+            <td style="text-align:center;">@shp.ShipVia</td>
+            <td style="text-align:center;">@shp.ShipPrice</td>
+            <td style="text-align:center;">@shp.DueDate</td>
+            <td style="text-align:center;">@shp.Order.Product.ProductName</td>
+            <td style="text-align:center;">
+                <button onclick="DetailThis('@shp.NidShip')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">Detail</button>
+                <button onclick="AcceptThis('@shp.NidShip')" class="btn btn-success notika-btn-info waves-effect" data-toggle="modal">Done</button>
+            </td>
+        </tr>
+    }
+}
+
+
+

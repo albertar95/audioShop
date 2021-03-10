@@ -1,0 +1,180 @@
+﻿@model IEnumerable<AudioShopBackend.Models.Product>
+
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if(TempData["SucessfullAddProduct"] != null)
+{
+    <input id="txtShowMessage" value="0" hidden />
+}
+else
+{
+    <input id="txtShowMessage" value="1" hidden />
+}
+<div class="breadcomb-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="breadcomb-list">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
+                            <div class="breadcomb-report">
+                                <a href="@Url.Action("AddProduct","Home")" style="float:left;" class="btn notika-btn-lime btn-reco-mg btn-button-mg waves-effect">add product</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="breadcomb-wp" style="float:right;text-align:right;">
+                                <div class="breadcomb-ctn">
+                                    <h2>Data Table</h2>
+                                    <p>Welcome to Notika <span class="bread-ntd">Admin Template</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="data-table-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="direction:rtl;float:right;text-align:right;">
+                <div class="data-table-list">
+                    <div class="basic-tb-hd">
+                        <h2>Basic Example</h2>
+                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="data-table-basic" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">ProductName</th>
+                                    <th style="text-align:center;">CategoryName</th>
+                                    <th style="text-align:center;">Brand</th>
+                                    <th style="text-align:center;">Type</th>
+                                    <th style="text-align:center;">CreateDate</th>
+                                    <th style="text-align:center;">Price</th>
+                                    <th style="text-align:center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblProduct">
+                                @foreach (var prod in Model)
+                                {
+                                    <tr>
+                                        <td style="text-align:center;">@prod.ProductName</td>
+                                        <td style="text-align:center;">@prod.Category.CategoryName</td>
+                                        <td style="text-align:center;">@prod.Category_Brands.BrandName</td>
+                                        <td style="text-align:center;">@prod.Category_Types.TypeName</td>
+                                        <td style="text-align:center;">@prod.CreateDate</td>
+                                        <td style="text-align:center;">@prod.Price</td>
+                                        <td style="text-align:center;">
+                                            <a href="@Url.Action("EditProduct","Home",new { NidProduct = prod.NidProduct})" class="btn btn-warning notika-btn-warning waves-effect">Edit</a>
+                                            <a href="#" onclick="DeleteThis('@prod.NidProduct')" class="btn btn-danger notika-btn-danger waves-effect">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles
+    {
+    
+<link href="@Url.Content("~/Content/css/notification/notification.css")" rel="stylesheet" />
+    }
+@section scripts
+    {
+<script src="@Url.Content("~/Content/js/notification/bootstrap-growl.min.js")"></script>
+<script src="@Url.Content("~/Content/js/notification/notification-active.js")"></script>
+    <script type="text/javascript">
+        $(function ()
+        {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liProducts").addClass('active');
+            if($("#txtShowMessage").val() == '0')
+            {
+                myNotify('bottom', 'center', '', 'success', 'animated fadeInLeft', 'animated fadeOutLeft', '@TempData["SucessfullAddProduct"]');
+            }
+        });
+        function myNotify(from, align, icon, type, animIn, animOut,myMessage) {
+            $.growl({
+                icon: icon,
+                title: '',
+                message: myMessage,
+                url: ''
+            }, {
+                element: 'body',
+                type: type,
+                allow_dismiss: true,
+                placement: {
+                    from: from,
+                    align: align
+                },
+                offset: {
+                    x: 20,
+                    y: 85
+                },
+                spacing: 10,
+                z_index: 1031,
+                delay: 2500,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: false,
+                animate: {
+                    enter: animIn,
+                    exit: animOut
+                },
+                icon_type: 'class',
+                template: '<div data-growl="container" class="alert" role="alert">' +
+								'<button type="button" class="close" data-growl="dismiss">' +
+									'<span aria-hidden="true">&times;</span>' +
+									'<span class="sr-only">Close</span>' +
+								'</button>' +
+								'<span data-growl="icon"></span>' +
+								'<span data-growl="title"></span>' +
+								'<span data-growl="message"></span>' +
+								'<a href="#" data-growl="url"></a>' +
+							'</div>'
+            });
+        };
+        function DeleteThis(nidProd)
+        {
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+            }).then(function () {
+                $.ajax(
+                    {
+                        url: '@Url.Action("DeleteProduct", "Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { NidProduct: nidProd },
+                        success: function (result) {
+                            if (result.HasValue) {
+                                swal("deleted!", result.Message, "success");
+                                setTimeout(function ()
+                                {
+                                    window.location.reload();
+                                }, 2500);
+                            } else {
+                                swal(result.Message);
+                            }
+                        },
+                        error: function () {
+                            swal("error");
+                        }
+                    })
+            });
+        }
+    </script>
+    }

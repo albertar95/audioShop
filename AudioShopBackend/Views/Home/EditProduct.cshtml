@@ -1,0 +1,275 @@
+﻿@model AudioShopBackend.ViewModels.ProductViewModel
+
+@{
+    ViewBag.Title = "EditProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("SubmitEditProduct","Home",FormMethod.Post,new { enctype = "multipart/form-data",id = "editProductForm"}))
+{
+    @Html.HiddenFor(p => p.Product.Description)
+    @Html.HiddenFor(p => p.Product.CreateDate)
+    @Html.HiddenFor(p => p.Product.LastModified)
+    @Html.HiddenFor(p => p.Product.NidProduct)
+    if (TempData["ErrorAddProduct"] != null)
+    {
+        <input id="txtShowMessage" value="0" hidden />
+    }
+    else
+    {
+        <input id="txtShowMessage" value="1" hidden />
+    }
+    <div class="form-example-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align:right;direction:rtl;">
+                    <div class="form-element-list" id="divCategoryForm">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div style="width:100% !important;margin:5px;">
+                                    <select class="form-control" name="Product.NidCategory" id="ProductNidCategory">
+                                        <option selected disabled value="-1">select category</option>
+                                        @foreach (var cat in Model.Categories)
+                                        {
+                                            if (cat.NidCategory == Model.Product.NidCategory)
+                                            {
+                                                <option value="@cat.NidCategory" selected>@cat.CategoryName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@cat.NidCategory">@cat.CategoryName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <div class="nk-int-st">
+                                        <input type="text" class="form-control" placeholder="ProductName" name="Product.ProductName" id="ProductProductName" value="@Model.Product.ProductName">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="TypeWrap">
+                                <div style="width:100% !important;margin:5px;">
+                                    <select class="form-control" name="Product.NidType" id="ProductNidType">
+                                        <option selected disabled value="-1">select type</option>
+                                        @foreach (var cat2 in Model.category_Types)
+                                        {
+                                            if (cat2.NidType == Model.Product.NidType)
+                                            {
+                                                <option value="@cat2.NidType" selected>@cat2.TypeName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@cat2.NidType">@cat2.TypeName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="BrandWrap">
+                                <div style="width:100% !important;margin:5px;">
+                                    <select class="form-control" name="Product.NidBrand" id="ProductNidBrand">
+                                        <option selected disabled value="-1">select brand</option>
+                                        @foreach (var cat3 in Model.Category_Brands)
+                                        {
+                                            if (cat3.NidBrand == Model.Product.NidBrand)
+                                            {
+                                                <option value="@cat3.NidBrand" selected>@cat3.BrandName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@cat3.NidBrand">@cat3.BrandName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <div class="tinymce-single nt-mg-b-30">
+                                        <div id="summernote">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <div class="nk-int-st">
+                                        <input type="text" class="form-control" placeholder="price" name="Product.Price" id="ProductPrice" value="@Model.Product.Price">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <div class="nk-int-st">
+                                        <input type="text" class="form-control" placeholder="keyword" name="Product.Keywords" id="ProductKeywords" value="@Model.Product.Keywords">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="bootstrap-select fm-cmp-mg" style="width:100% !important;">
+                                    <select class="selectpicker" data-live-search="true" name="Product.State" id="ProductState">
+                                        @if (Model.Product.State == 0)
+                                        {
+                                            <option value="0" selected>فعال</option>
+                                            <option value="1">غیر فعال</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="0">فعال</option>
+                                            <option value="1" selected>غیر فعال</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <div class="nk-int-st">
+                                        <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" type="submit" id="btnSubmit">add this!</button>
+                                        <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">clear form</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section styles
+    {
+    <!-- summernote CSS
+    ============================================ -->
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.1/summernote.css" rel="stylesheet">
+    <link href="@Url.Content("~/Content/css/bootstrap-select/bootstrap-select.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/css/notification/notification.css")" rel="stylesheet" />
+    @*<link rel="stylesheet" href="@Url.Content("~/Content/css/summernote/summernote.css")">*@
+}
+@section scripts
+    {
+    <!-- summernote JS
+    ============================================ -->
+    <script src="@Url.Content("~/Content/js/summernote/summernote.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/summernote/summernote-active.js")"></script>
+    <script src="@Url.Content("~/Content/js/bootstrap-select/bootstrap-select.js")"></script>
+    <script src="@Url.Content("~/Content/js/notification/bootstrap-growl.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/notification/notification-active.js")"></script>
+    <script type="text/javascript">
+        $(function () {
+            if ($("#txtShowMessage").val() == '0') {
+                myNotify('bottom', 'center', '', 'danger', 'animated fadeInLeft', 'animated fadeOutLeft', '@TempData["ErrorEditProduct"]');
+            }
+            $("#summernote").summernote(
+                {
+                    minHeight: 200
+                })
+            $("#summernote").summernote('code', '@Html.Raw(Model.Product.Description)');
+            $("#editProductForm").submit(function (e)
+            {
+                e.preventDefault();
+                if ($("#ProductProductName").val() == '' || $("#ProductNidType").find(":selected").val() == '-1' || $("#ProductNidBrand").find(":selected").val() == '-1' || $("#ProductNidCategory").find(":selected").val() == '-1' || $("#ProductPrice").val() == '' || $(".panel-body").html() == '')
+                {
+                    myNotify('bottom', 'center', '', 'warning', 'animated fadeInLeft', 'animated fadeOutLeft', 'fill necessary fields');
+                } else {
+                    $("#Product_Description").val($(".panel-body").html());
+                    $(this).unbind('submit').submit()
+                }
+            });
+            $("#ProductNidCategory").change(function ()
+            {
+                var NidCurrentCategory = $("#ProductNidCategory").find(":selected").val();
+                $.ajax(
+                    {
+                        url: '@Url.Action("GetBnTOptions","Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { NidCategory: NidCurrentCategory, IsBrand: true },
+                        success: function (result) {
+                            if (result.HasValue) {
+                                $("#BrandWrap").html(result.Html)
+                            }
+                        },
+                        error: function () { }
+                    });
+                 $.ajax(
+                    {
+                        url: '@Url.Action("GetBnTOptions","Home")',
+                        type: 'post',
+                        datatype: 'json',
+                        data: { NidCategory: NidCurrentCategory, IsBrand: false },
+                        success: function (result) {
+                            if (result.HasValue) {
+                                $("#TypeWrap").html(result.Html)
+                            }
+                        },
+                        error: function () { }
+                    });
+            });
+        });
+        function myNotify(from, align, icon, type, animIn, animOut, myMessage) {
+            $.growl({
+                icon: icon,
+                title: '',
+                message: myMessage,
+                url: ''
+            }, {
+                element: 'body',
+                type: type,
+                allow_dismiss: true,
+                placement: {
+                    from: from,
+                    align: align
+                },
+                offset: {
+                    x: 20,
+                    y: 85
+                },
+                spacing: 10,
+                z_index: 1031,
+                delay: 2500,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: false,
+                animate: {
+                    enter: animIn,
+                    exit: animOut
+                },
+                icon_type: 'class',
+                template: '<div data-growl="container" class="alert" role="alert">' +
+								'<button type="button" class="close" data-growl="dismiss">' +
+									'<span aria-hidden="true">&times;</span>' +
+									'<span class="sr-only">Close</span>' +
+								'</button>' +
+								'<span data-growl="icon"></span>' +
+								'<span data-growl="title"></span>' +
+								'<span data-growl="message"></span>' +
+								'<a href="#" data-growl="url"></a>' +
+							'</div>'
+            });
+        };
+    </script>
+}

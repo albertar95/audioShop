@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Audio Shop</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon
+        ============================================ -->
+    <link rel="shortcut icon" type="image/x-icon" href="@Url.Content("~/Content/img/favicon.ico")">
+    <!-- Google Fonts
+        ============================================ -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
+    <!-- Bootstrap CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/bootstrap.min.css")">
+    <!-- Bootstrap CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/font-awesome.min.css")">
+    <!-- owl.carousel CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/owl.carousel.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/owl.theme.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/owl.transitions.css")">
+    <!-- meanmenu CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/meanmenu/meanmenu.min.css")">
+    <!-- animate CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/animate.css")">
+    <!-- normalize CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/normalize.css")">
+    <!-- mCustomScrollbar CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/scrollbar/jquery.mCustomScrollbar.min.css")">
+    <!-- jvectormap CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/jvectormap/jquery-jvectormap-2.0.3.css")">
+    <!-- notika icon CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/notika-custom-icon.css")">
+    <!-- wave CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/wave/waves.min.css")">
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/wave/button.css")">
+    <!-- main CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/main.css")">
+    <!-- style CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/style.css")">
+    <!-- responsive CSS
+        ============================================ -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/responsive.css")">
+    <link href="@Url.Content("~/Content/css/dialog/dialog.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/css/dialog/sweetalert2.min.css")" rel="stylesheet" />
+    <!-- modernizr JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/vendor/modernizr-2.8.3.min.js")"></script>
+    @RenderSection("styles", required: false)
+</head>
+<body style="background-image: linear-gradient(to right top, #eae7dc, #e6e0d1, #e2dac7, #dfd3bc, #dcccb2, #dbc5a6, #dbbd9b, #dbb591, #dfa985, #e39c7c, #e68f76, #e98074);">
+    <!--[if lt IE 8]>
+           <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+       <![endif]-->
+    <!-- Start Header Top Area -->
+    <div class="header-top-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div class="header-top-menu">
+                        <ul class="nav navbar-nav notika-top-nav">
+                            <li>
+                                <a data-toggle="collapse" data-target="#Charts" href="#"><i class="notika-icon notika-left-arrow"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="logo-area" style="float:right;">
+                        <a href="#" style="font-size: x-large;color: white;">Audio Shop</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Header Top Area -->
+    <!-- Mobile Menu start -->
+    <div class="mobile-menu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mobile-menu">
+                        <nav id="dropdown">
+                            <ul class="mobile-menu-nav">
+                                <li>
+                                    <a href="@Url.Action("Index","Home")">خانه</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Categories","Home")">دسته بندی ها</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Products","Home")">محصولات</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Orders","Home")">سفارشات</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Ships","Home")">مرسولات</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Users","Home")">کاربران</a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Comments","Home")">نظرات</a>
+                                </li>
+                                <li id="liStatistics">
+                                    <a href="#">گزارشات</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Menu end -->
+    <!-- Main Menu area start-->
+    <div class="main-menu-area mg-tb-40">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <ul class="nav nav-tabs notika-menu-wrap menu-it-icon-pro">
+                        <li id="liStatistics">
+                            <a href="#"><i class="notika-icon notika-social"></i> گزارشات </a>
+                        </li>
+                        <li id="liComments">
+                            <a href="@Url.Action("Comments","Home")"><i class="notika-icon notika-social"></i> نظرات </a>
+                        </li>
+                        <li id="liUsers">
+                            <a href="@Url.Action("Users","Home")"><i class="notika-icon notika-star"></i> کاربران </a>
+                        </li>
+                        <li id="liShips">
+                            <a href="@Url.Action("Ships","Home")"><i class="notika-icon notika-mail"></i> مرسولات </a>
+                        </li>
+                        <li id="liOrders">
+                            <a href="@Url.Action("Orders","Home")"><i class="notika-icon notika-finance"></i> سفارشات </a>
+                        </li>
+                        <li id="liProducts">
+                            <a href="@Url.Action("Products","Home")"><i class="notika-icon notika-file"></i> محصولات </a>
+                        </li>
+                        <li id="liCategories">
+                            <a href="@Url.Action("Categories","Home")"><i class="notika-icon notika-tax"></i> دسته بندی ها </a>
+                        </li>
+                        <li class="active" id="liHome">
+                            <a href="@Url.Action("Index","Home")"><i class="notika-icon notika-house"></i> خانه </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Menu area End-->
+
+
+    @RenderBody()
+    <!-- Start Footer area-->
+    <div class="footer-copyright-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="footer-copy-right">
+                        <p>
+                            Copyright © 2018
+                            . All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Footer area-->
+    <!-- jquery
+
+    ============================================ -->
+    <script src="@Url.Content("~/Content/js/vendor/jquery-1.12.4.min.js")"></script>
+    <!-- bootstrap JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/bootstrap.min.js")"></script>
+    <!-- wow JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/wow.min.js")"></script>
+    <!-- price-slider JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/jquery-price-slider.js")"></script>
+    <!-- owl.carousel JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/owl.carousel.min.js")"></script>
+    <!-- scrollUp JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/jquery.scrollUp.min.js")"></script>
+    <!-- meanmenu JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/meanmenu/jquery.meanmenu.js")"></script>
+    <!-- counterup JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/counterup/jquery.counterup.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/counterup/waypoints.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/counterup/counterup-active.js")"></script>
+    <!-- mCustomScrollbar JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/scrollbar/jquery.mCustomScrollbar.concat.min.js")"></script>
+    <!-- jvectormap JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/jvectormap/jquery-jvectormap-2.0.2.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/jvectormap/jquery-jvectormap-world-mill-en.js")"></script>
+    <script src="@Url.Content("~/Content/js/jvectormap/jvectormap-active.js")"></script>
+    <!-- sparkline JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/sparkline/jquery.sparkline.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/sparkline/sparkline-active.js")"></script>
+    <!-- sparkline JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/flot/jquery.flot.js")"></script>
+    <script src="@Url.Content("~/Content/js/flot/jquery.flot.resize.js")"></script>
+    <script src="@Url.Content("~/Content/js/flot/curvedLines.js")"></script>
+    <script src="@Url.Content("~/Content/js/flot/flot-active.js")"></script>
+    <!-- knob JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/knob/jquery.knob.js")"></script>
+    <script src="@Url.Content("~/Content/js/knob/jquery.appear.js")"></script>
+    <script src="@Url.Content("~/Content/js/knob/knob-active.js")"></script>
+    <!--  wave JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/wave/waves.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/wave/wave-active.js")"></script>
+    <!--  todo JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/todo/jquery.todo.js")"></script>
+    <!-- plugins JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/plugins.js")"></script>
+    <!--  Chat JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/chat/moment.min.js")"></script>
+    <script src="@Url.Content("~/Content/js/chat/jquery.chat.js")"></script>
+    <!-- main JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/main.js")"></script>
+    <!-- tawk chat JS
+        ============================================ -->
+    <script src="@Url.Content("~/Content/js/tawk-chat.js")"></script>
+    <script src="@Url.Content("~/Content/js/dialog/dialog-active.js")"></script>
+    <script src="@Url.Content("~/Content/js/dialog/sweetalert2.min.js")"></script>
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        $(function ()
+        {
+            $("#liHome").click(function()
+            {
+                $("#liHome").css('backgroud-color','#555');
+            });
+        });
+    </script>
+</body>
+</html>

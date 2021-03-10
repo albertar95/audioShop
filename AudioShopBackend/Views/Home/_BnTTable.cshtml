@@ -1,0 +1,31 @@
+﻿@model AudioShopBackend.ViewModels.CategoryAndBrandViewModel
+
+
+    @if (Model.IsBrand)
+    {
+        foreach (var brd in Model.category_Brand)
+        {
+            <tr>
+                <td>@brd.BrandName</td>
+                <td>@brd.Keywords</td>
+                <td>
+                    <button onclick="EditBrand('@brd.NidBrand')" class="btn btn-warning notika-btn-warning waves-effect">Edit</button>
+                    <button onclick="DeleteBrand('@brd.NidBrand')" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
+        foreach (var typ in Model.category_Type)
+        {
+            <tr>
+                <td>@typ.TypeName</td>
+                <td>@typ.Keywords</td>
+                <td>
+                    <button onclick="EditType('@typ.NidType')" class="btn btn-warning notika-btn-warning waves-effect">Edit</button>
+                    <button onclick="DeleteType('@typ.NidType')" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                </td>
+            </tr>
+        }
+    }

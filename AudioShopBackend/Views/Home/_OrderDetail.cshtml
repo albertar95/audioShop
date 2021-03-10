@@ -1,0 +1,21 @@
+﻿@model AudioShopBackend.Models.Order
+
+<div class="modal-dialog modals-default">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+        <div class="modal-body">
+            <h2>@Model.User.FirstName  @Model.User.LastName</h2>
+            <h2>@Model.Product.Category.CategoryName</h2>
+            <h2>@Model.Product.Category_Brands.BrandName</h2>
+            <h2>@Model.Product.Category_Types.TypeName</h2>
+            <h2>@Model.Quantity</h2>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
