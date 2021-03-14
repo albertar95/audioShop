@@ -10,20 +10,20 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="data-table-list">
-                    <div class="basic-tb-hd">
-                        <h2>Doings</h2>
-                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    <div class="basic-tb-hd" style="text-align:right;">
+                        <h2>در حال انجام</h2>
+                        @*<p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>*@
                     </div>
                     <div class="table-responsive">
                         <table id="data-table-basic" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th style="text-align:center;">CreateDate</th>
-                                    <th style="text-align:center;">Ship Via</th>
-                                    <th style="text-align:center;">Ship Price</th>
-                                    <th style="text-align:center;">Due Date</th>
-                                    <th style="text-align:center;">Product Name</th>
-                                    <th style="text-align:center;">Action</th>
+                                    <th style="text-align:center;">تاریخ</th>
+                                    <th style="text-align:center;">نوع ارسال</th>
+                                    <th style="text-align:center;">قیمت</th>
+                                    <th style="text-align:center;">تاریخ تحویل</th>
+                                    <th style="text-align:center;">عنوان محصول</th>
+                                    <th style="text-align:center;">عملیات</th>
                                 </tr>
                             </thead>
                             <tbody id="tblDoing">
@@ -36,8 +36,8 @@
                                         <td style="text-align:center;">@shp.DueDate</td>
                                         <td style="text-align:center;">@shp.Order.Product.ProductName</td>
                                         <td style="text-align:center;">
-                                            <button onclick="DetailThis('@shp.NidShip')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">Detail</button>
-                                            <button onclick="AcceptThis('@shp.NidShip')" class="btn btn-success notika-btn-info waves-effect" data-toggle="modal">Done</button>
+                                            <button onclick="DetailThis('@shp.NidShip')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">جزییات</button>
+                                            <button onclick="AcceptThis('@shp.NidShip')" class="btn btn-success notika-btn-info waves-effect" data-toggle="modal">انجام شد</button>
                                         </td>
                                     </tr>
                                 }
@@ -48,20 +48,20 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="data-table-list">
-                    <div class="basic-tb-hd">
-                        <h2>Dones</h2>
-                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    <div class="basic-tb-hd" style="text-align:right;">
+                        <h2>انجام شده</h2>
+                        @*<p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>*@
                     </div>
                     <div class="table-responsive">
                         <table id="data-table-basic2" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th style="text-align:center;">CreateDate</th>
-                                    <th style="text-align:center;">Ship Via</th>
-                                    <th style="text-align:center;">Ship Price</th>
-                                    <th style="text-align:center;">Due Date</th>
-                                    <th style="text-align:center;">Product Name</th>
-                                    <th style="text-align:center;">Action</th>
+                                    <th style="text-align:center;">تاریخ</th>
+                                    <th style="text-align:center;">نوع ارسال</th>
+                                    <th style="text-align:center;">قیمت</th>
+                                    <th style="text-align:center;">تاریخ تحویل</th>
+                                    <th style="text-align:center;">عنوان محصول</th>
+                                    <th style="text-align:center;">عملیات</th>
                                 </tr>
                             </thead>
                             <tbody id="tblDone">
@@ -74,7 +74,7 @@
                                         <td style="text-align:center;">@shp1.DueDate</td>
                                         <td style="text-align:center;">@shp1.Order.Product.ProductName</td>
                                         <td style="text-align:center;">
-                                            <button onclick="DetailThis('@shp1.NidShip')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">Detail</button>
+                                            <button onclick="DetailThis('@shp1.NidShip')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">جزییات</button>
                                         </td>
                                     </tr>
                                 }

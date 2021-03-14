@@ -73,7 +73,7 @@ namespace AudioShopBackend.Services
 
         public List<Category> GetAllCategories(int PageSize = 10, bool IncludeTypes = false, bool IncludeBrands = false)
         {
-            return db.Categories.Where(p => p.IsSubmmited == true).Take(PageSize).ToList();
+            return db.Categories.Where(p => p.IsSubmmited == true).OrderByDescending(q => q.NidCategory).Take(PageSize).ToList();
         }
 
         public bool CheckForBrandByNidcategory(int NidCategory)
@@ -113,7 +113,7 @@ namespace AudioShopBackend.Services
 
         public List<Product> GetAllProducts(int pagesize = 10)
         {
-            return db.Products.Where(p => p.State == 0).Take(pagesize).ToList();
+            return db.Products.Where(p => p.State == 0).OrderByDescending(q => q.CreateDate).Take(pagesize).ToList();
         }
 
         public Product GetProductByProductId(Guid NidProduct)
@@ -128,7 +128,7 @@ namespace AudioShopBackend.Services
 
         public List<Order> GetAllOrders(int pagesize = 10)
         {
-            return db.Orders.Where(p => p.state == 0).Take(pagesize).ToList();
+            return db.Orders.Where(p => p.state == 0).OrderByDescending(q => q.CreateDate).Take(pagesize).ToList();
         }
 
         public Order GetOrderByNidOrder(Guid NidOrder)
@@ -138,12 +138,12 @@ namespace AudioShopBackend.Services
 
         public List<Ship> GetAllDoneShips(int pagesize = 10)
         {
-            return db.Ships.Where(p => p.State == 1).Take(pagesize).ToList();
+            return db.Ships.Where(p => p.State == 1).OrderByDescending(q => q.CreateDate).Take(pagesize).ToList();
         }
 
         public List<Ship> GetAllDoingShips(int pagesize = 10)
         {
-            return db.Ships.Where(p => p.State == 0).Take(pagesize).ToList();
+            return db.Ships.Where(p => p.State == 0).OrderByDescending(q => q.CreateDate).Take(pagesize).ToList();
         }
 
         public Ship GetShipByNidShip(Guid NidShip)
@@ -158,7 +158,7 @@ namespace AudioShopBackend.Services
 
         public List<User> GetAllUsers(int PageSize = 10)
         {
-            return db.Users.Where(p => p.Enabled == true).Take(10).ToList();
+            return db.Users.Where(p => p.Enabled == true).OrderByDescending(q => q.CreateDate).Take(10).ToList();
         }
 
         public bool CheckForUserExistance(string Username)
@@ -174,7 +174,7 @@ namespace AudioShopBackend.Services
         public List<Comment> GetAllComments(int Pagesize = 10,bool Accepted = false)
         {
             if(Accepted)
-            return db.Comments.Where(p => p.State == 1).Take(Pagesize).ToList();
+            return db.Comments.Where(p => p.State == 1).OrderByDescending(q => q.CreateDate).Take(Pagesize).ToList();
             else
                 return db.Comments.Where(p => p.State == 0).Take(Pagesize).ToList();
         }

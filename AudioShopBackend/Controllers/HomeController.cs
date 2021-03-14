@@ -23,9 +23,9 @@ namespace AudioShopBackend.Controllers
             dbTransfer = new DbTransfer();
             Tuple<byte, User> result = dbTransfer.Authenticate(Username,Password);
             if(result.Item1 == 1)
-                return Json(new JsonResults() {  HasValue = false, Message = "password incorrect"});
+                return Json(new JsonResults() {  HasValue = false, Message = "رمز عبور اشتباه است"});
             else if (result.Item1 == 2)
-                return Json(new JsonResults() { HasValue = false, Message = "user not found" });
+                return Json(new JsonResults() { HasValue = false, Message = "نام کاربری یافت نشد" });
             else if (result.Item1 == 0)
             {
                 FormsAuthenticationTicket Ticket = new FormsAuthenticationTicket(1, result.Item2.Username, DateTime.Now, DateTime.Now.AddMinutes(30), IsChecked, result.Item2.NidUser.ToString(),FormsAuthentication.FormsCookiePath);
@@ -34,7 +34,7 @@ namespace AudioShopBackend.Controllers
                 return Json(new JsonResults() { HasValue = true});
             }
             else
-                return Json(new JsonResults() { HasValue = false, Message = "unexpected result" });
+                return Json(new JsonResults() { HasValue = false, Message = "خطای ناشناخته" });
         }
         // GET: Home
         public ActionResult Index()
@@ -46,7 +46,7 @@ namespace AudioShopBackend.Controllers
         public ActionResult Categories()
         {
             dbTransfer = new DbTransfer();
-            var categoryList = dbTransfer.GetAllCategories();
+            var categoryList = dbTransfer.GetAllCategories(100);
             return View("Categories",categoryList);
         }
         public ActionResult AddBrandOrType(bool IsBrand,string Name, bool IsNewCategory, string CategoryName = "",int NidCategory = 0,string categoryKeywords="",string CategoryDescription="")
@@ -64,7 +64,7 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     categoryAdded = true;
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error adding category" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در اضافه کردن دسته بندی" });
             }
             else
             {
@@ -78,7 +78,7 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     brandAdded = true;
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error adding brand" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در اضافه کردن برند" });
             }
             else
             {
@@ -87,7 +87,7 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     typeAdded = true;
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error adding type" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در اضافه کردن نوع" });
             }
             if (categoryAdded)
             {
@@ -109,7 +109,7 @@ namespace AudioShopBackend.Controllers
                 return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryBrandAndTypeLabel", labels), tmpNidCategory = tmpNidcategory });
             }
             else
-                return Json(new JsonResults() { HasValue = false, Message = "unexpected error" });
+                return Json(new JsonResults() { HasValue = false, Message = "خطای ناشناخته" });
         }
         public ActionResult AddCategory(bool IsNewCategory,string Name,string CategoryDescription,string categoryKeywords, int NidCategory = 0,string pictures = "")
         {
@@ -122,7 +122,7 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     categoryAdded = true;
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error adding category" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در اضافه کردن دسته بندی" });
             }
             else
             {
@@ -136,19 +136,19 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     categoryAdded = true;
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error adding category" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در اضافه کردن دسته بندی" });
             }
             TempData["NidEditcategory"] = -1;
             if (categoryAdded)
                 return Json(new JsonResults() { HasValue = true });
             else
-                return Json(new JsonResults() { HasValue = false, Message = "unexcpected error" });
+                return Json(new JsonResults() { HasValue = false, Message = "خطای ناشناخته" });
 
         }
         public ActionResult SyncCategoryTable()
         {
             dbTransfer = new DbTransfer();
-            var categoryList = dbTransfer.GetAllCategories();
+            var categoryList = dbTransfer.GetAllCategories(100);
             return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_CategoryTable", categoryList) });
         }
         public ActionResult GetEditCategory(int NidCategory)
@@ -176,14 +176,14 @@ namespace AudioShopBackend.Controllers
             dbTransfer = new DbTransfer();
             //check for brands and type and product
             if (dbTransfer.CheckForBrandByNidcategory(NidCategory) || dbTransfer.CheckForTypeByNidcategory(NidCategory) || dbTransfer.CheckForProductByNidcategory(NidCategory))
-                return Json(new JsonResults() {  HasValue = false, Message = "type or brand or product included"});
+                return Json(new JsonResults() {  HasValue = false, Message = "حذف امکان پذیر نمی باشد.دسته بندی دارای محصول یا برند یا نوع می باشد"});
             else
             {
                 dbTransfer.Delete(dbTransfer.GetCategoryByNidCategory(NidCategory));
                 if(dbTransfer.Save())
-                    return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                    return Json(new JsonResults() { HasValue = true, Message = "دسته بندی با موفقیت حذف گردید" });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در حذف" });
             }
         }
         public ActionResult DeleteType(Guid NidType)
@@ -191,14 +191,14 @@ namespace AudioShopBackend.Controllers
             dbTransfer = new DbTransfer();
             //check for product
             if (dbTransfer.CheckForProductByNidType(NidType))
-                return Json(new JsonResults() { HasValue = false, Message = "product included" });
+                return Json(new JsonResults() { HasValue = false, Message = "این نوع دارای محصول می باشد" });
             else
             {
                 dbTransfer.Delete(dbTransfer.GetCategoryTypeByNidType(NidType));
                 if (dbTransfer.Save())
-                    return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                    return Json(new JsonResults() { HasValue = true, Message = "نوع با موفقیت حذف گردید" });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در حذف" });
             }
         }
         public ActionResult DeleteBrand(Guid NidBrand)
@@ -206,14 +206,14 @@ namespace AudioShopBackend.Controllers
             dbTransfer = new DbTransfer();
             //check for product
             if (dbTransfer.CheckForProductByNidBrand(NidBrand))
-                return Json(new JsonResults() { HasValue = false, Message = "product included" });
+                return Json(new JsonResults() { HasValue = false, Message = "این برند دارای محصول می باشد" });
             else
             {
                 dbTransfer.Delete(dbTransfer.GetCategoryBrandByNidBrand(NidBrand));
                 if (dbTransfer.Save())
-                    return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                    return Json(new JsonResults() { HasValue = true, Message = "برند با موفقیت حذف گردید" });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در حذف" });
             }
         }
         public ActionResult CategoryDetail(int NidCategory)
@@ -268,7 +268,7 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     return Json(new JsonResults() {  HasValue = true});
                 else
-                    return Json(new JsonResults() { HasValue = false,Message = "error in db" });
+                    return Json(new JsonResults() { HasValue = false,Message = "خطا در دیتابیس" });
             }
             else
             {
@@ -278,7 +278,7 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     return Json(new JsonResults() { HasValue = true });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error in db" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در دیتابیس" });
             }
         }
         public ActionResult ManageType(bool IsNewType, string Name, int NidCategory, string Description = "", string Keywords = "", string NidType = "")
@@ -291,7 +291,7 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     return Json(new JsonResults() { HasValue = true });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error in db" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در دیتابیس" });
             }
             else
             {
@@ -301,7 +301,7 @@ namespace AudioShopBackend.Controllers
                 if (dbTransfer.Save())
                     return Json(new JsonResults() { HasValue = true });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error in db" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در دیتابیس" });
             }
         }
         public ActionResult SyncBnTTable(bool IsBrand,int NidCategory)
@@ -340,14 +340,14 @@ namespace AudioShopBackend.Controllers
         public ActionResult Products()
         {
             dbTransfer = new DbTransfer();
-            var prods = dbTransfer.GetAllProducts();
+            var prods = dbTransfer.GetAllProducts(100);
             return View(prods);
         }
         public ActionResult AddProduct()
         {
             ProductViewModel pvm = new ProductViewModel();
             dbTransfer = new DbTransfer();
-            pvm.Categories = dbTransfer.GetAllCategories();
+            pvm.Categories = dbTransfer.GetAllCategories(100);
             return View(pvm);
         }
         public ActionResult EditProduct(Guid NidProduct)
@@ -369,12 +369,12 @@ namespace AudioShopBackend.Controllers
             dbTransfer.Update(pvm.Product);
             if(dbTransfer.Save())
             {
-                TempData["SucessfullAddProduct"] = "product edited successfully";
+                TempData["SucessfullAddProduct"] = "محصول با موفقیت ویرایش گردید";
                 return RedirectToAction("Products");
             }
             else
             {
-                TempData["ErrorEditProduct"] = "error in db";
+                TempData["ErrorEditProduct"] = "خطا در دیتابیس";
                 return RedirectToAction("EditProduct",new { NidProduct = pvm.Product.NidProduct});
             }
         }
@@ -383,14 +383,14 @@ namespace AudioShopBackend.Controllers
             dbTransfer = new DbTransfer();
             //check for orders
             if (dbTransfer.CheckForOrderByNidProduct(NidProduct))
-                return Json(new JsonResults() { HasValue = false, Message = "order included" });
+                return Json(new JsonResults() { HasValue = false, Message = "این محصول دارای سفارش می باشد" });
             else
             {
                 dbTransfer.Delete(dbTransfer.GetProductByProductId(NidProduct));
                 if (dbTransfer.Save())
-                    return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                    return Json(new JsonResults() { HasValue = true, Message = "محصول با موفقیت حذف گردید" });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در حذف" });
             }
         }
         [ValidateInput(false)]
@@ -402,12 +402,12 @@ namespace AudioShopBackend.Controllers
             dbTransfer.Add(pvm.Product);
             if(dbTransfer.Save())
             {
-                TempData["SucessfullAddProduct"] = "product added sucessfully";
+                TempData["SucessfullAddProduct"] = "محصول با موفقیت اضافه شد";
                 return RedirectToAction("Products");
             }
             else
             {
-                TempData["ErrorAddProduct"] = "error in db";
+                TempData["ErrorAddProduct"] = "خطا در دیتابیس";
                 return RedirectToAction("AddProduct");
             }
         }
@@ -415,7 +415,7 @@ namespace AudioShopBackend.Controllers
         public ActionResult Orders()
         {
             dbTransfer = new DbTransfer();
-            var orders = dbTransfer.GetAllOrders();
+            var orders = dbTransfer.GetAllOrders(1000);
             return View(orders);
         }
         public ActionResult OrderDetail(Guid NidOrder)
@@ -429,8 +429,8 @@ namespace AudioShopBackend.Controllers
         {
             dbTransfer = new DbTransfer();
             ShipsViewModel svm = new ShipsViewModel();
-            svm.Doing = dbTransfer.GetAllDoingShips();
-            svm.Done = dbTransfer.GetAllDoneShips();
+            svm.Doing = dbTransfer.GetAllDoingShips(100);
+            svm.Done = dbTransfer.GetAllDoneShips(100);
             return View(svm);
         }
         public ActionResult ShipDetail(Guid NidShip)
@@ -446,18 +446,18 @@ namespace AudioShopBackend.Controllers
             current.State = 1;
             dbTransfer.Update(current);
             if (dbTransfer.Save())
-                return Json(new JsonResults() { HasValue = true, Message = "accepted successfully" });
+                return Json(new JsonResults() { HasValue = true, Message = "با موفقیت تایید شد" });
             else
-                return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+                return Json(new JsonResults() { HasValue = false, Message = "خطا در تایید" });
         }
         public ActionResult SyncShipsTable(bool IsShipDone)
         {
             dbTransfer = new DbTransfer();
             ShipsViewModel svm = new ShipsViewModel();
             if (IsShipDone)
-                svm.Done = dbTransfer.GetAllDoneShips();
+                svm.Done = dbTransfer.GetAllDoneShips(100);
             else
-                svm.Doing = dbTransfer.GetAllDoingShips();
+                svm.Doing = dbTransfer.GetAllDoingShips(100);
             svm.IsDone = IsShipDone;
             return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_ShipTable", svm) });
         }
@@ -465,7 +465,7 @@ namespace AudioShopBackend.Controllers
         public ActionResult Users()
         {
             dbTransfer = new DbTransfer();
-            var userList = dbTransfer.GetAllUsers();
+            var userList = dbTransfer.GetAllUsers(100);
             return View("Users", userList);
         }
         public ActionResult AddUser(string Username, string Password, string Name = "", string LastName = "")
@@ -475,19 +475,19 @@ namespace AudioShopBackend.Controllers
             {
                 dbTransfer.Add(new User() {  NidUser = Guid.NewGuid(), CreateDate = DateTime.Now, Enabled = true, FirstName = Name, LastName = LastName, IsAdmin = true, Password = DbTransfer.Encrypt(Password), Username = Username});
                 if(dbTransfer.Save())
-                    return Json(new JsonResults() { HasValue = true, Message = "user added successfully!" });
+                    return Json(new JsonResults() { HasValue = true, Message = "کاربر با موفقیت ایجاد شد" });
                 else
-                    return Json(new JsonResults() { HasValue = false, Message = "error in db" });
+                    return Json(new JsonResults() { HasValue = false, Message = "خطا در دیتابیس" });
             }
             else
             {
-                return Json(new JsonResults() { HasValue = false, Message = "username exists already" });
+                return Json(new JsonResults() { HasValue = false, Message = "این نام کاربری موجود می باشد" });
             }
         }
         public ActionResult SyncUserTable()
         {
             dbTransfer = new DbTransfer();
-            var userlist = dbTransfer.GetAllUsers();
+            var userlist = dbTransfer.GetAllUsers(100);
             return Json(new JsonResults() { HasValue = true, Html = RenderViewToString(this.ControllerContext, "_UserTable", userlist) });
         }
         public ActionResult DeleteUser(Guid NidUser)
@@ -497,22 +497,22 @@ namespace AudioShopBackend.Controllers
             u.Enabled = false;
             dbTransfer.Update(u);
             if (dbTransfer.Save())
-                return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                return Json(new JsonResults() { HasValue = true, Message = "کاربر با موفقیت حذف گردید" });
             else
-                return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+                return Json(new JsonResults() { HasValue = false, Message = "خطا در حذف" });
         }
         //comments
         public ActionResult Comments()
         {
             dbTransfer = new DbTransfer();
-            var comments = dbTransfer.GetAllComments();
+            var comments = dbTransfer.GetAllComments(100);
             TempData["Comments"] = "0";
             return View(comments);
         }
         public ActionResult AcceptedComments()
         {
             dbTransfer = new DbTransfer();
-            var comments = dbTransfer.GetAllComments(10, true);
+            var comments = dbTransfer.GetAllComments(100, true);
             TempData["Comments"] = "1";
             return View("Comments",comments);
         }
@@ -523,9 +523,9 @@ namespace AudioShopBackend.Controllers
             cmt.State = 2;
             dbTransfer.Update(cmt);
             if (dbTransfer.Save())
-                return Json(new JsonResults() { HasValue = true, Message = "deleted successfully" });
+                return Json(new JsonResults() { HasValue = true, Message = "نظر با موفقیت حذف گردید" });
             else
-                return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+                return Json(new JsonResults() { HasValue = false, Message = "خطا در دیتابیس" });
         }
         public ActionResult AcceptComment(Guid NidComment)
         {
@@ -534,9 +534,9 @@ namespace AudioShopBackend.Controllers
             cmt.State = 1;
             dbTransfer.Update(cmt);
             if (dbTransfer.Save())
-                return Json(new JsonResults() { HasValue = true, Message = "accepted successfully" });
+                return Json(new JsonResults() { HasValue = true, Message = "نظر با موفقیت تایید شد" });
             else
-                return Json(new JsonResults() { HasValue = false, Message = "error in delete!" });
+                return Json(new JsonResults() { HasValue = false, Message = "خطا در تایید" });
         }
         //generals
         public static string RenderViewToString(ControllerContext context, string viewName, object model)

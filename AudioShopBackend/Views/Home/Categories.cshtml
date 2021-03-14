@@ -13,15 +13,15 @@
                     <div class="alert alert-success" role="alert" hidden="hidden" id="successfullMessageDiv"></div>
                     <div class="alert alert-warning" role="alert" hidden="hidden" id="warningMessageDiv"></div>
                     <div class="alert alert-danger" role="alert" hidden="hidden" id="errorMessageDiv"></div>
-                    <div class="basic-tb-hd">
-                        <h2>Categories</h2>
-                        <p>desc about categories</p>
+                    <div class="basic-tb-hd" style="text-align:right;">
+                        <h2>ایجاد دسته بندی</h2>
+                        <p>لطفا فیلد های ضروری را پر کنید</p>
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group ic-cmp-int">
                                 <div class="nk-int-st">
-                                    <input type="text" class="form-control" placeholder="type name" id="txtTypeName">
+                                    <input type="text" class="form-control" placeholder="نام نوع" id="txtTypeName">
                                 </div>
                                 <div class="form-ic-cmp button-icon-btn button-icon-btn-cl sm-res-mg-t-30">
                                     <button class="btn btn-lightgreen lightgreen-icon-notika btn-reco-mg btn-button-mg waves-effect" id="btnAddType"><i class="notika-icon notika-checked" style="top:0 !important;"></i></button>
@@ -31,7 +31,7 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group ic-cmp-int">
                                 <div class="nk-int-st">
-                                    <input type="text" class="form-control" placeholder="brand name" id="txtBrandName">
+                                    <input type="text" class="form-control" placeholder="نام برند" id="txtBrandName">
                                 </div>
                                 <div class="form-ic-cmp button-icon-btn button-icon-btn-cl sm-res-mg-t-30">
                                     <button class="btn btn-lightgreen lightgreen-icon-notika btn-reco-mg btn-button-mg waves-effect" id="btnAddBrand"><i class="notika-icon notika-checked" style="top:0 !important;"></i></button>
@@ -44,7 +44,7 @@
                                     <i class="notika-icon notika-edit"></i>
                                 </div>
                                 <div class="nk-int-st">
-                                    <input type="text" class="form-control" placeholder="categoryname" id="txtCategoryName">
+                                    <input type="text" class="form-control" placeholder="عنوان دسته بندی" id="txtCategoryName">
                                 </div>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                                     <i class="notika-icon notika-star"></i>
                                 </div>
                                 <div class="nk-int-st">
-                                    <textarea class="form-control" placeholder="desc" id="txtDescription"></textarea>
+                                    <textarea class="form-control" placeholder="توضیحات" id="txtDescription"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                                     <i class="notika-icon notika-star"></i>
                                 </div>
                                 <div class="nk-int-st">
-                                    <input type="text" class="form-control" placeholder="keywords" id="txtKeywords">
+                                    <input type="text" class="form-control" placeholder="کلید واژه ها" id="txtKeywords">
                                 </div>
                             </div>
                         </div>
@@ -92,12 +92,12 @@
                     <div class="row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group ic-cmp-int">
-                                <a href="@Url.Action("ManageTypeAndBrand","Home",new { IsBrand = false})" style="text-decoration:underline;">manage category types</a>
+                                <a href="@Url.Action("ManageTypeAndBrand","Home",new { IsBrand = false})" style="text-decoration:underline;">مدیریت نوع دسته بندی</a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group ic-cmp-int">
-                                <a href="@Url.Action("ManageTypeAndBrand","Home",new { IsBrand = true })" style="text-decoration:underline;">manage category brands</a>
+                                <a href="@Url.Action("ManageTypeAndBrand","Home",new { IsBrand = true })" style="text-decoration:underline;">مدیریت برند دسته یندی</a>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -121,8 +121,8 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <div class="form-group ic-cmp-int">
                                 <div class="nk-int-st">
-                                    <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddCategory">add this!</button>
-                                    <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">clear form</button>
+                                    <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddCategory">اضافه کردن</button>
+                                    <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">خالی کردن فرم</button>
                                 </div>
                             </div>
                         </div>
@@ -139,19 +139,19 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="data-table-list">
-                    <div class="basic-tb-hd">
-                        <h2>Basic Example</h2>
-                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    <div class="basic-tb-hd" style="text-align:right;">
+                        <h2>لیست دسته بندی ها</h2>
+                        <p></p>
                     </div>
                     <div class="table-responsive">
                         <table id="data-table-basic" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>NidCategory</th>
-                                    <th>CategoryName</th>
-                                    <th>Types</th>
-                                    <th>Brands</th>
-                                    <th>Action</th>
+                                    <th style="text-align:center !important;">شماره دسته بندی</th>
+                                    <th style="text-align:center !important;">عنوان دسته بندی</th>
+                                    <th style="text-align:center !important;">نوع</th>
+                                    <th style="text-align:center !important;">برند</th>
+                                    <th style="text-align:center !important;">عملیات</th>
                                 </tr>
                             </thead>
                             <tbody id="tblCategory">
@@ -185,9 +185,9 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <button onclick="EditThis(@cat.NidCategory)" class="btn btn-warning notika-btn-warning waves-effect">Edit</button>
-                                            <button onclick="DeleteThis(@cat.NidCategory)" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
-                                            <button onclick="DetailThis(@cat.NidCategory)" class="btn btn-info notika-btn-info waves-effect"  data-toggle="modal">Detail</button>
+                                            <button onclick="EditThis(@cat.NidCategory)" class="btn btn-warning notika-btn-warning waves-effect">ویرایش</button>
+                                            <button onclick="DeleteThis(@cat.NidCategory)" class="btn btn-danger notika-btn-danger waves-effect">حذف</button>
+                                            <button onclick="DetailThis(@cat.NidCategory)" class="btn btn-info notika-btn-info waves-effect"  data-toggle="modal">جزییات</button>
                                         </td>
                                     </tr>
                                 }

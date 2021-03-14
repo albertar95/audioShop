@@ -26,7 +26,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div style="width:100% !important;margin:5px;">
                                     <select class="form-control" name="Product.NidCategory" id="ProductNidCategory">
-                                        <option selected disabled value="-1">select category</option>
+                                        <option selected disabled value="-1">دسته بندی را انتخاب نمایید</option>
                                         @foreach (var cat in Model.Categories)
                                         {
                                             <option value="@cat.NidCategory">@cat.CategoryName</option>
@@ -37,7 +37,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     <div class="nk-int-st">
-                                        <input type="text" class="form-control" placeholder="ProductName" name="Product.ProductName" id="ProductProductName">
+                                        <input type="text" class="form-control" placeholder="عنوان محصول" name="Product.ProductName" id="ProductProductName">
                                     </div>
                                 </div>
                             </div>
@@ -46,14 +46,14 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="TypeWrap">
                                 <div style="width:100% !important;margin:5px;" >
                                     <select class="form-control" name="Product.NidType" id="ProductNidType">
-                                        <option selected disabled value="-1">select type</option>
+                                        <option selected disabled value="-1">نوع را انتخاب نمایید</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="BrandWrap">
                                 <div style="width:100% !important;margin:5px;">
                                     <select class="form-control" name="Product.NidBrand" id="ProductNidBrand">
-                                        <option selected disabled value="-1">select brand</option>
+                                        <option selected disabled value="-1">برند را انتخاب نمایید</option>
                                     </select>
                                 </div>
                             </div>
@@ -72,14 +72,14 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     <div class="nk-int-st">
-                                        <input type="text" class="form-control" placeholder="price" name="Product.Price" id="ProductPrice">
+                                        <input type="text" class="form-control" placeholder="قیمت" name="Product.Price" id="ProductPrice">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     <div class="nk-int-st">
-                                        <input type="text" class="form-control" placeholder="keyword" name="Product.Keywords" id="ProductKeywords">
+                                        <input type="text" class="form-control" placeholder="کلید واژه" name="Product.Keywords" id="ProductKeywords">
                                     </div>
                                 </div>
                             </div>
@@ -119,8 +119,8 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group">
                                     <div class="nk-int-st">
-                                        <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" type="submit" id="btnSubmit">add this!</button>
-                                        <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">clear form</button>
+                                        <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" type="submit" id="btnSubmit">اضافه کردن</button>
+                                        <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">خالی کردن فرم</button>
                                     </div>
                                 </div>
                             </div>
@@ -150,6 +150,8 @@
 <script src="@Url.Content("~/Content/js/notification/notification-active.js")"></script>
     <script type="text/javascript">
         $(function () {
+            $('.nav-tabs li.active').removeClass('active');
+            $("#liProducts").addClass('active');
             if ($("#txtShowMessage").val() == '0') {
                 myNotify('bottom', 'center', '', 'danger', 'animated fadeInLeft', 'animated fadeOutLeft', '@TempData["ErrorAddProduct"]');
             }

@@ -888,7 +888,7 @@ ul.notika-menu-wrap li a{
 }
 .checkbox input[type="checkbox"]:checked + label::after {
     content: "\f00c";
-    font-family: 'BYekan' !important;
+    font-family: 'FontAwesome';
 }
 .checkbox label::after {
     color: #333333;
@@ -1832,7 +1832,7 @@ ul.wizard-nav-ac li .disabled{
     content:"\e923";
     -ms-transform:scale(1);
     -o-transform:scale(1);
-	 font-family: 'BYekan' !important;
+	 font-family: 'notika-icon';
 }
 .panel-collapse .panel-heading:after{
     -webkit-transform:scale(0);
@@ -1840,7 +1840,7 @@ ul.wizard-nav-ac li .disabled{
     -o-transform:scale(0);
     transform:scale(0);
     content:"\e91b";
-	font-family: 'BYekan' !important;
+	font-family: 'notika-icon';
 }
 .panel-collapse .panel-heading.active .panel-title>a:after{
     -webkit-transform:scale(1);
@@ -2717,7 +2717,7 @@ hr {
 }
 .dataTables_filter label:after {
     content: '\e928';
-    font-family: 'BYekan' !important;
+    font-family: 'notika-icon' !important;
     position: absolute;
     font-size: 14px;
     right: 0px;
@@ -2735,7 +2735,7 @@ hr {
     content: '\e903';
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.next:before, .dataTables_wrapper .dataTables_paginate .paginate_button.previous:before {
-    font-family: 'BYekan' !important;
+    font-family: 'notika-icon' !important;
     font-size: 14px;
     line-height: 35px;
 }
@@ -3034,7 +3034,7 @@ textarea.auto-size {
     width: 40px;
     height: 100%;
     content: "\e928";
-    font-family: 'BYekan' !important;
+    font-family: 'notika-icon' !important;
     font-size: 16px;
     padding: 12px 0 0 15px;
 }
@@ -3098,7 +3098,7 @@ textarea.auto-size {
 }
 .chosen-select-act .chosen-container .chosen-results li.result-selected:before {
     content: "\e906";
-    font-family: 'BYekan' !important;
+    font-family: 'notika-icon' !important;
 	font-size:16px;
 }
 .chosen-select-act .chosen-container .chosen-results li{
@@ -3119,7 +3119,7 @@ textarea.auto-size {
 }
 .chosen-select-act .chosen-container-single .chosen-search:before {
     content: "\e928";
-    font-family: 'BYekan' !important;
+    font-family: 'notika-icon' !important;
     position: absolute;
     left: 0;
     top: 3px;
@@ -3381,7 +3381,7 @@ textarea.auto-size {
     border: 0px solid rgba(0, 0, 0, 0.2);
     border-radius: 0px;
     color: #333;
-    font-family: 'BYekan' !important;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
 	width: 300px;
 }

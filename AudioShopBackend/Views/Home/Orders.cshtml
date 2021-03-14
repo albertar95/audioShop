@@ -10,19 +10,19 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="data-table-list">
-                    <div class="basic-tb-hd">
-                        <h2>Basic Example</h2>
-                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    <div class="basic-tb-hd" style="text-align:right;">
+                        <h2>لیست سفارشات</h2>
+                        @*<p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>*@
                     </div>
                     <div class="table-responsive">
                         <table id="data-table-basic" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th style="text-align:center;">CreateDate</th>
-                                    <th style="text-align:center;">Customer Name</th>
-                                    <th style="text-align:center;">ProductName</th>
-                                    <th style="text-align:center;">Quantity</th>
-                                    <th style="text-align:center;">Action</th>
+                                    <th style="text-align:center;">تاریخ</th>
+                                    <th style="text-align:center;">نام مشتری</th>
+                                    <th style="text-align:center;">عنوان محصول</th>
+                                    <th style="text-align:center;">تعداد</th>
+                                    <th style="text-align:center;">عملیات</th>
                                 </tr>
                             </thead>
                             <tbody id="tblCategory">
@@ -34,7 +34,7 @@
                                         <td style="text-align:center;">@ord.Product.ProductName</td>
                                         <td style="text-align:center;">@ord.Quantity</td>
                                         <td style="text-align:center;">
-                                            <button onclick="DetailThis('@ord.NidOrder')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">Detail</button>
+                                            <button onclick="DetailThis('@ord.NidOrder')" class="btn btn-info notika-btn-info waves-effect" data-toggle="modal">جزییات</button>
                                         </td>
                                     </tr>
                                 }

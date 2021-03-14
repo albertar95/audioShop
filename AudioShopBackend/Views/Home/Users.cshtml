@@ -12,35 +12,35 @@
                     <div class="alert alert-success" role="alert" hidden="hidden" id="successfullMessageDiv"></div>
                     <div class="alert alert-warning" role="alert" hidden="hidden" id="warningMessageDiv"></div>
                     <div class="alert alert-danger" role="alert" hidden="hidden" id="errorMessageDiv"></div>
-                    <div class="basic-tb-hd">
-                        <h2>Categories</h2>
-                        <p>desc about categories</p>
+                    <div class="basic-tb-hd" style="text-align:right;">
+                        <h2>ایجاد کاربر</h2>
+                        @*<p>desc about categories</p>*@
                     </div>
                     <div class="row">
                         <div class="form-group ic-cmp-int" style="width:80%;">
                             <div class="nk-int-st">
-                                <input type="text" class="form-control" placeholder="name" id="txtName">
+                                <input type="text" class="form-control" placeholder="نام" id="txtName">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group ic-cmp-int" style="width:80%;">
                             <div class="nk-int-st">
-                                <input type="text" class="form-control" placeholder="Last name" id="txtLastName">
+                                <input type="text" class="form-control" placeholder="نام خانوادگی" id="txtLastName">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group ic-cmp-int" style="width:80%;">
                             <div class="nk-int-st">
-                                <input type="text" class="form-control" placeholder="User name" id="txtUserName">
+                                <input type="text" class="form-control" placeholder="نام کاربری" id="txtUserName">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group ic-cmp-int" style="width:80%;">
                             <div class="nk-int-st">
-                                <input type="password" class="form-control" placeholder="password" id="txtPassword">
+                                <input type="password" class="form-control" placeholder="کلمه عبور" id="txtPassword">
                             </div>
                         </div>
                     </div>
@@ -54,8 +54,8 @@
                     <div class="row">
                         <div class="form-group ic-cmp-int">
                             <div class="nk-int-st">
-                                <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddUser">add this!</button>
-                                <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">clear form</button>
+                                <button class="btn notika-btn-green btn-reco-mg btn-button-mg waves-effect" id="btnAddUser">اضافه کردن</button>
+                                <button class="btn notika btn-reco-mg btn-button-mg waves-effect" id="btnClearForm">خالی کردن فرم</button>
                             </div>
                         </div>
                     </div>
@@ -63,18 +63,18 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="data-table-list">
-                    <div class="basic-tb-hd">
-                        <h2>Basic Example</h2>
-                        <p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>
+                    <div class="basic-tb-hd" style="text-align:right;">
+                        <h2>لیست کاربران</h2>
+                        @*<p>It's just that simple. Turn your simple table into a sophisticated data table and offer your users a nice experience and great features without any effort.</p>*@
                     </div>
                     <div class="table-responsive">
                         <table id="data-table-basic" class="table table-striped">
                             <thead>
                                 <tr>
                                     @*<th></th>*@
-                                    <th>Name</th>
-                                    <th>UserName</th>
-                                    <th>Action</th>
+                                    <th>نام</th>
+                                    <th>نام کاربری</th>
+                                    <th>عملیات</th>
                                 </tr>
                             </thead>
                             <tbody id="tblUser">
@@ -85,7 +85,7 @@
                                         <td>@usr.FirstName @usr.LastName</td>
                                         <td>@usr.Username</td>
                                         <td>
-                                            <button onclick="DeleteThis('@usr.NidUser')" class="btn btn-danger notika-btn-danger waves-effect">Delete</button>
+                                            <button onclick="DeleteThis('@usr.NidUser')" class="btn btn-danger notika-btn-danger waves-effect">حذف</button>
                                         </td>
                                     </tr>
                                 }
